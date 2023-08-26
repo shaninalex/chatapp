@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css']
+    templateUrl: './register.component.html'
 })
 export class RegisterComponent {
     registerForm: FormGroup = new FormGroup({
@@ -13,15 +12,12 @@ export class RegisterComponent {
         password: new FormControl("", [Validators.required]),
     })
 
-    constructor(private http: HttpClient) { }
+    constructor(private authService: AuthService) { }
+
 
     Submit() {
         if (this.registerForm.valid) {
-            this.http.post('/api/v1/auth', this.registerForm.value).subscribe({
-                next: data => {
-                    console.log(data);
-                }
-            })
+            this.authService.register(this.registerForm.value);
         }
     }
 

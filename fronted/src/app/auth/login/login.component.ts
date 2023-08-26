@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
     selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    templateUrl: './login.component.html'
 })
 export class LoginComponent {
     loginForm: FormGroup = new FormGroup({
@@ -14,17 +13,11 @@ export class LoginComponent {
         password: new FormControl("", [Validators.required]),
     })
 
-    constructor(private http: HttpClient) { }
+    constructor(private authService: AuthService) { }
 
     Submit() {
         if (this.loginForm.valid) {
-            this.http.post('/api/v1/auth/login', this.loginForm.value).subscribe({
-                next: data => {
-                    console.log(data);
-                }
-            })
+            this.authService.login(this.loginForm.value);
         }
     }
-
-
 }

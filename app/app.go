@@ -79,7 +79,16 @@ func (app *App) createUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	token, err := utils.CreateJWT(user.Id, user.Email)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"access_token": token,
+	})
 }
 
 func (app *App) authUser(c *gin.Context) {
