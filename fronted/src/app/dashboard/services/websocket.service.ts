@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 
 
 @Injectable()
 export class WebsocketService {
     socket = new WebSocket("ws://localhost:5000/ws");
+    public messagesList: Subject<string[]> = new Subject<string[]>();
 
     constructor() {
 
@@ -11,8 +13,8 @@ export class WebsocketService {
             console.log(event);
         }
 
-        this.socket.onmessage = (event: Event) => {
-            console.log(event);
+        this.socket.onmessage = (event: any) => {
+            this.messagesList.next(event.data);
         }
     }
 

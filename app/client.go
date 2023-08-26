@@ -2,6 +2,7 @@ package app
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"time"
 
@@ -57,8 +58,8 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		log.Println(message)
-		c.hub.broadcast <- message
+		log.Println([]byte(fmt.Sprintf("%s: - %s", c.user.Email, message)))
+		c.hub.broadcast <- []byte(fmt.Sprintf("%s: - %s", c.user.Email, message))
 	}
 }
 
@@ -83,6 +84,7 @@ func (c *Client) writePump() {
 			if err != nil {
 				return
 			}
+
 			w.Write(message)
 
 			// Add queued chat messages to the current websocket message.
