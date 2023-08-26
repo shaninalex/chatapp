@@ -23,7 +23,7 @@ func CreateApp(db *db.Database) (*App, error) {
 
 func (app *App) Run() {
 	app.registerRoutes()
-	app.router.Run("127.0.0.1:5000")
+	app.router.Run("localhost:5000")
 }
 
 func (app *App) registerRoutes() {
@@ -37,10 +37,10 @@ func (app *App) registerRoutes() {
 	auth_routes.Use(AuthMiddleware())
 	{
 		auth_routes.GET("/", app.getCurrentUser) // /api/v1/user
+		auth_routes.GET("/logout", app.logoutUser)
 	}
 
 	sockets := app.router.Group("/ws")
-	// sockets.Use(AuthMiddleware())
 	{
 		sockets.GET("", app.handleWebsockets)
 	}
@@ -85,6 +85,7 @@ func (app *App) createUser(c *gin.Context) {
 		return
 	}
 
+	c.SetCookie("token", token, 3600, "/", "localhost", true, true)
 	c.JSON(http.StatusOK, gin.H{
 		"access_token": token,
 	})
@@ -124,8 +125,13 @@ func (app *App) authUser(c *gin.Context) {
 		return
 	}
 
+	c.SetCookie("token", token, 3600, "/", "localhost", true, true)
 	c.JSON(http.StatusOK, gin.H{
 		"access_token": token,
 	})
+}
 
+func (app *App) logoutUser(c *gin.Context) {
+	c.SetCookie("token", "", 0, "/", "localhost", true, true)
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }

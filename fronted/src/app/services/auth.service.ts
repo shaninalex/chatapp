@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { TokenService } from "./token.service";
 
 export interface RegisterPayload {
     email: string
@@ -24,13 +23,11 @@ export interface LoginResponse {
 export class AuthService {
 
     constructor(private http: HttpClient,
-                private tokenService: TokenService,
                 private router: Router) {}
 
     register(register_payload: RegisterPayload): void {
         this.http.post<any>("/api/v1/auth", register_payload).subscribe({
             next: result => {
-                this.tokenService.saveToken(result.access_token);
                 this.router.navigate(['/']);
             }
         })
@@ -39,8 +36,15 @@ export class AuthService {
     login(login_payload: LoginPayload): void {
         this.http.post<LoginResponse>("/api/v1/auth/login", login_payload).subscribe({
             next: result => {
-                this.tokenService.saveToken(result.access_token);
                 this.router.navigate(['/']);
+            }
+        });
+    }
+
+    logout(): void {
+        this.http.get("/api/v1/user/logout").subscribe({
+            next: result => {
+                this.router.navigate(['/auth']);
             }
         });
     }

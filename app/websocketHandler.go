@@ -17,6 +17,12 @@ var upgrader = websocket.Upgrader{
 }
 
 func (app *App) handleWebsockets(c *gin.Context) {
+	token, err := c.Cookie("token")
+	if err != nil {
+		log.Print("upgrade:", err)
+		return
+	}
+	log.Println("Cookie: ", token)
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Print("upgrade:", err)

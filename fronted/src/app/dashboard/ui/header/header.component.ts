@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { TokenService } from 'src/app/services/token.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-header',
@@ -9,12 +8,10 @@ import { TokenService } from 'src/app/services/token.service';
 export class HeaderComponent {
 
     constructor(
-        private router: Router,
-        private tokenService: TokenService
+        private authService: AuthService
     ) { }
 
     logout(): void {
-        this.tokenService.removeAccessToken();
-        this.router.navigate(['/auth']);
+        this.authService.logout();
     }
 }
