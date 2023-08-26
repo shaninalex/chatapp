@@ -15,7 +15,6 @@ type App struct {
 }
 
 func CreateApp(db *db.Database) (*App, error) {
-
 	return &App{
 		router:   gin.Default(),
 		database: db,
@@ -41,7 +40,7 @@ func (app *App) registerRoutes() {
 	}
 
 	sockets := app.router.Group("ws")
-	sockets.Use(AuthMiddleware())
+	// sockets.Use(AuthMiddleware())
 	{
 		sockets.GET("", app.handleWebsockets)
 	}

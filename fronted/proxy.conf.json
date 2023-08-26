@@ -3,8 +3,8 @@
         "target": "http://localhost:5000",
         "secure": false
     },
-    "ws": {
-        "target": "http://localhost:5000",
+    "/ws": {
+        "target": "ws://localhost:5000",
         "secure": false
     }
 }

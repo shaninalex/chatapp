@@ -4,8 +4,10 @@ go 1.21.0
 
 require (
 	github.com/doug-martin/goqu/v9 v9.18.0
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/gorilla/websocket v1.5.0
 	github.com/lib/pq v1.10.1
 	golang.org/x/crypto v0.12.0
 )

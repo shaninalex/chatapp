@@ -14,7 +14,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		token := c.Request.Header.Get("Authorization")
 		if token == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized 1"})
 			return
 		}
 
@@ -22,7 +22,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		token_claims, err := utils.ValidateToken(token)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized 2"})
 			return
 		}
 
