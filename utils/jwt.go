@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func CreateJWT(id, role, email string) (string, error) {
+func CreateJWT(id int64, email string) (string, error) {
 	// https://www.golinuxcloud.com/golang-jwt/
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)

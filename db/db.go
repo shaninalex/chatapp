@@ -50,13 +50,16 @@ func (database *Database) CreateUser(email, password string) (*User, error) {
 
 func (database *Database) GetUser(email string) (*User, error) {
 
-	query := goqu.From("users").Select("email", "id").Where(
+	query := goqu.From("users").Select("id", "email", "password_hash").Where(
 		goqu.C("email").Eq(email),
 	)
 	selectQuery, _, _ := query.ToSQL()
 	var user User
 
-	err := database.DB.QueryRow(selectQuery).Scan(&user.Email, &user.Id)
+	err := database.DB.QueryRow(selectQuery).Scan(
+		&user.Id, &user.Email, &user.PasswordHash,
+	)
+
 	if err != nil {
 		log.Println(err)
 		return nil, err
