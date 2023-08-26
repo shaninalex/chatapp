@@ -1,0 +1,14 @@
+<h3>Login</h3>
+<form [formGroup]="loginForm" (ngSubmit)="Submit()">
+    <div class="mb-3">
+        <input type="email" class="form-control" formControlName="email" />
+    </div>
+    <div class="mb-3">
+        <input type="password" class="form-control" formControlName="password" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-info">Login</button>
+    </div>
+
+    <a routerLink="/auth/register">Register</a>
+</form>

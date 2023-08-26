@@ -18,5 +18,6 @@ func main() {
 		panic(err)
 	}
 
+	go app.Hub.Run()
 	app.Run()
 }
