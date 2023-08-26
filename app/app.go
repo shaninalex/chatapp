@@ -28,14 +28,28 @@ func (app *App) Run() {
 }
 
 func (app *App) registerRoutes() {
-	app.router.Use(AuthMiddleware())
-	app.router.GET("/api/v1/user", app.getCurrentUser)
-	app.router.POST("/api/v1/user", app.createUser)
-	app.router.POST("/api/v1/auth", app.authUser)
+	api := app.router.Group("/api/v1")
+	{
+		api.POST("/auth", app.createUser)
+		api.POST("/auth/login", app.authUser)
+	}
+
+	auth_routes := api.Group("user")
+	auth_routes.Use(AuthMiddleware())
+	{
+		auth_routes.GET("/", app.getCurrentUser) // /api/v1/user
+	}
 }
 
 func (app *App) getCurrentUser(c *gin.Context) {
 
+	user, exist := c.Get("user")
+	if !exist {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Can't get user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }
 
 type AuthPayload struct {
@@ -95,6 +109,7 @@ func (app *App) authUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"access_token": token,
 	})
