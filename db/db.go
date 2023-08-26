@@ -4,13 +4,16 @@ import (
 	"database/sql"
 	"log"
 
+	_ "github.com/lib/pq"
+	"github.com/shaninalex/go-chat/utils"
+
 	"github.com/doug-martin/goqu/v9"
 )
 
 type User struct {
-	Id           int64  `db:"id"`
-	Email        string `db:"email"`
-	PasswordHash string `db:"password_hash"`
+	Id           int64  `json:"id" db:"id"`
+	Email        string `json:"email" db:"email" binding:"required"`
+	PasswordHash string `json:"-" db:"password_hash" binding:"required"`
 }
 
 type Database struct {
@@ -25,18 +28,39 @@ func CreateConnection(dsn string) (*Database, error) {
 	return &Database{DB: db}, nil
 }
 
-func (database *Database) CreateUser(user User) error {
+func (database *Database) CreateUser(email, password string) (*User, error) {
 
-	ds := goqu.Insert("users").Rows(user)
+	hashed_password, err := utils.GenerateFromPassword(password)
+	ds := goqu.Insert("users").Rows(
+		goqu.Record{"email": email, "password_hash": hashed_password},
+	).Returning("id")
 	insertSQL, _, _ := ds.ToSQL()
 
-	result, err := database.DB.Exec(insertSQL)
+	var user_id int64
+	err = database.DB.QueryRow(insertSQL).Scan(&user_id)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	log.Println(result.LastInsertId())
-	log.Println(result.RowsAffected())
+	return &User{
+		Id:    user_id,
+		Email: email,
+	}, nil
+}
 
-	return nil
+func (database *Database) GetUser(email string) (*User, error) {
+
+	query := goqu.From("users").Select("email", "id").Where(
+		goqu.C("email").Eq(email),
+	)
+	selectQuery, _, _ := query.ToSQL()
+	var user User
+
+	err := database.DB.QueryRow(selectQuery).Scan(&user.Email, &user.Id)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &user, nil
 }
