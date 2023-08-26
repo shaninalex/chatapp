@@ -16,6 +16,22 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+type ChatMessage struct {
+	UserId int64  `json:"user_id"`
+	Body   string `json:"body"`
+}
+
+type UserStatus struct {
+	UserId int64 `json:"user_id"`
+	Status bool  `json:"status"`
+}
+
+type ApplicationMessage struct {
+	MessageType string      `json:"message_type"` // "message" | "app"
+	ReceiverId  int64       `json:"receiver_id"`
+	Content     interface{} `json:"content"` // ChatMessage | UserStatus
+}
+
 func (app *App) handleWebsockets(c *gin.Context) {
 	token, err := c.Cookie("token")
 	if err != nil {
@@ -29,6 +45,17 @@ func (app *App) handleWebsockets(c *gin.Context) {
 		return
 	}
 	defer ws.Close()
+
+
+	client := &Client{
+		conn: ws,
+		send: make(chan []byte, 256),
+	}
+
+	// register user in Hub
+	// run listeners for clients
+	log.Println(client)
+
 	for {
 		//read data from ws
 		mt, message, err := ws.ReadMessage()
