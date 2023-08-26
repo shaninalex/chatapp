@@ -39,6 +39,12 @@ func (app *App) registerRoutes() {
 	{
 		auth_routes.GET("/", app.getCurrentUser) // /api/v1/user
 	}
+
+	sockets := app.router.Group("ws")
+	sockets.Use(AuthMiddleware())
+	{
+		sockets.GET("", app.handleWebsockets)
+	}
 }
 
 func (app *App) getCurrentUser(c *gin.Context) {
