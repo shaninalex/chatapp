@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class WebsocketService {
-    private socket: WebSocket;
-    messages: string[] = [];
+    socket = new WebSocket("ws://127.0.0.1:5000/ws");
 
     constructor() {
-        this.socket = new WebSocket('ws://localhost:5000/ws');
+        console.log("socket");
 
-        this.socket.onmessage = (event) => {
-            this.messages.push(event.data);
-        };
+        this.socket.onopen = (event: Event) => {
+            console.log(event);
+        }
+
+        this.socket.onmessage = (event: Event) => {
+            console.log(event);
+        }
     }
 
-    sendMessage(message: string) {
-        console.log("send message");
+    public send(message: string) {
         this.socket.send(message);
     }
 }

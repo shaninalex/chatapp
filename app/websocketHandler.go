@@ -12,25 +12,31 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		log.Println(r.Header.Get("Authrization"))
 		return true
 	},
 }
 
 func (app *App) handleWebsockets(c *gin.Context) {
-	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
+		log.Print("upgrade:", err)
 		return
 	}
-	defer conn.Close()
-
+	defer ws.Close()
 	for {
-		messageType, p, err := conn.ReadMessage()
+		//read data from ws
+		mt, message, err := ws.ReadMessage()
 		if err != nil {
-			return
+			log.Println("read:", err)
+			break
 		}
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			return
+		log.Printf("recv: %s", message)
+
+		//write ws data
+		err = ws.WriteMessage(mt, message)
+		if err != nil {
+			log.Println("write:", err)
+			break
 		}
 	}
 }

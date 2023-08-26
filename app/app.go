@@ -23,7 +23,7 @@ func CreateApp(db *db.Database) (*App, error) {
 
 func (app *App) Run() {
 	app.registerRoutes()
-	app.router.Run(":5000")
+	app.router.Run("127.0.0.1:5000")
 }
 
 func (app *App) registerRoutes() {
@@ -39,7 +39,7 @@ func (app *App) registerRoutes() {
 		auth_routes.GET("/", app.getCurrentUser) // /api/v1/user
 	}
 
-	sockets := app.router.Group("ws")
+	sockets := app.router.Group("/ws")
 	// sockets.Use(AuthMiddleware())
 	{
 		sockets.GET("", app.handleWebsockets)
