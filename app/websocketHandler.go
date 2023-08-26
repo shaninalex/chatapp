@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/shaninalex/go-chat/db"
 )
 
 var upgrader = websocket.Upgrader{
@@ -32,44 +32,38 @@ type ApplicationMessage struct {
 	Content     interface{} `json:"content"` // ChatMessage | UserStatus
 }
 
-func (app *App) handleWebsockets(c *gin.Context) {
-	token, err := c.Cookie("token")
+func (app *App) handleWebsockets(hub *Hub, user db.User, req *http.Request, resp http.ResponseWriter) {
+	log.Println(user)
+	conn, err := upgrader.Upgrade(resp, req, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Println(err)
 		return
 	}
-	log.Println("Cookie: ", token)
-	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		log.Print("upgrade:", err)
-		return
-	}
-	defer ws.Close()
-
-
 	client := &Client{
-		conn: ws,
+		hub: hub,
+		conn: conn,
 		send: make(chan []byte, 256),
+		user: user,
 	}
-
-	// register user in Hub
-	// run listeners for clients
-	log.Println(client)
-
-	for {
-		//read data from ws
-		mt, message, err := ws.ReadMessage()
-		if err != nil {
-			log.Println("read:", err)
-			break
-		}
-		log.Printf("recv: %s", message)
-
-		//write ws data
-		err = ws.WriteMessage(mt, message)
-		if err != nil {
-			log.Println("write:", err)
-			break
-		}
-	}
+	client.hub.register <- client
+	go client.writePump()
+	go client.readPump()
+	// token, err := req.Cookie("token")
+	// if err != nil {
+	// 	log.Print("upgrade:", err)
+	// 	return
+	// }
+	// log.Println("Cookie: ", token)
+	//
+	// ws, err := upgrader.Upgrade(resp, req, nil)
+	// if err != nil {
+	// 	log.Print("upgrade:", err)
+	// 	return
+	// }
+	// defer ws.Close()
+	//
+	// client := &Client{conn: ws, send: make(chan []byte, 256), hub: hub}
+	// client.hub.register <- client
+	// go client.writePump()
+	// go client.readPump()
 }
