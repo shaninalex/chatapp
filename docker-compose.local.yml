@@ -39,6 +39,7 @@ services:
       # - websocket
     volumes:
       - ./config/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+      - ./config/ejabberd/token_auth.py:/home/ejabberd/conf/token_auth.py
 
   # Kratos
   kratos-migrate:

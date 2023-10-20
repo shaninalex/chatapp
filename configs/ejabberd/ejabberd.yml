@@ -272,6 +272,10 @@ modules:
   mod_version:
     show_os: false
 
+
+auth_method: [external]
+extauth_program: /etc/ejabberd/token_auth.py
+
 ### Local Variables:
 ### mode: yaml
 ### End:
