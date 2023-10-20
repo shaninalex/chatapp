@@ -1,8 +1,5 @@
 start:
-	docker compose -f ./docker-compose.yml --env-file .env up -d --build
+	docker compose -f ./docker-compose.local.yml up -d --build
 
 down:
-	docker compose -f ./docker-compose.yml --env-file .env down -v
-
-run:
-	go run .
+	docker compose -f ./docker-compose.local.yml down -v

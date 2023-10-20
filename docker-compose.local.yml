@@ -1,0 +1,84 @@
+version: "3.7"
+
+volumes:
+  postgres_data:
+
+
+services:
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_MULTIPLE_DATABASES=chat,kratos
+    ports:
+      - 5432:5432
+    volumes:
+      - ./config/db/:/docker-entrypoint-initdb.d/ 
+      - postgres_data:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d chat -U $user" ]
+      interval: 5s
+      timeout: 10s
+      retries: 120
+
+  frontend:
+    build: ./frontend
+    container_name: chat_frontend
+    ports:
+      - 4200:4200
+
+  # Ejabberd
+  ejabberd:
+    image: ejabberd/ecs
+    container_name: chat_ejabberd
+    ports:
+      - 5222:5222 # client to server
+      - 5280:5280 # web console
+      # - websocket
+    volumes:
+      - ./config/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+
+  # Kratos
+  kratos-migrate:
+    image: oryd/kratos:v1.0.0
+    container_name: chat_kratos_db_migrate
+    environment:
+      - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    volumes:
+      - ./config/kratos:/etc/config/kratos
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+
+  kratos:
+    image: oryd/kratos:v1.0.0
+    container_name: chat_kratos
+    environment:
+      - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    ports:
+      - "4433:4433"
+      - "4434:4434"
+    volumes:
+      - ./config/kratos:/etc/config/kratos
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+
+  # Ory hooks server
+  ory_hooks:
+    build: ./oryhooks
+    container_name: chat_ory_hooks
+    restart: always
+    ports:
+      - 8081:8081
+
+  # Oathkeeper
+  oathkeeper:
+    image: oryd/oathkeeper:v0.40
+    ports:
+      - 8080:4455
+      - 4456:4456
+    command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
+    environment:
+      - LOG_LEVEL=debug
+    restart: on-failure
+    volumes:
+      - ./configs/oathkeeper:/etc/config/oathkeeper

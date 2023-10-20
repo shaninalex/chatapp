@@ -1,0 +1,17 @@
+# example
+# not actual config
+- id: "api:chat"
+  upstream:
+    preserve_host: true
+    url: "ws://chat:8003"
+  match:
+    url: "ws://chat:8080<**>"
+    methods:
+      - GET
+      - POST
+  authenticators:
+    - handler: noop
+  mutators:
+    - handler: noop
+  authorizer:
+    handler: allow
