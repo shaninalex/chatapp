@@ -27,6 +27,4 @@ $ ./bin/ejabberdctl oauth_issue_token admin@localhost 3600 ejabberd:admin
 ```
 
 ## API
-
 Postman documentation: https://documenter.getpostman.com/view/11586531/2s9YRB3sLr
-
