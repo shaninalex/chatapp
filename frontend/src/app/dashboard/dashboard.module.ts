@@ -14,14 +14,22 @@ import {
     matNotificationsOutline,
     matHomeOutline,
     matBookmarkBorderOutline,
+    matSearchOutline,
+    matMoreVertOutline,
 } from '@ng-icons/material-icons/outline';
+import { ChatComponent } from './pages/chat/chat.component';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { ContactItemComponent } from './ui/contact-item/contact-item.component';
 
 
 @NgModule({
     declarations: [
         DashboardComponent,
         SidebarComponent,
-        HeaderComponent
+        HeaderComponent,
+        ChatComponent,
+        SettingsComponent,
+        ContactItemComponent
     ],
     imports: [
         CommonModule,
@@ -34,6 +42,8 @@ import {
             matNotificationsOutline,
             matHomeOutline,
             matBookmarkBorderOutline,
+            matSearchOutline,
+            matMoreVertOutline,
         }),
     ]
 })
