@@ -8,3 +8,9 @@ type RegistrationPayload struct {
 	} `json:"name"`
 	UserId string `json:"userId"`
 }
+
+type RegistrationEjabberdPayload struct {
+	User     string `json:"user"`
+	Host     string `json:"host"`
+	Password string `json:"password"`
+}

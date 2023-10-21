@@ -1,0 +1,19 @@
+name: Validate PR Title
+
+on:
+  pull_request:
+   types: [opened, synchronize, edited, review_requested]
+
+jobs:
+  validate_pr_title:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    # - name : Print Title of PR
+    #   run: echo The Title of your PR is ${{ github.event.pull_request.title }}
+    - name: Check format of pull request title
+      run: python .github/workflows/scripts/validate_pr_title.py
+      shell: sh
+      env:
+        GITHUB_PR_TITLE: ${{ github.event.pull_request.title }}

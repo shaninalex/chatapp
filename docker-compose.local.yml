@@ -5,23 +5,17 @@ volumes:
 
 
 services:
-
   postgres:
     image: postgres:15
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_MULTIPLE_DATABASES=chat,kratos
+      - POSTGRES_MULTIPLE_DATABASES=chat,kratos,ejabberd
     ports:
       - 5432:5432
     volumes:
-      - ./config/db/:/docker-entrypoint-initdb.d/ 
-      - postgres_data:/docker-entrypoint-initdb.d/
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d chat -U $user" ]
-      interval: 5s
-      timeout: 10s
-      retries: 120
+      - ./configs/db/:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data/
 
   frontend:
     build: ./frontend
@@ -33,13 +27,25 @@ services:
   ejabberd:
     image: ejabberd/ecs
     container_name: chat_ejabberd
+    restart: on-failure
     ports:
       - 5222:5222 # client to server
       - 5280:5280 # web console
+      - 5443:5443
       # - websocket
     volumes:
-      - ./config/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
-      - ./config/ejabberd/token_auth.py:/home/ejabberd/conf/token_auth.py
+      - ./configs/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+    depends_on:
+      - migrate_ejabberd_db
+
+  # Migration task. Create schema in the database before ejabberd starts
+  migrate_ejabberd_db:
+    build: ./configs/migrate_ejabberd_db
+    env_file:
+      - ./configs/migrate_ejabberd_db/.env
+    restart: on-failure
+    depends_on:
+      - postgres
 
   # Kratos
   kratos-migrate:
@@ -48,7 +54,7 @@ services:
     environment:
       - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
     volumes:
-      - ./config/kratos:/etc/config/kratos
+      - ./configs/kratos:/etc/config/kratos
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
 
   kratos:
@@ -60,7 +66,7 @@ services:
       - "4433:4433"
       - "4434:4434"
     volumes:
-      - ./config/kratos:/etc/config/kratos
+      - ./configs/kratos:/etc/config/kratos
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
 
   # Ory hooks server
@@ -70,6 +76,9 @@ services:
     restart: always
     ports:
       - 8081:8081
+    depends_on:
+      - postgres
+      - ejabberd
 
   # Oathkeeper
   oathkeeper:

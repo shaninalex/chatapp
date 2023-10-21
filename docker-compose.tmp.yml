@@ -1,0 +1,69 @@
+version: "3.7"
+
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_MULTIPLE_DATABASES=chat,kratos,ejabberd
+    ports:
+      - 5432:5432
+    volumes:
+      - ./configs/db/:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Ejabberd server
+  # Main part of the application that will handle all user comunication
+  ejabberd:
+    image: ejabberd/ecs
+    container_name: chat_ejabberd
+    restart: on-failure
+    ports:
+      - 5222:5222 # client to server
+      - 5280:5280 # web console
+      - 5443:5443
+      # - websocket
+    environment:
+      - CTL_ON_CREATE=register admin localhost password
+      # - CTL_ON_START=register admin localhost password ;
+      #                check_password admin localhost password ;
+      #                status
+    volumes:
+      - ./configs/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+    depends_on:
+      migrate_ejabberd_db:
+        condition: service_completed_successfully
+
+  # Migration task. Create schema in the database before ejabberd starts
+  migrate_ejabberd_db:
+    build: ./configs/migrate_ejabberd_db
+    env_file:
+      - ./configs/migrate_ejabberd_db/.env
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Ory hooks server
+  ory_hooks:
+    build: ./oryhooks
+    container_name: chat_ory_hooks
+    restart: always
+    env_file:
+      - ./oryhooks/.env
+    ports:
+      - 8081:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ejabberd:
+        condition: service_started

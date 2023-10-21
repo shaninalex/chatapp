@@ -1,0 +1,19 @@
+{
+	"folders": [
+        {
+            "path": ".github"
+        },
+        {
+            "path": "configs"
+        },
+        {
+            "path": "backend"
+        },
+        {
+            "path": "frontend"
+        },
+        {
+            "path": "oryhooks"
+        }
+    ]
+}
