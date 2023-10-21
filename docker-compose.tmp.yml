@@ -92,6 +92,19 @@ services:
       - KRATOS_BROWSER_URL=http://127.0.0.1:4433/
     restart: on-failure
 
+  # Oathkeeper
+  oathkeeper:
+    image: oryd/oathkeeper:v0.40
+    ports:
+      - 8080:4455
+      - 4456:4456
+    command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
+    environment:
+      - LOG_LEVEL=debug
+    restart: on-failure
+    volumes:
+      - ./configs/oathkeeper:/etc/config/oathkeeper
+
   # Email service
   mailslurper:
     image: oryd/mailslurper:latest-smtps
@@ -100,6 +113,9 @@ services:
       - "4436:4436"
       - "4437:4437"
 
+  # 
+  # SERVICES
+  # 
   # Ory hooks server
   ory_hooks:
     build: ./service-oryhooks
@@ -114,3 +130,12 @@ services:
         condition: service_healthy
       ejabberd:
         condition: service_started
+
+  service_profile:
+    build: ./service-profile
+    container_name: chat_profile
+    restart: always
+    env_file:
+      - ./service-profile/.env
+    ports:
+      - 8082:8082

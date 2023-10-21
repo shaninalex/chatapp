@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './app-routing.module';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
 import { HeaderComponent } from './ui/header/header.component';
+import { HttpClientModule } from "@angular/common/http";
 
 import { NgIconsModule } from '@ng-icons/core';
 import {
@@ -34,6 +35,7 @@ import { ContactItemComponent } from './ui/contact-item/contact-item.component';
     imports: [
         CommonModule,
         DashboardRoutingModule,
+        HttpClientModule,
         NgIconsModule.withIcons({
             matMessageOutline,
             matSettingsOutline,
@@ -45,6 +47,6 @@ import { ContactItemComponent } from './ui/contact-item/contact-item.component';
             matSearchOutline,
             matMoreVertOutline,
         }),
-    ]
+    ],
 })
 export class DashboardModule { }

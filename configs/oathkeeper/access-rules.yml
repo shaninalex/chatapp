@@ -1,17 +1,38 @@
-# example
-# not actual config
 - id: "api:profile"
   upstream:
     preserve_host: true
-    url: "ws://chat:8003"
+    url: "http://service_profile:8082"
+    strip_path: /api/v2/profile
   match:
-    url: "ws://chat:8080<**>"
+    url: "http://127.0.0.1:8080/api/v2/profile<**>"
     methods:
       - GET
+      - PATCH
       - POST
   authenticators:
-    - handler: noop
+    - handler: cookie_session
   mutators:
-    - handler: noop
+    - handler: header
   authorizer:
     handler: allow
+  errors:
+    - handler: json
+
+# - id: "api:chat"
+#   upstream:
+#     preserve_host: true
+#     url: "ws://chat:8003"
+#   match:
+#     url: "ws://chat:8080<**>"
+#     methods:
+#       - GET
+#   authenticators:
+#     - handler: cookie_session
+#   mutators:
+#     - handler: header
+#   authorizer:
+#     handler: allow
+#   errors:
+#     - handler: redirect
+#       config:
+#         to: http://127.0.0.1:4455/login

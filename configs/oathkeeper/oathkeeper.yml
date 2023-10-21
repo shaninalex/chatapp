@@ -7,7 +7,7 @@ serve:
     cors:
       enabled: true
       allowed_origins:
-        - http://127.0.0.1:4200
+        - "*"
       allowed_methods:
         - POST
         - GET
@@ -27,18 +27,6 @@ errors:
     - json
 
   handlers:
-    redirect:
-      enabled: true
-      config:
-        to: http://127.0.0.1:4455/login
-        when:
-          - error:
-              - unauthorized
-              - forbidden
-            request:
-              header:
-                accept:
-                  - text/html
     json:
       enabled: true
       config:
@@ -76,8 +64,6 @@ mutators:
   noop:
     enabled: true
   header:
-    # Set enabled to true if the authenticator should be enabled and false 
-    # to disable the authenticator. Defaults to false.
     enabled: true
     config:
       headers:
