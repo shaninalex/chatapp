@@ -1,11 +1,13 @@
 package main
 
 type RegistrationPayload struct {
-	Email string `json:"email"`
-	Name  struct {
-		First string `json:"first"`
-		Last  string `json:"last"`
-	} `json:"name"`
+	Traits struct {
+		Email string `json:"email"`
+		Name  struct {
+			First string `json:"first"`
+			Last  string `json:"last"`
+		} `json:"name"`
+	} `json:"traits"`
 	UserId string `json:"userId"`
 }
 

@@ -10,7 +10,7 @@ tmp_start:
 	docker compose -f ./docker-compose.tmp.yml up -d --build
 
 tmp_down:
-	docker compose -f ./docker-compose.tmp.yml down -v
+	docker compose -f ./docker-compose.tmp.yml down
 
-# tmp_clear_volumes:
-# 	docker compose -f ./docker-compose.tmp.yml down -v
+tmp_clear_volumes:
+	docker compose -f ./docker-compose.tmp.yml down -v
