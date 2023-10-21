@@ -26,6 +26,10 @@ func main() {
 		err := c.ShouldBindJSON(&payload)
 		if err != nil {
 			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":   true,
+				"message": err.Error(),
+			})
 			return
 		}
 
@@ -33,16 +37,28 @@ func main() {
 		err = oryHooks.Register(&payload)
 		if err != nil {
 			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":   true,
+				"message": err.Error(),
+			})
 			return
 		}
 
 		// create Auth Token
-		err = oryHooks.Register(&payload)
+		err = oryHooks.AuthToken(&payload)
 		if err != nil {
 			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":   true,
+				"message": err.Error(),
+			})
 			return
 		}
-		c.JSON(http.StatusOK, nil)
+
+		c.JSON(http.StatusOK, gin.H{
+			"error":   false,
+			"message": fmt.Sprintf("Created chat user for %s", payload.Email),
+		})
 	})
 
 	router.Run(fmt.Sprintf(":%d", port))

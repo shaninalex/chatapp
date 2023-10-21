@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -34,9 +36,32 @@ func InitOryHooks() *OryHooks {
 	}
 }
 
-func (o *OryHooks) Register(payload *RegistrationPayload) error {
+func (o *OryHooks) makeRequest(method string, url string, payload io.Reader) error {
+	log.Println(url)
 	client := http.Client{}
+	request, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", o.EjabberdRoot, url), payload)
+	auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", o.AdminJID, o.AdminPassword)))
+	request.Header.Add("Authorization", fmt.Sprintf("Basic %s", auth))
+	if err != nil {
+		return err
+	}
+	resp, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
 
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != 200 {
+		return errors.New(string(data))
+	}
+	return nil
+}
+
+func (o *OryHooks) Register(payload *RegistrationPayload) error {
 	ejabberd_payload := strings.NewReader(
 		fmt.Sprintf(`{"user": "%s","host": "%s","password": "%s"}`,
 			payload.UserId,
@@ -44,49 +69,25 @@ func (o *OryHooks) Register(payload *RegistrationPayload) error {
 			uuid.New().String(), // users will never be able to login via password. Only Auth token
 		),
 	)
-	request, err := http.NewRequest("POST", fmt.Sprintf("%s/api/register", o.EjabberdRoot), ejabberd_payload)
+	err := o.makeRequest("POST", "api/register", ejabberd_payload)
 	if err != nil {
 		return err
 	}
-	resp, err := client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(request.Body)
-	if err != nil {
-		return err
-	}
-	log.Println(string(data))
-
 	return nil
 }
 
 func (o *OryHooks) AuthToken(payload *RegistrationPayload) error {
-	client := http.Client{}
 	ejabberd_payload := strings.NewReader(
-		fmt.Sprintf(`{"jid": "%s","ttl": "%d","scopes": "%s"}`,
+		fmt.Sprintf(`{"jid": "%s","ttl": %d,"scopes": "%s"}`,
 			payload.UserId,
 			o.TokenLifeTime,
 			DEFAULT_USER_SCOPE,
 		),
 	)
-	request, err := http.NewRequest("POST", fmt.Sprintf("%s/api/oauth_issue_token", o.EjabberdRoot), ejabberd_payload)
-	if err != nil {
-		return err
-	}
-	resp, err := client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
 
-	data, err := io.ReadAll(request.Body)
+	err := o.makeRequest("POST", "api/oauth_issue_token", ejabberd_payload)
 	if err != nil {
 		return err
 	}
-	log.Println(string(data))
-
 	return nil
 }
