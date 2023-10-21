@@ -70,7 +70,7 @@ selfservice:
             - hook: show_verification_ui
             - hook: web_hook
               config:
-                url: http://ory_hooks_test:8081/ory-hooks/register
+                url: http://ory_hooks:8081/ory-hooks/register
                 method: POST
                 # jsonnet template
                 # function(ctx) {

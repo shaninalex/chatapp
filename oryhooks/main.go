@@ -21,44 +21,43 @@ func main() {
 		return
 	}
 
+	// Always return 200 OK since Kratos does not realy need to handle
+	// errors from webhooks
 	router.POST("/ory-hooks/register", func(c *gin.Context) {
 		var payload RegistrationPayload
 		err := c.ShouldBindJSON(&payload)
 		if err != nil {
 			log.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{
+			log.Println(gin.H{
 				"error":   true,
 				"message": err.Error(),
 			})
-			return
+			c.JSON(http.StatusOK, nil)
 		}
 
 		// create ejabberd user
 		err = oryHooks.Register(&payload)
 		if err != nil {
 			log.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{
+			log.Println(gin.H{
 				"error":   true,
 				"message": err.Error(),
 			})
-			return
+			c.JSON(http.StatusOK, nil)
 		}
 
 		// create Auth Token
 		err = oryHooks.AuthToken(&payload)
 		if err != nil {
 			log.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{
+			log.Println(gin.H{
 				"error":   true,
 				"message": err.Error(),
 			})
-			return
+			c.JSON(http.StatusOK, nil)
 		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"error":   false,
-			"message": fmt.Sprintf("Created chat user for %s", payload.Email),
-		})
+		c.JSON(http.StatusOK, nil)
 	})
 
 	router.Run(fmt.Sprintf(":%d", port))

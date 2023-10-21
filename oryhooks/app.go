@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -37,7 +36,6 @@ func InitOryHooks() *OryHooks {
 }
 
 func (o *OryHooks) makeRequest(method string, url string, payload io.Reader) error {
-	log.Println(url)
 	client := http.Client{}
 	request, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", o.EjabberdRoot, url), payload)
 	auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", o.AdminJID, o.AdminPassword)))
