@@ -18,16 +18,11 @@
         "target": "ES2022",
         "module": "ES2022",
         "useDefineForClassFields": false,
-        "strictPropertyInitialization": false,
         "lib": [
             "ES2022",
             "dom"
         ],
-        "paths": {
-            "rxjs": [
-                "node_modules/rxjs"
-            ]
-        }
+        "strictPropertyInitialization": false,
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

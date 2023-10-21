@@ -1,30 +1,52 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
-import { RouterModule, Routes } from '@angular/router';
-
-import { HeaderComponent } from './ui/header/header.component';
+import { DashboardRoutingModule } from './app-routing.module';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
-import { WebsocketService } from './services/websocket.service';
+import { HeaderComponent } from './ui/header/header.component';
+import { HttpClientModule } from "@angular/common/http";
 
+import { NgIconsModule } from '@ng-icons/core';
+import {
+    matMessageOutline,
+    matSettingsOutline,
+    matPowerSettingsNewOutline,
+    matWechatOutline,
+    matNotificationsOutline,
+    matHomeOutline,
+    matBookmarkBorderOutline,
+    matSearchOutline,
+    matMoreVertOutline,
+} from '@ng-icons/material-icons/outline';
+import { ChatComponent } from './pages/chat/chat.component';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { ContactItemComponent } from './ui/contact-item/contact-item.component';
 
-const routes: Routes = [
-    {
-        path: "",
-        component: DashboardComponent
-    }
-]
 
 @NgModule({
     declarations: [
         DashboardComponent,
+        SidebarComponent,
         HeaderComponent,
-        SidebarComponent
+        ChatComponent,
+        SettingsComponent,
+        ContactItemComponent
     ],
     imports: [
         CommonModule,
-        RouterModule.forChild(routes)
+        DashboardRoutingModule,
+        HttpClientModule,
+        NgIconsModule.withIcons({
+            matMessageOutline,
+            matSettingsOutline,
+            matPowerSettingsNewOutline,
+            matWechatOutline,
+            matNotificationsOutline,
+            matHomeOutline,
+            matBookmarkBorderOutline,
+            matSearchOutline,
+            matMoreVertOutline,
+        }),
     ],
-    providers: [WebsocketService]
 })
 export class DashboardModule { }

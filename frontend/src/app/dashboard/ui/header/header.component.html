@@ -1,22 +1,27 @@
-<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Chat</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <button class="nav-link" (click)="logout()">Logout</button>
-                </li>
-            </ul>
+<div class="fixed top-0 left-0 pl-20 h-20 bg-white w-screen flex flex-col justify-between">
+    <div class="flex justify-between items-center w-full px-4 py-2">
+        <div>
+            <h1 class="text-xl">Conversations</h1>
+        </div>
+        <div class="flex items-center justify-between gap-4">
+            <button class="p-3 w-8 h-8 rounded-full hover:bg-sky-200 border flex items-center justify-center">
+                <ng-icon name="matNotificationsOutline" class="text-lg"></ng-icon>
+            </button>
 
+            <button class="p-3 w-8 h-8 rounded-full hover:bg-sky-200 border flex items-center justify-center">
+                <ng-icon name="matBookmarkBorderOutline" class="text-lg"></ng-icon>
+            </button>
+
+            <button>
+                <figure class="w-10 h-10 rounded-md overflow-hidden">
+                    <img src="/assets/images/default.jpg" alt="username" class="object-cover w-full h-full" />
+                </figure>
+            </button>
         </div>
     </div>
-</nav>
+    <div class="flex items-center gap-1 text-xs text-slate-500 w-full border-t px-4 py-1">
+        <ng-icon name="matHomeOutline" class="text-blue-500 text-sm"></ng-icon>
+        <span>/</span>
+        <span>Conversations</span>
+    </div>
+</div>

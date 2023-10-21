@@ -1,4 +1,4 @@
-og:
+log:
   level: debug
   format: json
 
@@ -16,7 +16,6 @@ serve:
         - DELETE
       allowed_headers:
         - Authorization
-        - X-Auth-Token
         - Content-Type
       exposed_headers:
         - Content-Type
@@ -44,6 +43,16 @@ authenticators:
     config:
       subject: guest
 
+  cookie_session:
+    enabled: true
+    config:
+      check_session_url: http://kratos:4433/sessions/whoami
+      preserve_path: true
+      extra_from: "@this"
+      subject_from: "identity.id"
+      only:
+        - ory_kratos_session
+
   noop:
     enabled: true
 
@@ -54,3 +63,8 @@ authorizers:
 mutators:
   noop:
     enabled: true
+  header:
+    enabled: true
+    config:
+      headers:
+        X-User: "{{ print .Subject }}"
