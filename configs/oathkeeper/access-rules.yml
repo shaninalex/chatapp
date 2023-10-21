@@ -1,6 +1,6 @@
 # example
 # not actual config
-- id: "api:chat"
+- id: "api:profile"
   upstream:
     preserve_host: true
     url: "ws://chat:8003"

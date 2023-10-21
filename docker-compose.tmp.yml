@@ -53,21 +53,6 @@ services:
       postgres:
         condition: service_healthy
 
-  # Ory hooks server
-  ory_hooks:
-    build: ./oryhooks
-    container_name: chat_ory_hooks
-    restart: always
-    env_file:
-      - ./oryhooks/.env
-    ports:
-      - 8081:8081
-    depends_on:
-      postgres:
-        condition: service_healthy
-      ejabberd:
-        condition: service_started
-
   # Kratos
   kratos-migrate:
     image: oryd/kratos:v1.0.0
@@ -114,3 +99,18 @@ services:
     ports:
       - "4436:4436"
       - "4437:4437"
+
+  # Ory hooks server
+  ory_hooks:
+    build: ./service-oryhooks
+    container_name: chat_ory_hooks
+    restart: always
+    env_file:
+      - ./service-oryhooks/.env
+    ports:
+      - 8081:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ejabberd:
+        condition: service_started

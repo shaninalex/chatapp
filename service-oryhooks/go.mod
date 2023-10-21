@@ -1,4 +1,4 @@
-module ory-hooks-handler
+module service-oryhooks
 
 go 1.21.2
 

@@ -1,4 +1,4 @@
-og:
+log:
   level: debug
   format: json
 
@@ -7,7 +7,7 @@ serve:
     cors:
       enabled: true
       allowed_origins:
-        - "*"
+        - http://127.0.0.1:4200
       allowed_methods:
         - POST
         - GET
@@ -16,7 +16,6 @@ serve:
         - DELETE
       allowed_headers:
         - Authorization
-        - X-Auth-Token
         - Content-Type
       exposed_headers:
         - Content-Type
@@ -28,6 +27,18 @@ errors:
     - json
 
   handlers:
+    redirect:
+      enabled: true
+      config:
+        to: http://127.0.0.1:4455/login
+        when:
+          - error:
+              - unauthorized
+              - forbidden
+            request:
+              header:
+                accept:
+                  - text/html
     json:
       enabled: true
       config:
@@ -44,6 +55,16 @@ authenticators:
     config:
       subject: guest
 
+  cookie_session:
+    enabled: true
+    config:
+      check_session_url: http://kratos:4433/sessions/whoami
+      preserve_path: true
+      extra_from: "@this"
+      subject_from: "identity.id"
+      only:
+        - ory_kratos_session
+
   noop:
     enabled: true
 
@@ -54,3 +75,10 @@ authorizers:
 mutators:
   noop:
     enabled: true
+  header:
+    # Set enabled to true if the authenticator should be enabled and false 
+    # to disable the authenticator. Defaults to false.
+    enabled: true
+    config:
+      headers:
+        X-User: "{{ print .Subject }}"
