@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,6 +8,11 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RequestInterceptor } from './base_services/request.interceptor';
 import { ProfileService } from './base_services/profile.service';
 import { LoginComponent } from './pages/login/login.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { profileReducer } from './store/profile/profile.reducer';
+import { ProfileEffects } from './store/profile/profile.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
     declarations: [
@@ -19,6 +24,13 @@ import { LoginComponent } from './pages/login/login.component';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        StoreModule.forRoot({
+            profile: profileReducer,
+        }),
+        EffectsModule.forRoot([
+            ProfileEffects,
+        ]),
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
     providers: [
         {
