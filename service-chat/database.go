@@ -13,7 +13,7 @@ type Database struct {
 }
 
 func InitDatabaseConnection() (*Database, error) {
-	db, err := sql.Open("postgres", "postgres://user:password@localhost:5432/ejabberd?sslmode=disable")
+	db, err := sql.Open("postgres", EJABBERD_DATABASE)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func InitDatabaseConnection() (*Database, error) {
 func (db *Database) getToken(user_id string) (string, error) {
 	// for some reason I can't authenticate user with oath token. So we will use
 	// password instead... Less secure...
-	sql, _, _ := goqu.From("user").Select("password").Where(goqu.Ex{
+	sql, _, _ := goqu.From("users").Select("password").Where(goqu.Ex{
 		"username": user_id,
 	}).ToSQL()
 	var token string

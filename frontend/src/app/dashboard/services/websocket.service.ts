@@ -2,11 +2,9 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class WebsocketService {
-    socket = new WebSocket("ws://127.0.0.1:8083/ws");
+    socket = new WebSocket("ws://127.0.0.1:8080/ws");
 
     constructor() {
-        console.log("socket");
-
         this.socket.onopen = (event: Event) => {
             console.log(event);
         }

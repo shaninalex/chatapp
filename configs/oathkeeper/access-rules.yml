@@ -21,11 +21,12 @@
 - id: "api:chat"
   upstream:
     preserve_host: true
-    url: "ws://service_chat:8083"
+    url: "http://service_chat:8083"
   match:
-    url: "ws://127.0.0.1:8080<**>"
+    url: "http://127.0.0.1:8080/ws"
     methods:
       - GET
+      - POST
   authenticators:
     - handler: cookie_session
   mutators:
@@ -34,3 +35,4 @@
     handler: allow
   errors:
     - handler: json
+# https://www.ory.sh/docs/oathkeeper/guides/proxy-websockets

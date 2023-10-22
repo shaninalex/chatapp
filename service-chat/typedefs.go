@@ -16,3 +16,10 @@ type RegistrationEjabberdPayload struct {
 	Host     string `json:"host"`
 	Password string `json:"password"`
 }
+
+type Message struct {
+	From string `json:"from"`
+	To   string `json:"to,omitempty"`
+	Body string `json:"body,omitempty"`
+	Type string `json:"type,omitempty"`
+}

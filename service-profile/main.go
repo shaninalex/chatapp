@@ -18,12 +18,12 @@ func main() {
 	client := ory.NewAPIClient(configuration)
 	router := gin.Default()
 	router.GET("/", func(c *gin.Context) {
-
 		user_id := c.Request.Header.Get("X-User")
 		req := client.IdentityApi.GetIdentity(c, user_id)
 		identity, _, err := client.IdentityApi.GetIdentityExecute(req)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get identity"})
+			return
 		}
 
 		c.JSON(http.StatusOK, identity.Traits)
