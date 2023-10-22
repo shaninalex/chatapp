@@ -58,6 +58,13 @@ listen:
     ip: "::"    # TODO: allow only internal services accessing this port
     request_handlers:
       /api: mod_http_api
+  -
+    port: 5444
+    ip: "::"
+    module: ejabberd_http
+    tls: false
+    request_handlers:
+      "/ws": ejabberd_http_ws
 
 s2s_use_starttls: optional
 
