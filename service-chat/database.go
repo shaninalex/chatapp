@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"errors"
-	"os"
 
 	"github.com/doug-martin/goqu/v9"
 	_ "github.com/lib/pq"
@@ -14,7 +13,7 @@ type Database struct {
 }
 
 func InitDatabaseConnection() (*Database, error) {
-	db, err := sql.Open("postgres", os.Getenv("EJABBERD_DATABASE"))
+	db, err := sql.Open("postgres", "postgres://user:password@localhost:5432/ejabberd?sslmode=disable")
 	if err != nil {
 		return nil, err
 	}
