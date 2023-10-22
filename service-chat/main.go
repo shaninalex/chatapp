@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -13,19 +12,27 @@ import (
 func main() {
 
 	router := gin.Default()
-
+	database, err := InitDatabaseConnection()
+	if err != nil {
+		panic(err)
+	}
 	port, err := strconv.Atoi(os.Getenv("APP_PORT"))
 	if err != nil {
-		log.Println(err)
-		return
+		panic(err)
 	}
 
-	// Always return 200 OK since Kratos does not realy need to handle
-	// errors from webhooks
-	router.GET("/ory-hooks/register", func(c *gin.Context) {
+	router.GET("/connect", func(c *gin.Context) {
 		user_id := c.Request.Header.Get("X-User")
-
-		c.JSON(http.StatusOK, nil)
+		if user_id == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "user id is empty"})
+			return
+		}
+		token, err := database.getToken(user_id)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"authToken": token})
 	})
 
 	router.Run(fmt.Sprintf(":%d", port))
