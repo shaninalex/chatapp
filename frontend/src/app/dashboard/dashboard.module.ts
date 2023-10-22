@@ -21,6 +21,7 @@ import {
 import { ChatComponent } from './pages/chat/chat.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ContactItemComponent } from './ui/contact-item/contact-item.component';
+import { WebsocketService } from './services/websocket.service';
 
 
 @NgModule({
@@ -48,5 +49,8 @@ import { ContactItemComponent } from './ui/contact-item/contact-item.component';
             matMoreVertOutline,
         }),
     ],
+    providers: [
+        WebsocketService
+    ]
 })
 export class DashboardModule { }

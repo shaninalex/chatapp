@@ -1,0 +1,11 @@
+FROM golang:1.21.2
+WORKDIR /build
+COPY . ./
+RUN go mod tidy
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o service_chat .
+
+FROM alpine:latest  
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=0 /build/service_chat ./
+CMD ["./service_chat"]
