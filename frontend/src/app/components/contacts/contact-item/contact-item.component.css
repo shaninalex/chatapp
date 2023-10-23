@@ -1,0 +1,16 @@
+.contact-item {
+    padding: 24px;
+}
+
+.contact-item figure {
+    width: 58px;
+    height: 58px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.contact-item figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

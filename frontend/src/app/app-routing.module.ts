@@ -1,27 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { LoginComponent } from './pages/login/login.component';
-import { AuthRequired } from './base_services/auth.guard';
 
 const routes: Routes = [
-    {
-        path: "", 
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-        canActivate: [AuthRequired],
-    },
-    {
-        path: "login",
-        component: LoginComponent
-    },
-    {
-        path: "404",
-        component: NotFoundComponent
-    },
-    { 
-        path: "**",
-        redirectTo: "404"
-    }
 ];
 
 @NgModule({
