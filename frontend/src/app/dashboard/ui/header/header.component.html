@@ -1,7 +1,13 @@
-<div class="fixed top-0 left-0 pl-20 h-20 bg-white w-screen flex flex-col justify-between">
+<div class="fixed top-0 left-0 h-20 bg-white w-full flex flex-col justify-between
+    sm:pl-20 z-10 sm:z-auto
+    ">
     <div class="flex justify-between items-center w-full px-4 py-2">
-        <div>
-            <h1 class="text-xl">Conversations</h1>
+        <div class="flex items-center gap-4">
+            <a routerLink="/" class="sm:hidden block w-5">
+                <img src="/assets/images/logo.png" alt="ChattUp" 
+                    class="block h-full w-full" />
+            </a>
+            <h1 class="text-xl">Messages</h1>
         </div>
         <div class="flex items-center justify-between gap-4">
             <button class="p-3 w-8 h-8 rounded-full hover:bg-sky-200 border flex items-center justify-center">

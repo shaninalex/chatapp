@@ -1,5 +1,8 @@
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-    <div class="rounded bg-white col-span-1">
+<div class="conv-box">
+    <div class="mb-4 lg:hidden">
+        <button class="btn">Show contacts</button>
+    </div>
+    <div class="conv-contacts">
         <div class="p-4">
             <div class="flex justify-between items-center mb-4">
                 <div class="text-xl text-slate-600">Contacts</div>
@@ -12,12 +15,14 @@
                 </form>
             </div>
         </div>
-        <app-contact-item
-            *ngFor="let contact of contacts"
-            [contact]="contact"
-        ></app-contact-item>
+        <div class="overflow-y-auto flex-grow">
+            <app-contact-item
+                *ngFor="let contact of contacts"
+                [contact]="contact"
+            ></app-contact-item>
+        </div>
     </div>
-    <div class="rounded bg-white  col-span-3">
+    <div class="conv">
         <div class="p-4 border-b flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <figure class="w-10 h-10 rounded-md overflow-hidden">
