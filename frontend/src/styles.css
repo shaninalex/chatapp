@@ -180,7 +180,7 @@ body::-webkit-scrollbar-track {
 }
 
 @font-face {
-    font-family: 'Satoshi';
+    font-family: 'Satoshi-Medium';
     src: url('./assets/fonts/Satoshi-Medium.woff2') format('woff2'),
         url('./assets/fonts/Satoshi-Medium.woff') format('woff'),
         url('./assets/fonts/Satoshi-Medium.ttf') format('truetype');
@@ -274,3 +274,10 @@ body {
     --border: var(--color-red);
     --color: var(--color-red);
 }
+
+
+.heading-sm {
+    font-size: 16px;
+    font-weight: 700;
+}
+

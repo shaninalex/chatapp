@@ -1,15 +1,16 @@
-<div class="contact-item">
-
-    <figure>
-        <img src="/assets/images/default.jpg" alt="">
-    </figure>
-
-    <div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <div>
-
+<div class="contact-item"
+    [ngClass]="{'active': active}">
+    <div class="contact-item-row">
+        <figure>
+            <img src="/assets/images/default.jpg" alt="">
+        </figure>
+        <div>
+            <div class="heading-sm">Cameron Williamson</div>
+            <div class="message-preview">Not too bad, just trying to catch up on some. How about y</div>
+        </div>
+        <div class="contact-meta">
+            <div class="time-elapsed">5s</div>
+            <div class="message-counter">1</div>
+        </div>
     </div>
 </div>

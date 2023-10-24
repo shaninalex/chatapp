@@ -6,11 +6,14 @@
     width: 371px;
     background-color: var(--color-white);
     border-left: 1px solid var(--color-gray-100);
+    display: flex;
+    flex-direction: column;
 }
 
 .contacts-header {
     padding: 24px;
     padding-bottom: 0;
+    flex-shrink: 0;
 }
 
 .contacts-top {
@@ -32,4 +35,10 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+
+.contact-list {
+    overflow-y: auto;
+    flex-grow: 1;
 }
