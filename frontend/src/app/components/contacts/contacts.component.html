@@ -24,11 +24,17 @@
         </div>
     </div>
     <div class="contact-list">
-        <app-contact-item></app-contact-item>
-        <app-contact-item></app-contact-item>
-        <app-contact-item [active]="true"></app-contact-item>
-        <app-contact-item></app-contact-item>
-        <app-contact-item></app-contact-item>
-        <app-contact-item></app-contact-item>
+        <app-contact-item timeElapsed="5s"></app-contact-item>
+        <app-contact-item timeElapsed="20s" [unreadCount]=1></app-contact-item>
+        <app-contact-item timeElapsed="18h" [active]="true"></app-contact-item>
+        <app-contact-item timeElapsed="1d"></app-contact-item>
+        <app-contact-item timeElapsed="12h"></app-contact-item>
+        <app-contact-item timeElapsed="2w"></app-contact-item>
+        <app-contact-item timeElapsed="5s"></app-contact-item>
+        <app-contact-item timeElapsed="20s" [unreadCount]=1></app-contact-item>
+        <app-contact-item timeElapsed="18h" [active]="true"></app-contact-item>
+        <app-contact-item timeElapsed="1d"></app-contact-item>
+        <app-contact-item timeElapsed="12h"></app-contact-item>
+        <app-contact-item timeElapsed="2w"></app-contact-item>
     </div>
 </div>

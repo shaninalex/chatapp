@@ -7,4 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class ContactItemComponent {
     @Input() active: boolean;
+    @Input() unreadCount: number|undefined;
+    @Input() timeElapsed: string|undefined;
 }
