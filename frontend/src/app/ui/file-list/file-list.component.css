@@ -1,0 +1,23 @@
+ul { 
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: 1rem 0;
+}
+
+li,
+li .name {
+    display: flex;
+    align-items: center;
+}
+
+li .name {
+    flex-grow: 1;
+    gap: 0.625rem;
+    color: var(--color-gray-300)
+}
+
+.show-more {
+    color: var(--color-accent);
+    font-size: 1rem;
+}

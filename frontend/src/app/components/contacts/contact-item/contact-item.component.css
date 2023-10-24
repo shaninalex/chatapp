@@ -15,6 +15,12 @@
     box-shadow: inset 6px 0px 0px 0px var(--color-accent);
 }
 
+.contact-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
 .contact-item-row {
     display: flex;
     gap: 10px;

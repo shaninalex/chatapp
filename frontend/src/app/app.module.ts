@@ -11,6 +11,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { ContactItemComponent } from './components/contacts/contact-item/contact-item.component';
+import { CheckboxComponent } from './ui/checkbox/checkbox.component';
+import { CollapseComponent } from './ui/collapse/collapse.component';
+import { FileListComponent } from './ui/file-list/file-list.component';
+import { ImageTilesComponent } from './ui/image-tiles/image-tiles.component';
 
 @NgModule({
     declarations: [
@@ -21,6 +25,10 @@ import { ContactItemComponent } from './components/contacts/contact-item/contact
         UserInfoComponent,
         ConversationComponent,
         ContactItemComponent,
+        CheckboxComponent,
+        CollapseComponent,
+        FileListComponent,
+        ImageTilesComponent,
     ],
     imports: [
         BrowserModule,
