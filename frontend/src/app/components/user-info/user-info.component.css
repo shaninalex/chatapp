@@ -1,0 +1,6 @@
+.user-info {
+    background-color: var(--color-white);
+    width: 372px;
+    height: 100%;
+    flex-shrink: 0;
+}
