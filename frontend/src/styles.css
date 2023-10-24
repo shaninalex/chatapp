@@ -161,6 +161,8 @@ body::-webkit-scrollbar-track {
     --color-gray-200: #ACB9B8;
     --color-gray-300: #758A88;
 
+    --color-hover: rgba(50, 153, 147, 0.1);
+
     --btn-circle-size: 52;
     --font-default: 'Satoshi';
 
@@ -281,3 +283,32 @@ body {
     font-weight: 700;
 }
 
+.action-btn {
+    color: var(--color-accent);
+    width: 52px;
+    height: 52px;
+    border-radius: 52px;
+    border: 1px solid var(--color-gray-100);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--animation-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn.action-btn__disabled {
+    color: var(--color-gray-200);
+}
+
+.action-btn.action-btn__disabled svg {
+    fill: var(--color-gray-200);
+}
+
+.action-btn:hover {
+    background-color: var(--color-hover);
+}
+
+.action-btn svg {
+    fill: var(--color-accent)
+}
