@@ -29,3 +29,38 @@ figure img {
     height: 100%;
     object-fit: cover;
 }
+
+.account-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-name {
+    color: #171C1B;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.account-status {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    font-size: 16px;
+    color: var(--color-secondary);
+}
+
+.account-status.offline .status-icon {
+    --color: var(--color-gray-200)
+}
+
+.status-icon {
+    --_color: var(--color, var(--color-green));
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: var(--_color);
+}
