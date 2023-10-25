@@ -1,9 +1,23 @@
 :host {
     flex-grow: 1;
+    height: 100%;
 }
 
 .conversation-box {
     margin-inline: auto;
     max-width: 37rem;
-    padding: 1rem
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 1rem;
+}
+
+.conversation {
+
+}
+
+.conversation-editor {
+    
 }
