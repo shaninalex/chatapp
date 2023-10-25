@@ -15,6 +15,9 @@ import { CheckboxComponent } from './ui/checkbox/checkbox.component';
 import { CollapseComponent } from './ui/collapse/collapse.component';
 import { FileListComponent } from './ui/file-list/file-list.component';
 import { ImageTilesComponent } from './ui/image-tiles/image-tiles.component';
+import { EditorComponent } from './components/conversation/editor/editor.component';
+import { MessagesComponent } from './components/conversation/messages/messages.component';
+import { MessageComponent } from './components/conversation/message/message.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +32,9 @@ import { ImageTilesComponent } from './ui/image-tiles/image-tiles.component';
         CollapseComponent,
         FileListComponent,
         ImageTilesComponent,
+        EditorComponent,
+        MessagesComponent,
+        MessageComponent,
     ],
     imports: [
         BrowserModule,

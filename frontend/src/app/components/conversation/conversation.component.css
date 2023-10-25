@@ -1,5 +1,9 @@
 :host {
     flex-grow: 1;
 }
+
 .conversation-box {
+    margin-inline: auto;
+    max-width: 37rem;
+    padding: 1rem
 }

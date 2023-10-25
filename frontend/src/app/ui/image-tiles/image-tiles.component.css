@@ -9,6 +9,13 @@ figure {
     border-radius: 1rem;
     overflow: hidden;
     display: block;
+    opacity: 1;
+    transition: var(--animation-speed);
+    cursor: pointer;
+}
+
+figure:hover {
+    opacity: 0.8;
 }
 
 img {

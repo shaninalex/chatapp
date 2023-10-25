@@ -157,7 +157,7 @@ body::-webkit-scrollbar-track {
     --color-accent: #329993;
     /* --color-accent: #26736E; */
     --color-secondary: #465352;
-    --color-gray-100: #e9f1f0;
+    --color-gray-100: #E3E8E7;
     --color-gray-200: #ACB9B8;
     --color-gray-300: #758A88;
 
@@ -281,6 +281,39 @@ body {
 .heading-sm {
     font-size: 16px;
     font-weight: 700;
+}
+
+.action-button-sm {
+    --_color: var(--color, var(--color-gray-200));
+    --_background: var(--background, transparent);
+    --_border-color: var(--border-color, transparent);
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--_color);
+    padding: 0.25rem;
+    background-color: var(--_background);
+    border: 1px solid var(--_border-color);
+    transition: var(--animation-speed);
+}
+
+.action-button-sm.__active {
+    fill: var(--_color);
+}
+
+.action-button-sm svg {
+    fill: var(--_color);
+    transition: var(--animation-speed);
+}
+
+.action-button-sm:hover {
+    --color: var(--color-accent);
+    --background: var(--color-hover);
+    --border-color: var(--color-gray-100);
 }
 
 .action-btn {
