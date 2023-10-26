@@ -20,6 +20,12 @@ import { MessagesComponent } from './components/conversation/messages/messages.c
 import { MessageComponent } from './components/conversation/message/message.component';
 import { StoreModule } from '@ngrx/store';
 import { uiReducer } from './store/ui/reducer';
+import { profileReducer } from './store/profile/reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { ProfileEffects } from './store/profile/effects';
+import { ProfileService } from './services/profile.service';
+import { WebsocketService } from './services/websocket.service';
+
 
 @NgModule({
     declarations: [
@@ -43,10 +49,18 @@ import { uiReducer } from './store/ui/reducer';
         AppRoutingModule,
         HttpClientModule,
         StoreModule.forRoot({
-            ui: uiReducer
+            ui: uiReducer,
+            profile: profileReducer,
         }),
+        EffectsModule.forRoot([
+            ProfileEffects,
+        ]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [
+        AppComponent,
+        ProfileService,
+        WebsocketService,
+    ]
 })
 export class AppModule { }

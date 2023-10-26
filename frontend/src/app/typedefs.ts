@@ -1,5 +1,9 @@
+export interface Name {
+    first: string
+    last: string
+}
+
 export interface Profile {
-    image: string
-    username: string
-    user_id: string
+    email: string
+    name: Name
 }
