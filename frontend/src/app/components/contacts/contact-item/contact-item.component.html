@@ -4,11 +4,11 @@
         <figure>
             <img src="/assets/images/default.jpg" alt="">
         </figure>
-        <div class="contact-item-body">
+        <div class="contact-item-body" *ngIf="!(compact | async)">
             <div class="heading-sm">Cameron Williamson</div>
             <div class="message-preview">Not too bad, just trying to catch up on some. How about y</div>
         </div>
-        <div class="contact-meta">
+        <div class="contact-meta" *ngIf="!(compact | async)">
             <div class="time-elapsed">{{timeElapsed}}</div>
             <div *ngIf="unreadCount" class="message-counter">{{unreadCount}}</div>
             <svg *ngIf="!unreadCount" width="24" height="11" viewBox="0 0 24 11" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -7,5 +7,6 @@
         <app-header></app-header>
         <app-conversation></app-conversation>
     </main>
-    <app-user-info></app-user-info>
+    <app-user-info 
+        *ngIf="showUserInfo | async"></app-user-info>
 </div>  

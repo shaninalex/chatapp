@@ -1,10 +1,15 @@
-<div class="contacts">
+<div class="contacts"
+    [ngClass]="{compact: compactView | async}">
     <div class="contacts-header">
         <div class="contacts-top">
-            <div class="contacts-title">Messages</div>
-            <button class="clear-btn">
-                <svg width="21" height="6" viewBox="0 0 21 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.125 -6.83923e-07C10.6442 -6.77732e-07 11.1517 0.153953 11.5834 0.442392C12.0151 0.730831 12.3515 1.1408 12.5502 1.62046C12.7489 2.10011 12.8008 2.62791 12.6996 3.13711C12.5983 3.64631 12.3483 4.11404 11.9812 4.48115C11.614 4.84827 11.1463 5.09827 10.6371 5.19956C10.1279 5.30085 9.60011 5.24886 9.12046 5.05018C8.6408 4.8515 8.23083 4.51505 7.94239 4.08337C7.65395 3.65169 7.5 3.14417 7.5 2.625C7.5 1.92881 7.77656 1.26113 8.26885 0.768843C8.76113 0.27656 9.42881 -6.92225e-07 10.125 -6.83923e-07ZM5.25 2.625C5.25 2.10582 5.09605 1.59831 4.80761 1.16663C4.51917 0.734948 4.1092 0.398496 3.62955 0.199816C3.14989 0.00113591 2.62209 -0.0508486 2.11289 0.0504376C1.60369 0.151724 1.13596 0.40173 0.768846 0.768843C0.401733 1.13596 0.151726 1.60369 0.0504399 2.11289C-0.0508463 2.62209 0.0011374 3.14989 0.199817 3.62954C0.398497 4.1092 0.73495 4.51917 1.16663 4.80761C1.59831 5.09605 2.10583 5.25 2.625 5.25C3.32119 5.25 3.98887 4.97344 4.48116 4.48115C4.97344 3.98887 5.25 3.32119 5.25 2.625ZM15 2.625C15 3.14418 15.154 3.65169 15.4424 4.08337C15.7308 4.51505 16.1408 4.8515 16.6205 5.05018C17.1001 5.24886 17.6279 5.30085 18.1371 5.19956C18.6463 5.09827 19.114 4.84827 19.4812 4.48115C19.8483 4.11404 20.0983 3.64631 20.1996 3.13711C20.3008 2.62791 20.2489 2.10011 20.0502 1.62046C19.8515 1.1408 19.5151 0.730831 19.0834 0.442392C18.6517 0.153954 18.1442 -5.88295e-07 17.625 -5.94487e-07C16.9288 -6.02789e-07 16.2611 0.27656 15.7688 0.768843C15.2766 1.26113 15 1.92881 15 2.625Z" fill="#ACB9B8"/>
+            <div class="contacts-title" *ngIf="!(compactView | async)">Messages</div>
+            <button class="action-btn" (click)="toggleCompactView()">
+                <svg *ngIf="!(compactView | async)" width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.17026 0.740388L0.920257 6.99039C0.862147 7.04843 0.816047 7.11736 0.784595 7.19324C0.753142 7.26911 0.736954 7.35044 0.736954 7.43258C0.736954 7.51471 0.753142 7.59604 0.784595 7.67191C0.816047 7.74779 0.862147 7.81672 0.920257 7.87476L7.17026 14.1248C7.28753 14.242 7.44659 14.3079 7.61245 14.3079C7.7783 14.3079 7.93736 14.242 8.05463 14.1248C8.17191 14.0075 8.23779 13.8484 8.23779 13.6826C8.23779 13.5167 8.17191 13.3577 8.05463 13.2404L2.24604 7.43258L8.05463 1.62476C8.1127 1.56669 8.15876 1.49776 8.19019 1.42189C8.22162 1.34601 8.23779 1.2647 8.23779 1.18258C8.23779 1.10045 8.22162 1.01914 8.19019 0.943265C8.15876 0.867394 8.1127 0.798456 8.05463 0.740388C7.99656 0.682319 7.92763 0.636257 7.85176 0.60483C7.77588 0.573403 7.69457 0.557227 7.61244 0.557227C7.53032 0.557227 7.44901 0.573403 7.37313 0.60483C7.29726 0.636257 7.22833 0.682319 7.17026 0.740388Z" fill="#329993"/>
+                </svg>
+                
+                <svg *ngIf="compactView | async" width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.8046 14.1248L8.0546 7.87476C8.11271 7.81671 8.15881 7.74778 8.19026 7.67191C8.22171 7.59603 8.2379 7.5147 8.2379 7.43257C8.2379 7.35043 8.22171 7.2691 8.19026 7.19323C8.15881 7.11736 8.11271 7.04843 8.0546 6.99038L1.8046 0.74038C1.68732 0.623105 1.52826 0.55722 1.36241 0.55722C1.19656 0.55722 1.0375 0.623105 0.92022 0.74038C0.802945 0.857656 0.737061 1.01672 0.737061 1.18257C0.737061 1.34842 0.802945 1.50748 0.92022 1.62476L6.72881 7.43257L0.92022 13.2404C0.862151 13.2984 0.816088 13.3674 0.784661 13.4433C0.753235 13.5191 0.73706 13.6004 0.73706 13.6826C0.73706 13.7647 0.753235 13.846 0.784661 13.9219C0.816088 13.9977 0.862151 14.0667 0.92022 14.1248C0.978289 14.1828 1.04723 14.2289 1.1231 14.2603C1.19897 14.2917 1.28029 14.3079 1.36241 14.3079C1.44453 14.3079 1.52585 14.2917 1.60172 14.2603C1.67759 14.2289 1.74653 14.1828 1.8046 14.1248Z" fill="#329993"/>
                 </svg>
             </button>
         </div>
@@ -24,17 +29,17 @@
         </div>
     </div>
     <div class="contact-list">
-        <app-contact-item timeElapsed="5s"></app-contact-item>
-        <app-contact-item timeElapsed="20s" [unreadCount]=1></app-contact-item>
-        <app-contact-item timeElapsed="18h" [active]="true"></app-contact-item>
-        <app-contact-item timeElapsed="1d"></app-contact-item>
-        <app-contact-item timeElapsed="12h"></app-contact-item>
-        <app-contact-item timeElapsed="2w"></app-contact-item>
-        <app-contact-item timeElapsed="5s"></app-contact-item>
-        <app-contact-item timeElapsed="20s" [unreadCount]=3></app-contact-item>
-        <app-contact-item timeElapsed="18h" [active]="true"></app-contact-item>
-        <app-contact-item timeElapsed="1d"></app-contact-item>
-        <app-contact-item timeElapsed="12h"></app-contact-item>
-        <app-contact-item timeElapsed="2w"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="5s"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="20s" [unreadCount]=1></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="18h" [active]="true"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="1d"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="12h"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="2w"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="5s"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="20s" [unreadCount]=3></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="18h"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="1d"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="12h"></app-contact-item>
+        <app-contact-item [compact]="compactView" timeElapsed="2w"></app-contact-item>
     </div>
 </div>

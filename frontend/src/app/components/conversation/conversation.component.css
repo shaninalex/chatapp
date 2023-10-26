@@ -16,17 +16,19 @@
 
 .conversation {
     position: absolute;
-    height: calc(100% - 9rem);
+    height: calc(100% - 10rem);
     overflow-y: auto;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    width: calc(100% - 2rem);
+    transform: translateX(-50%);
     padding-top: 1rem;
 }
 
 .conversation-editor {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 1rem;
+    left: 50%;
+    width: calc(100% - 2rem);
+    transform: translateX(-50%);
 }

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-contact-item',
@@ -10,4 +11,5 @@ export class ContactItemComponent {
     @Input() active: boolean;
     @Input() unreadCount: number|undefined;
     @Input() timeElapsed: string|undefined;
+    @Input() compact: Observable<boolean>;
 }

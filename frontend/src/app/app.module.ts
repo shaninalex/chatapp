@@ -18,6 +18,8 @@ import { ImageTilesComponent } from './ui/image-tiles/image-tiles.component';
 import { EditorComponent } from './components/conversation/editor/editor.component';
 import { MessagesComponent } from './components/conversation/messages/messages.component';
 import { MessageComponent } from './components/conversation/message/message.component';
+import { StoreModule } from '@ngrx/store';
+import { uiReducer } from './store/ui/reducer';
 
 @NgModule({
     declarations: [
@@ -40,6 +42,9 @@ import { MessageComponent } from './components/conversation/message/message.comp
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        StoreModule.forRoot({
+            ui: uiReducer
+        }),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
     bootstrap: [AppComponent]

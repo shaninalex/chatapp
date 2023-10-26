@@ -1,11 +1,21 @@
 .contacts {
+    --_form-display: var(--form-display, flex);
+    --_sidebar-width: var(--sidebar-width, 23.25rem);
+    --_contacts-top-jstf: var(--contacts-top-jstf, space-between);
+
     height: 100%;
-    width: 371px;
+    width: var(--_sidebar-width);
     background-color: var(--color-white);
     border-left: 1px solid var(--color-gray-100);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+}
+
+.contacts.compact {
+    --form-display: none;
+    --sidebar-width: 7rem;
+    --contacts-top-jstf: center;
 }
 
 .contacts-header {
@@ -17,7 +27,7 @@
 .contacts-top {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: var(--_contacts-top-jstf);
     margin-bottom: 24px;
 }
 
@@ -35,8 +45,13 @@
     gap: 12px;
 }
 
+.contact-form {
+    display: var(--_form-display);
+}
 
 .contact-list {
     overflow-y: auto;
     flex-grow: 1;
 }
+
+
