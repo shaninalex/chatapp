@@ -15,9 +15,18 @@
 }
 
 .conversation {
-
+    position: absolute;
+    height: calc(100% - 9rem);
+    overflow-y: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 1rem;
 }
 
 .conversation-editor {
-    
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
