@@ -3,42 +3,49 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { RequestInterceptor } from './base_services/request.interceptor';
-import { ProfileService } from './base_services/profile.service';
-import { LoginComponent } from './pages/login/login.component';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { profileReducer } from './store/profile/profile.reducer';
-import { ProfileEffects } from './store/profile/profile.effects';
+import { HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ContactsComponent } from './components/contacts/contacts.component';
+import { HeaderComponent } from './components/header/header.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
+import { ContactItemComponent } from './components/contacts/contact-item/contact-item.component';
+import { CheckboxComponent } from './ui/checkbox/checkbox.component';
+import { CollapseComponent } from './ui/collapse/collapse.component';
+import { FileListComponent } from './ui/file-list/file-list.component';
+import { ImageTilesComponent } from './ui/image-tiles/image-tiles.component';
+import { EditorComponent } from './components/conversation/editor/editor.component';
+import { MessagesComponent } from './components/conversation/messages/messages.component';
+import { MessageComponent } from './components/conversation/message/message.component';
+import { StoreModule } from '@ngrx/store';
+import { uiReducer } from './store/ui/reducer';
 
 @NgModule({
     declarations: [
         AppComponent,
-        NotFoundComponent,
-        LoginComponent
+        SidebarComponent,
+        ContactsComponent,
+        HeaderComponent,
+        UserInfoComponent,
+        ConversationComponent,
+        ContactItemComponent,
+        CheckboxComponent,
+        CollapseComponent,
+        FileListComponent,
+        ImageTilesComponent,
+        EditorComponent,
+        MessagesComponent,
+        MessageComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
         StoreModule.forRoot({
-            profile: profileReducer,
+            ui: uiReducer
         }),
-        EffectsModule.forRoot([
-            ProfileEffects,
-        ]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    ],
-    providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: RequestInterceptor,
-            multi: true
-        },
-        ProfileService
     ],
     bootstrap: [AppComponent]
 })

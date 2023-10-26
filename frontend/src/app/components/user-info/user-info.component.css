@@ -1,0 +1,82 @@
+.user-info {
+    background-color: var(--color-white);
+    width: 23.25rem;
+    height: 100%;
+    flex-shrink: 0;
+    position: relative;
+    padding: 1.5rem;
+}
+
+.sections {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.section {
+    border-bottom: 1px solid var(--color-gray-100);
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section:last-child {
+    border-bottom: 0;
+}
+
+.user-info-action {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.top {
+    text-align: center;
+    padding-top: 5rem;
+}
+
+.top h1 {
+    font-size: 32px;
+    margin: 0;
+    line-height: 1;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.top p {
+    color: var(--color-secondary);
+}
+
+.top figure {
+    width: 8.5rem;
+    height: 8.5rem;
+    border-radius: 100%;
+    overflow: hidden;
+    margin-inline: auto;
+    border: 6px solid var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.top figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.counter {
+    color: var(--color-gray-300)
+}
+
+.recent-files-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.images-gap {
+    margin-bottom: 1.25rem;
+}

@@ -1,20 +1,348 @@
-/* You can add global styles to this file, and also import other style files */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 
 
-@layer components {
-    .btn {
-        @apply bg-sky-500 text-white hover:bg-sky-600 px-4 py-2 rounded-xl inline-block disabled:bg-gray-400;
-    }
-    .nav-item {
-        @apply text-2xl text-slate-600 flex items-center justify-center p-3 rounded h-11 hover:bg-sky-100;
-    }
-    .message-counter {
-        @apply text-sm w-6 h-6 rounded-full bg-orange-200 flex items-center justify-center;
-    }
-    .new-label {
-        @apply text-sm bg-orange-100 px-2 py-1 rounded-xl flex items-center justify-center;
-    }
+div::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+div::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background-color: #C8D0D0;
+    border-radius: 2px;
+    margin-right: 2px;
+}
+
+
+div::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 2px;
+}
+
+:root {
+    --color-black: #171C1B;
+    --color-white: #fff;
+    --color-green: #00B207;
+    --color-red: #DD0000;
+
+    --color-accent: #329993;
+    /* --color-accent: #26736E; */
+    --color-secondary: #465352;
+    --color-gray-100: #E3E8E7;
+    --color-gray-200: #ACB9B8;
+    --color-gray-300: #758A88;
+
+    --color-hover: rgba(50, 153, 147, 0.1);
+
+    --btn-circle-size: 52;
+    --font-default: 'Satoshi';
+
+    --panel-color: var(--color-white);
+    --bg-color: #eef1f1;
+    --animation-speed: .4s;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('./assets/fonts/Satoshi-Bold.woff2') format('woff2'),
+        url('./assets/fonts/Satoshi-Bold.woff') format('woff'),
+        url('./assets/fonts/Satoshi-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Satoshi-Medium';
+    src: url('./assets/fonts/Satoshi-Medium.woff2') format('woff2'),
+        url('./assets/fonts/Satoshi-Medium.woff') format('woff'),
+        url('./assets/fonts/Satoshi-Medium.ttf') format('truetype');
+    font-weight: 600;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('./assets/fonts/Satoshi-Regular.woff2') format('woff2'),
+        url('./assets/fonts/Satoshi-Regular.woff') format('woff'),
+        url('./assets/fonts/Satoshi-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: var(--font-default);
+    background-color: var(--bg-color);
+    color: var(--color-black);
+}
+
+.clear-btn {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.form-control {
+    height: 48px;
+    border-radius: 52px;
+    border: 1px solid var(--color-gray-100);
+    font-size: 1rem;
+    padding: 1rem;
+    width: 100%;
+    transition: var(--animation-speed)
+}
+
+.form-control:focus-visible,
+.form-control:focus {
+    border: 1px solid var(--color-accent);
+    outline: none;
+}
+
+.btn {
+    --_border: var(--border, var(--color-black));
+    --_color: var(--color, var(--color-black));
+    --_background: var(--background, transparent);
+
+    background-color: var(--_background);
+    font-weight: 600;
+    height: 44px;
+    border: 1px solid var(--_border);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    border-radius: 52px;
+    color: var(--_color);
+    width: 100%;
+    cursor: pointer;
+}
+
+.btn svg {
+    fill: var(--_color);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn.btn-accent {
+    --border: var(--color-accent);
+    --color: var(--color-white);
+    --background: var(--color-accent)
+}
+
+.btn.btn-outline-red {
+    --border: var(--color-red);
+    --color: var(--color-red);
+}
+
+
+.heading-sm {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.action-button-sm {
+    --_color: var(--color, var(--color-gray-200));
+    --_background: var(--background, transparent);
+    --_border-color: var(--border-color, transparent);
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--_color);
+    padding: 0.25rem;
+    background-color: var(--_background);
+    border: 1px solid var(--_border-color);
+    transition: var(--animation-speed);
+}
+
+.action-button-sm.__active {
+    fill: var(--_color);
+}
+
+.action-button-sm svg {
+    fill: var(--_color);
+    transition: var(--animation-speed);
+}
+
+.action-button-sm:hover {
+    --color: var(--color-accent);
+    --background: var(--color-hover);
+    --border-color: var(--color-gray-100);
+}
+
+.action-btn {
+    color: var(--color-accent);
+    width: 52px;
+    height: 52px;
+    border-radius: 52px;
+    border: 1px solid var(--color-gray-100);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--animation-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.action-btn.action-btn__disabled {
+    color: var(--color-gray-200);
+}
+
+.action-btn.action-btn__disabled svg {
+    fill: var(--color-gray-200);
+}
+
+.action-btn:hover {
+    background-color: var(--color-hover);
+}
+
+.action-btn svg {
+    fill: var(--color-accent)
 }

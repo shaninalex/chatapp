@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProfileService } from './base_services/profile.service';
-import { ProfileState } from './store/profile/profile.reducer';
 import { Store } from '@ngrx/store';
-import { ProfileActions } from './store/profile/profile.action-types';
+import { selectUserInfoVisibility } from './store/ui/selectors';
+import { AppState } from './store';
+
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    profile: Observable<any>;
+    showUserInfo: Observable<boolean>;
 
-    constructor(private store: Store<ProfileState>) {
-        this.store.dispatch(ProfileActions.getProfileStart());
+    constructor(private store: Store<AppState>) {
+        this.showUserInfo = this.store.select(selectUserInfoVisibility);
     }
 }
