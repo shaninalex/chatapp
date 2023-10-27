@@ -57,6 +57,9 @@ func WSHandler(w http.ResponseWriter, r *http.Request, user_id string, db *Datab
 		Router:         router,
 	}
 	router.HandleFunc("message", service.handleMessage)
+	router.HandleFunc("iq", service.handleMessage)
+	router.HandleFunc("presence", service.handleMessage)
+
 	client, err := xmpp.NewClient(&config, service.Router, service.errorHandler)
 	if err != nil {
 		log.Fatalf("%+v", err)

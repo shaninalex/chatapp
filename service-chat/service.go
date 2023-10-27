@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/gorilla/websocket"
 	"gosrc.io/xmpp"
@@ -18,7 +18,7 @@ type Service struct {
 }
 
 func (serv *Service) Provide() {
-	// get messages from xmpp and send to web app
+	// get messages from web app and send to xmpp
 	for {
 		_, msg, err := serv.Conn.ReadMessage()
 		if err != nil {
@@ -48,16 +48,8 @@ func (serv *Service) errorHandler(err error) {
 	fmt.Println(err.Error())
 }
 
+// just transport all incomming messages from xmpp to websocket to frontend
 func (serv *Service) handleMessage(s xmpp.Sender, p stanza.Packet) {
-	msg, ok := p.(stanza.Message)
-	if !ok {
-		_, _ = fmt.Fprintf(os.Stdout, "Ignoring packet: %T\n", p)
-		return
-	}
-
-	encodedMsg, err := encodeMessage(msg.From, msg.Body)
-	if err != nil {
-		log.Println(err)
-	}
-	serv.Conn.WriteMessage(1, encodedMsg)
+	_Msg, _ := json.Marshal(p)
+	serv.Conn.WriteMessage(1, _Msg)
 }

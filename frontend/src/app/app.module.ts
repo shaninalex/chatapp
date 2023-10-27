@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
@@ -25,6 +25,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { ProfileEffects } from './store/profile/effects';
 import { ProfileService } from './services/profile.service';
 import { WebsocketService } from './services/websocket.service';
+import { RequestInterceptor } from './services/response.interceptor';
 
 
 @NgModule({
@@ -57,10 +58,17 @@ import { WebsocketService } from './services/websocket.service';
         ]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
-    bootstrap: [
-        AppComponent,
+    providers: [
         ProfileService,
         WebsocketService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: RequestInterceptor,
+            multi: true
+        }
+    ],
+    bootstrap: [
+        AppComponent,
     ]
 })
 export class AppModule { }
