@@ -1,3 +1,0 @@
-go 1.21.2
-
-use ../../../go/pkg/mod/gosrc.io/xmpp@v0.5.1

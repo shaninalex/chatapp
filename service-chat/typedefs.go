@@ -1,25 +1,37 @@
 package main
 
-type RegistrationPayload struct {
-	Traits struct {
-		Email string `json:"email"`
-		Name  struct {
-			First string `json:"first"`
-			Last  string `json:"last"`
-		} `json:"name"`
-	} `json:"traits"`
-	UserId string `json:"userId"`
-}
+import "gosrc.io/xmpp/stanza"
 
-type RegistrationEjabberdPayload struct {
-	User     string `json:"user"`
-	Host     string `json:"host"`
-	Password string `json:"password"`
-}
+type MessageType string
+
+const (
+	TypeMessage  MessageType = "message"
+	TypePresence MessageType = "precense"
+	TypeIQ       MessageType = "iq"
+	TypeSystem   MessageType = "system"
+)
 
 type Message struct {
-	From string `json:"from"`
-	To   string `json:"to,omitempty"`
-	Body string `json:"body,omitempty"`
-	Type string `json:"type,omitempty"`
+	Type    MessageType     `json:"type"`
+	Payload *stanza.Message `json:"payload"`
+}
+
+type MessagePresense struct {
+	Type    MessageType      `json:"type"`
+	Payload *stanza.Presence `json:"payload"`
+}
+
+type MessageIQ struct {
+	Type    MessageType       `json:"type"`
+	Payload *stanza.IQPayload `json:"payload"`
+}
+
+type ContactsList struct {
+	Type  MessageType         `json:"type"`
+	Items []stanza.RosterItem `json:"items"`
+}
+
+type MessageSystem struct {
+	Type    MessageType `json:"type"`
+	Payload string      `json:"payload"`
 }
