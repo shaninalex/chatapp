@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,7 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"gosrc.io/xmpp"
 )
 
 var (
@@ -19,52 +17,32 @@ var (
 	APP_PORT          = os.Getenv("APP_PORT")
 )
 
-var wsupgrader = websocket.Upgrader{
+var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		// TODO: accept origin only from front host
+		log.Println(r.Host)
+		// TODO: accept origin only from front
 		return true
 	},
 }
 
-func WSHandler(w http.ResponseWriter, r *http.Request, user_id string, db *Database) {
-	conn, err := wsupgrader.Upgrade(w, r, nil)
+func ServeWebsocket(hub *Hub, user_id string, w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Printf("Failed to set websocket upgrade: %+v", err)
+		log.Println(err)
 		return
 	}
 
-	token, err := db.getToken(user_id)
+	client, err := InitClient(hub, conn, user_id)
 	if err != nil {
-		log.Fatalf("%+v", err)
+		log.Println(err)
+		return
 	}
-	config := xmpp.Config{
-		TransportConfiguration: xmpp.TransportConfiguration{
-			Address: EJABBERD_SERVER,
-		},
-		Jid:          fmt.Sprintf("%s@localhost", user_id),
-		Credential:   xmpp.Password(token),
-		StreamLogger: os.Stdout,
-		Insecure:     true,
-	}
-	config.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
-	router := xmpp.NewRouter()
-	service := &Service{
-		ConsumeMessage: make(chan *Message),
-		Conn:           conn,
-		Router:         router,
-	}
-	router.HandleFunc("message", service.handleMessage)
-	client, err := xmpp.NewClient(&config, service.Router, service.errorHandler)
-	if err != nil {
-		log.Fatalf("%+v", err)
-	}
-	service.Client = client
-	cm := xmpp.NewStreamManager(client, nil)
-	go service.Provide()
-	log.Fatal(cm.Run())
+	client.Hub.Register <- client
+	go client.ReadMessages()
+	go client.WriteMessages()
 }
 
 func main() {
@@ -74,6 +52,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	hub := InitHub(database)
+	go hub.Run()
 
 	router.GET("/ws", func(c *gin.Context) {
 		user_id := c.Request.Header.Get("X-User")
@@ -81,7 +61,7 @@ func main() {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "user id is empty"})
 			return
 		}
-		WSHandler(c.Writer, c.Request, user_id, database)
+		ServeWebsocket(hub, user_id, c.Writer, c.Request)
 	})
 
 	port, err := strconv.Atoi(os.Getenv("APP_PORT"))

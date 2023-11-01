@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectUserInfoVisibility } from './store/ui/selectors';
 import { AppState } from './store';
+import { ProfileActions } from './store/profile/actions';
+import { WebsocketService } from './services/websocket.service';
 
 
 @Component({
@@ -13,7 +15,11 @@ import { AppState } from './store';
 export class AppComponent {
     showUserInfo: Observable<boolean>;
 
-    constructor(private store: Store<AppState>) {
+    constructor(
+        private store: Store<AppState>,
+        private ws: WebsocketService,
+    ) {
         this.showUserInfo = this.store.select(selectUserInfoVisibility);
+        this.store.dispatch(ProfileActions.getUserStart());
     }
 }

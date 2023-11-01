@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
@@ -20,6 +20,13 @@ import { MessagesComponent } from './components/conversation/messages/messages.c
 import { MessageComponent } from './components/conversation/message/message.component';
 import { StoreModule } from '@ngrx/store';
 import { uiReducer } from './store/ui/reducer';
+import { profileReducer } from './store/profile/reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { ProfileEffects } from './store/profile/effects';
+import { ProfileService } from './services/profile.service';
+import { WebsocketService } from './services/websocket.service';
+import { RequestInterceptor } from './services/response.interceptor';
+
 
 @NgModule({
     declarations: [
@@ -43,10 +50,25 @@ import { uiReducer } from './store/ui/reducer';
         AppRoutingModule,
         HttpClientModule,
         StoreModule.forRoot({
-            ui: uiReducer
+            ui: uiReducer,
+            profile: profileReducer,
         }),
+        EffectsModule.forRoot([
+            ProfileEffects,
+        ]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
-    bootstrap: [AppComponent]
+    providers: [
+        ProfileService,
+        WebsocketService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: RequestInterceptor,
+            multi: true
+        }
+    ],
+    bootstrap: [
+        AppComponent,
+    ]
 })
 export class AppModule { }
