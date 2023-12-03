@@ -46,17 +46,6 @@ func main() {
 			c.JSON(http.StatusOK, nil)
 		}
 
-		// create Auth Token
-		err = oryHooks.AuthToken(&payload)
-		if err != nil {
-			log.Println(err)
-			log.Println(gin.H{
-				"error":   true,
-				"message": err.Error(),
-			})
-			c.JSON(http.StatusOK, nil)
-		}
-
 		c.JSON(http.StatusOK, nil)
 	})
 

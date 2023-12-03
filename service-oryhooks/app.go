@@ -73,19 +73,3 @@ func (o *OryHooks) Register(payload *RegistrationPayload) error {
 	}
 	return nil
 }
-
-func (o *OryHooks) AuthToken(payload *RegistrationPayload) error {
-	ejabberd_payload := strings.NewReader(
-		fmt.Sprintf(`{"jid": "%s","ttl": %d,"scopes": "%s"}`,
-			payload.UserId,
-			o.TokenLifeTime,
-			DEFAULT_USER_SCOPE,
-		),
-	)
-
-	err := o.makeRequest("POST", "api/oauth_issue_token", ejabberd_payload)
-	if err != nil {
-		return err
-	}
-	return nil
-}

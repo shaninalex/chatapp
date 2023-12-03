@@ -1,18 +1,22 @@
 import { Injectable } from "@angular/core";
+import { parseString } from "xml2js";
+import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class WebsocketService {
-    socket = new WebSocket("ws://127.0.0.1:8080/ws");
+    socket = new WebSocket(environment.WEBSOCKET_ADDRESS);
 
     constructor() {
         this.socket.onopen = (event: Event) => {
             console.log(event);
         }
 
-        this.socket.onmessage = (event: Event) => {
-            console.log(event);
+        this.socket.onmessage = (event: any) => {
+            parseString(event.data, (err, result) => {
+                console.log(result);
+            });
         }
     }
 

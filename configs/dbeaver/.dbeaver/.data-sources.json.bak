@@ -1,0 +1,65 @@
+{
+	"folders": {},
+	"connections": {
+		"postgres-jdbc-18b75b62db2-72040212880331e6": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "ejabberd",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5432",
+				"database": "ejabberd",
+				"url": "jdbc:postgresql://localhost:5432/ejabberd",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		},
+		"postgres-cockroach-jdbc-18bdc0f041f-4c4d7756490de5e3": {
+			"provider": "postgresql",
+			"driver": "postgres-cockroach-jdbc",
+			"name": "system",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "26257",
+				"database": "system",
+				"url": "jdbc:postgresql://localhost:26257/system",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		},
+		"postgres-jdbc-18be2f6f47a-3f3e6468d4a92124": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "kratos",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5432",
+				"database": "kratos",
+				"url": "jdbc:postgresql://localhost:5432/kratos",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"provider-properties": {},
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": false,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800
+		}
+	}
+}
