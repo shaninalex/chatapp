@@ -31,7 +31,8 @@ export interface Identity {
 
 export interface Traits {
     name: Name
-    email: string
+    email: string,
+    image: string
 }
 
 export interface Name {

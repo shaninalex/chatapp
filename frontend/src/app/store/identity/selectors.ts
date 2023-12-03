@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppState } from './reducer';
-import { IdentityObject } from 'src/app/typedefs/identity';
+import { IdentityObject } from '../../typedefs/identity';
 
 
 export const selectIdentityFeature = createFeatureSelector<AppState, IdentityObject>('identity');

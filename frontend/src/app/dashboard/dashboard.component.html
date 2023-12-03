@@ -1,2 +1,7 @@
-<app-header />
-<app-sidebar />
+@if (identity$ | async; as identity) {
+    <app-header />
+    <div class="container-xl">
+        <app-sidebar />
+        
+    </div>
+}
