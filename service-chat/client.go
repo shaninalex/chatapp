@@ -2,13 +2,11 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"crypto/tls"
-	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/gorilla/websocket"
 	"gosrc.io/xmpp"
@@ -59,53 +57,19 @@ func InitClient(hub *Hub, connection *websocket.Conn, user_id string) (*Client, 
 		return nil, err
 	}
 	wsclient.Client = client
-	cm := xmpp.NewStreamManager(client, wsclient.GetContactList)
+	cm := xmpp.NewStreamManager(client, nil)
 	log.Fatal(cm.Run())
 	return wsclient, nil
 }
 
 func (c *Client) handleMessage(s xmpp.Sender, p stanza.Packet) {
-	message_p, ok := p.(stanza.Message)
-	if !ok {
-		return
-	}
-	msg := &Message{Type: TypeMessage, Payload: &message_p}
-	_Msg, _ := json.Marshal(msg)
+	_Msg, _ := xml.Marshal(p)
 	c.Conn.WriteMessage(1, _Msg)
 }
 
 func (c *Client) handlePresence(s xmpp.Sender, p stanza.Packet) {
-	message_p, ok := p.(stanza.Presence)
-	if !ok {
-		return
-	}
-	msg := &MessagePresense{Type: TypePresence, Payload: &message_p}
-	_Msg, _ := json.Marshal(msg)
+	_Msg, _ := xml.Marshal(p)
 	c.Conn.WriteMessage(1, _Msg)
-}
-
-func (c *Client) GetContactList(cl xmpp.Sender) {
-	req, _ := stanza.NewIQ(stanza.Attrs{From: c.Jid, Type: stanza.IQTypeGet})
-	req.RosterItems()
-	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	cc, err := c.Client.SendIQ(ctx, req)
-
-	if err != nil {
-		msg := &MessageSystem{Type: TypeSystem, Payload: err.Error()}
-		d, _ := json.Marshal(msg)
-		c.Send <- d
-	}
-
-	go func() {
-		serverResp := <-cc
-		if rosterItems, ok := serverResp.Payload.(*stanza.RosterItems); ok {
-			contacts := rosterItems.Items
-			cl := &ContactsList{Items: contacts}
-			data, _ := json.Marshal(cl)
-			c.Send <- data
-			return
-		}
-	}()
 }
 
 func (c *Client) ReadMessages() {
