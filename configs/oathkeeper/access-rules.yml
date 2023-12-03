@@ -4,7 +4,7 @@
     url: "http://service_profile:8082"
     strip_path: /api/v2/profile
   match:
-    url: "http://127.0.0.1:8080/api/v2/profile<**>"
+    url: "http://localhost:8080/api/v2/profile<**>"
     methods:
       - GET
       - PATCH
@@ -23,7 +23,7 @@
     preserve_host: true
     url: "http://service_chat:8083"
   match:
-    url: "http://127.0.0.1:8080/ws"
+    url: "http://localhost:8080/ws"
     methods:
       - GET
       - POST

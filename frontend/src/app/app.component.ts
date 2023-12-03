@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectUserInfoVisibility } from './store/ui/selectors';
-import { AppState } from './store';
-
+import { Component, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { SharedModule } from './shared/shared.module';
 
 @Component({
-    selector: 'app-root',
+    selector: '#root',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        SharedModule
+    ],
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-    showUserInfo: Observable<boolean>;
-
-    constructor(private store: Store<AppState>) {
-        this.showUserInfo = this.store.select(selectUserInfoVisibility);
-    }
+    title = 'Memosynth';
 }
