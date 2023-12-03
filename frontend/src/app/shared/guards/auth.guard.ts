@@ -30,6 +30,7 @@ export function CanActiveteAccountPage(route: ActivatedRouteSnapshot, state: Rou
             return of(true);
         }),
         catchError((err) => {
+            console.log(err);
             if (err.status === 401) return router.navigate(["/auth/login"]);
             return of(err)
         }),

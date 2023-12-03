@@ -15,3 +15,12 @@ clear_volumes:
 		-f ./docker-compose.local.yml \
 		--env-file .env \
 		down -v
+
+restart: down start
+
+# example usage 
+# $ make action service=auth
+# output: 
+# 	auth
+rebuild:
+	docker compose --file docker-compose.local.yml up -d --no-deps --build $(service)

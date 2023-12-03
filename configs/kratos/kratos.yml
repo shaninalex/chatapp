@@ -11,9 +11,9 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:4455/
+  default_browser_return_url: http://localhost:4200/
   allowed_return_urls:
-    - http://localhost:4455
+    - http://localhost:4200
 
   methods:
     password:
@@ -28,41 +28,56 @@ selfservice:
       enabled: true
     code:
       enabled: true
-
+    oidc:
+      config:
+        providers:
+          - id: google
+            provider: generic
+            # Google client id and secret are set via env variables:
+            # client_id = SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID
+            # client_secret = SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET
+            issuer_url: https://accounts.google.com
+            mapper_url: file:///etc/config/kratos/google.jsonnet
+            scope:
+              - email
+              - profile
+              - openid
+      enabled: true
+  
   flows:
     error:
-      ui_url: http://localhost:4455/error
+      ui_url: http://localhost:4200/error
 
     settings:
-      ui_url: http://localhost:4455/settings
+      ui_url: http://localhost:4200/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: http://localhost:4455/recovery
+      ui_url: http://localhost:4200/auth/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://localhost:4455/verification
+      ui_url: http://localhost:4200/auth/verification
       use: code
       after:
-        default_browser_return_url: http://localhost:4200/
+        default_browser_return_url: http://localhost:4200/app
 
     logout:
       after:
-        default_browser_return_url: http://localhost:4455/login
+        default_browser_return_url: http://localhost:4200/auth/login
 
     login:
-      ui_url: http://localhost:4455/login
+      ui_url: http://localhost:4200/auth/login
       lifespan: 10m
       after:
-        default_browser_return_url: http://localhost:4200/
+        default_browser_return_url: http://localhost:4200/app
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:4455/registration
+      ui_url: http://localhost:4200/auth/registration
       after:
         password:
           hooks:
@@ -81,6 +96,18 @@ selfservice:
                 #   },
                 # }
                 # base64 encoded jsonnet template
+                body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgdXNlcklkOiBjdHguaWRlbnRpdHkuaWQsCiAgdHJhaXRzOiB7CiAgICBlbWFpbDogY3R4LmlkZW50aXR5LnRyYWl0cy5lbWFpbCwKICAgIG5hbWU6IGN0eC5pZGVudGl0eS50cmFpdHMubmFtZSwKICB9LAp9
+                response:
+                  ignore: false
+                  parse: false
+        oidc:
+          hooks:
+            - hook: session
+            - hook: web_hook
+              config:
+                url: http://ory_hooks:8081/ory-hooks/register
+                method: POST
+                # base64 encoded jsonnet template ./registration_hook.jsonnet
                 body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgdXNlcklkOiBjdHguaWRlbnRpdHkuaWQsCiAgdHJhaXRzOiB7CiAgICBlbWFpbDogY3R4LmlkZW50aXR5LnRyYWl0cy5lbWFpbCwKICAgIG5hbWU6IGN0eC5pZGVudGl0eS50cmFpdHMubmFtZSwKICB9LAp9
                 response:
                   ignore: false
