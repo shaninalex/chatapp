@@ -14,6 +14,4 @@ import { SharedModule } from './shared/shared.module';
     templateUrl: './app.component.html',
     encapsulation: ViewEncapsulation.None
 })
-export class AppComponent {
-    title = 'Memosynth';
-}
+export class AppComponent {}
