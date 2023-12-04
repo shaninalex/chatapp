@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../store/identity/reducer";
 import { Observable } from "rxjs";
-import { Identity, Traits } from "../../../typedefs/identity";
+import { Traits } from "../../../typedefs/identity";
 import { selectTraits } from "../../../store/identity/selectors";
 
 @Component({
