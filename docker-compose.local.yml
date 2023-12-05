@@ -5,9 +5,9 @@ volumes:
 
 services:
 
-  # ==================================== 
-  # Apps
-  # ==================================== 
+  # # ==================================== 
+  # # Apps
+  # # ==================================== 
   ory_hooks:
     build: ./service-oryhooks
     restart: always
@@ -30,17 +30,9 @@ services:
     depends_on:
       - kratos
 
-  service_chat:
-    build: ./service-chat
-    restart: always
-    env_file:
-      - ./service-chat/.env
-    ports:
-      - 8083:8083
-
-  # ==================================== 
-  # INFRASTRUCTURE
-  # ==================================== 
+  # # ==================================== 
+  # # INFRASTRUCTURE
+  # # ==================================== 
   postgres:
     image: postgres:15
     environment:
@@ -63,13 +55,13 @@ services:
   ejabberd:
     image: ejabberd/ecs
     restart: on-failure
+    container_name: ejabberdcore
     ports:
       - 5222:5222 # client to server
       - 5280:5280 # web console
-      - 5443:5443
       # - websocket
     environment:
-      - CTL_ON_CREATE=register admin localhost password
+      - CTL_ON_CREATE=register admin localhost a0sdf9un0a49unf
       # - CTL_ON_START=register admin localhost password ;
       #                check_password admin localhost password ;
       #                status
@@ -89,7 +81,7 @@ services:
       postgres:
         condition: service_healthy
 
-  # Kratos
+  # # Kratos
   kratos-migrate:
     image: oryd/kratos:v1.0.0
     env_file:

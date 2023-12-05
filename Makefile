@@ -24,3 +24,6 @@ restart: down start
 # 	auth
 rebuild:
 	docker compose --file docker-compose.local.yml up -d --no-deps --build $(service)
+
+create_user_token:
+	docker exec -it ejabberdcore /home/ejabberd/bin/ejabberdctl oauth_issue_token $(user)@localhost 3600 ejabberd:admin

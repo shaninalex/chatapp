@@ -12,6 +12,13 @@ certfiles:
 
 ca_file: "/home/ejabberd/conf/cacert.pem"
 
+## When using let's encrypt to generate certificates
+##certfiles:
+##  - /etc/letsencrypt/live/localhost/fullchain.pem
+##  - /etc/letsencrypt/live/localhost/privkey.pem
+##
+##ca_file: "/etc/letsencrypt/live/localhost/fullchain.pem"
+
 listen:
   -
     port: 5222
@@ -33,6 +40,7 @@ listen:
     tls: true
     request_handlers:
       "/admin": ejabberd_web_admin
+      "/api": mod_http_api
       "/bosh": mod_bosh
       "/captcha": ejabberd_captcha
       "/upload": mod_http_upload
@@ -44,36 +52,77 @@ listen:
     module: ejabberd_http
     request_handlers:
       "/admin": ejabberd_web_admin
-      "/api": mod_http_api
-      "/oauth": ejabberd_oauth
+      "/ws": ejabberd_http_ws
   -
     port: 1883
     ip: "::"
     module: mod_mqtt
     backlog: 1000
-  -
-    port: 5281
-    module: ejabberd_http
-    tls: false  # localy and inside docker network we dont need tls. And this is not accesable outside
-    ip: "::"    # TODO: allow only internal services accessing this port
-    request_handlers:
-      /api: mod_http_api
-  -
-    port: 5444
-    ip: "::"
-    module: ejabberd_http
-    tls: false
-    request_handlers:
-      "/ws": ejabberd_http_ws
+  ##
+  ## https://docs.ejabberd.im/admin/configuration/#stun-and-turn
+  ## ejabberd_stun: Handles STUN Binding requests
+  ##
+  ##-
+  ##  port: 3478
+  ##  ip: "0.0.0.0"
+  ##  transport: udp
+  ##  module: ejabberd_stun
+  ##  use_turn: true
+  ##  turn_ip: "{{ IP }}"
+  ##  auth_type: user
+  ##  auth_realm: "example.com"
+  ##-
+  ##  port: 3478
+  ##  ip: "0.0.0.0"
+  ##  module: ejabberd_stun
+  ##  use_turn: true
+  ##  turn_ip: "{{ IP }}"
+  ##  auth_type: user
+  ##  auth_realm: "example.com"
+  ##- 
+  ##  port: 5349
+  ##  ip: "0.0.0.0"
+  ##  module: ejabberd_stun
+  ##  certfile: "/home/ejabberd/conf/server.pem"
+  ##  tls: true
+  ##  use_turn: true
+  ##  turn_ip: "{{ IP }}"
+  ##  auth_type: user
+  ##  auth_realm: "example.com"
+  ##
+  ## https://docs.ejabberd.im/admin/configuration/#sip
+  ## To handle SIP (VOIP) requests:
+  ##
+  ##-
+  ##  port: 5060
+  ##  ip: "0.0.0.0"
+  ##  transport: udp
+  ##  module: ejabberd_sip
+  ##-
+  ##  port: 5060
+  ##  ip: "0.0.0.0"
+  ##  module: ejabberd_sip
+  ##-
+  ##  port: 5061
+  ##  ip: "0.0.0.0"
+  ##  module: ejabberd_sip
+  ##  tls: true
+
+oauth_access: all
 
 s2s_use_starttls: optional
 
 acl:
+  local:
+    user_regexp: ""
+  loopback:
+    ip:
+      - 127.0.0.0/8
+      - ::1/128
+      - ::FFFF:127.0.0.1/128
   admin:
     user:
       - "admin@localhost"
-  apicommands:
-    user: admin@localhost
 
 access_rules:
   local:
@@ -92,8 +141,6 @@ access_rules:
   trusted_network:
     allow: loopback
 
-oauth_access: all
-
 api_permissions:
   "console commands":
     from:
@@ -102,26 +149,26 @@ api_permissions:
     what: "*"
   "admin access":
     who:
-      - access:
-          - allow:
-            - acl: admin
-      - oauth:
-        - scope: "ejabberd:admin"
-        - access:
-          - allow:
-              - acl: admin
+      access:
+        allow:
+          acl: loopback
+          acl: admin
+      oauth:
+        scope: "ejabberd:admin"
+        access:
+          allow:
+            acl: loopback
+            acl: admin
     what:
       - "*"
       - "!stop"
       - "!start"
-  "API used from localhost allows all calls":
-    from:
-      - ejabberd_ctl
-      - mod_http_api
+  "public commands":
     who:
-      acl: apicommands
-    what: "*"
-
+      ip: 127.0.0.1/8
+    what:
+      - status
+      - connected_users_number
 
 shaper:
   normal: 1000
@@ -202,6 +249,11 @@ modules:
   mod_push: {}
   mod_push_keepalive: {}
   mod_register:
+    ## Only accept registration requests from the "trusted"
+    ## network (see access_rules section above).
+    ## Think twice before enabling registration from any
+    ## address. See the Jabber SPAM Manifesto for details:
+    ## https://github.com/ge0rg/jabber-spam-fighting-manifesto
     ip_access: trusted_network
   mod_roster:
     versioning: true
@@ -215,8 +267,10 @@ modules:
   mod_version:
     show_os: false
 
-# host_config:
-#   localhost:
+### Local Variables:
+### mode: yaml
+### End:
+### vim: set filetype=yaml tabstop=8
 default_db: sql
 sql_type: pgsql
 sql_server: postgres

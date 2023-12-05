@@ -13,6 +13,6 @@ export class HeaderComponent {
     identity$: Observable<Traits>;
 
     constructor(private store: Store<AppState>) {
-        this.identity$ = this.store.select(selectTraits);
+        // this.identity$ = this.store.select(selectTraits);
     }
 }

@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Traits } from '../typedefs/identity';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/identity/reducer';
 import { selectTraits } from '../store/identity/selectors';
-import { WebsocketService } from './services/chat.service';
+import { XmppService } from './services/xmpp.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -16,15 +16,17 @@ export class DashboardComponent {
 
     constructor(
         private store: Store<AppState>,
-        private socket: WebsocketService,
+        private xmpp: XmppService,
     ) {
-        this.identity$ = this.store.select(selectTraits).pipe(
-            tap(data => {
-                if (data) {
-                    console.log(data);
-                    this.socket.connect();
-                }
-            })
-        );
+        // this.identity$ = this.store.select(selectTraits);
+        this.connectToXMPP("admin@localhost", "yjuzTWEB6TTef6HaARYUEPcMdifnrZxN"); // n2XcpuOKnfp4coqS2Rja7mGrawdwKVRC
+    }
+
+    connectToXMPP(jid: string, password: string) {
+        this.xmpp.connect(jid, password);
+    }
+
+    disconnectFromXMPP() {
+        this.xmpp.disconnect();
     }
 }
