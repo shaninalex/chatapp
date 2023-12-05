@@ -18,8 +18,9 @@ export class DashboardComponent {
         private store: Store<AppState>,
         private xmpp: XmppService,
     ) {
-        // this.identity$ = this.store.select(selectTraits);
-        this.connectToXMPP("admin@localhost", "yjuzTWEB6TTef6HaARYUEPcMdifnrZxN"); // n2XcpuOKnfp4coqS2Rja7mGrawdwKVRC
+        this.identity$ = this.store.select(selectTraits);
+        // TODO: receive access token from the backend ( new profile service? )
+        this.connectToXMPP("24772281-f0a4-4343-8c9c-98c11a6af4ad@localhost", "hip1EqBLGYR3QOlIXgPfZwK7DW8IF9Pz");
     }
 
     connectToXMPP(jid: string, password: string) {

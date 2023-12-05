@@ -8,7 +8,7 @@ export const routes: Routes = [
     },
     {
         path: "app",
-        // canLoad: [CanActiveteAccountPage],
+        canLoad: [CanActiveteAccountPage],
         loadChildren: () => import("./dashboard/dashboard.module").then(c => c.DashboardModule),
     },
     {
