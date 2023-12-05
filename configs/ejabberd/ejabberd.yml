@@ -103,9 +103,7 @@ api_permissions:
       - ejabberd_ctl
     who: all
     what:
-      - access:
-        - allow:
-          - acl: admin
+      - "*"
   "admin access":
     who:
       - access:

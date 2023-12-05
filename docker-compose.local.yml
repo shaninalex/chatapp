@@ -9,17 +9,20 @@ services:
   # # Apps
   # # ==================================== 
   ory_hooks:
-    build: ./service-oryhooks
+    build: ./oryhooks
     restart: always
-    env_file:
-      - ./service-oryhooks/.env
+    environment:
+      - EJABBERD_ROOT=${EJABBERD_ROOT}
+      - ADMIN_JID=${ADMIN_JID}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - APP_PORT=${APP_PORT}
     ports:
       - 8081:8081
     depends_on:
       ejabberd:
         condition: service_started
 
-  service_profile:
+  kratos_proxy:
     image: shanart/m-kratos-forms-proxy:latest
     restart: on-failure
     ports:
@@ -36,9 +39,9 @@ services:
   postgres:
     image: postgres:15
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_MULTIPLE_DATABASES=chat,kratos,ejabberd
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_MULTIPLE_DATABASES=${DATABASE_KRATOS},${DATABASE_EJABBERD}
     ports:
       - 5432:5432
     volumes:
@@ -61,7 +64,7 @@ services:
       - 5280:5280 # web console
       # - websocket
     environment:
-      - CTL_ON_CREATE=register admin localhost a0sdf9un0a49unf
+      - CTL_ON_CREATE=register ${ADMIN_USERNAME} localhost ${ADMIN_PASSWORD}
       # - CTL_ON_START=register admin localhost password ;
       #                check_password admin localhost password ;
       #                status
@@ -74,8 +77,11 @@ services:
   # Migration task. Create schema in the database before ejabberd starts
   migrate_ejabberd_db:
     build: ./configs/migrate_ejabberd_db
-    env_file:
-      - ./configs/migrate_ejabberd_db/.env
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=${DATABASE_KRATOS}
+      - DB_USER=${DATABASE_USER}
+      - PGPASSWORD=${DATABASE_PASSWORD}
     restart: on-failure
     depends_on:
       postgres:
@@ -84,8 +90,8 @@ services:
   # # Kratos
   kratos-migrate:
     image: oryd/kratos:v1.0.0
-    env_file:
-      - .env
+    environment:
+      - DSN=${DSN}
     volumes:
       - ./configs/kratos:/etc/config/kratos
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
@@ -95,8 +101,11 @@ services:
 
   kratos:
     image: oryd/kratos:v1.0.0
-    env_file:
-      - .env
+    environment:
+      - SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID=${SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID}
+      - SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET=${SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET}
+      - DSN=${DSN}
+      - COURIER_SMTP_CONNECTION_URI=${COURIER_SMTP_CONNECTION_URI}
     ports:
       - "4433:4433"
       - "4434:4434"

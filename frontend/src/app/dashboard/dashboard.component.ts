@@ -20,7 +20,7 @@ export class DashboardComponent {
     ) {
         this.identity$ = this.store.select(selectTraits);
         // TODO: receive access token from the backend ( new profile service? )
-        this.connectToXMPP("24772281-f0a4-4343-8c9c-98c11a6af4ad@localhost", "hip1EqBLGYR3QOlIXgPfZwK7DW8IF9Pz");
+        this.connectToXMPP("771dbb4f-bb53-4bf0-a787-c5850359ae56@localhost", "H5RjVXhzfFixoptBocWy8YBkajHngrrw");
     }
 
     connectToXMPP(jid: string, password: string) {
