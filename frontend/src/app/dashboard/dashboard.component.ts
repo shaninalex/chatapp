@@ -23,15 +23,10 @@ export class DashboardComponent implements OnDestroy {
         this.identity$ = this.store.select(selectTraits);
         this.profile.getCredentials().subscribe({
             next: data => {
-                this.xmpp.connect(data.jid, "d650f8bc-41ff-49d4-b3f5-108055ccc25b"); //data.token
+                this.xmpp.connect(data.jid, "d650f8bc-41ff-49d4-b3f5-108055ccc25b");
             }
         });
     }
-
-    // sendMessage() {
-    //     var m = $msg({to: to, from: from, type: 'chat'}).c("body").t(body);     
-    //     this.xmpp.connect.send(m);
-    // }
 
     ngOnDestroy(): void {
         this.xmpp.disconnect();

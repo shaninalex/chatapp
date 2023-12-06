@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	_ "github.com/lib/pq"
@@ -37,11 +38,14 @@ func (db *Database) GetAuthTokenByUser(user_id string) (*TokenObject, error) {
 	defer rows.Close()
 
 	var token TokenObject
-	for rows.Next() {
+	if rows.Next() {
 		err = rows.Scan(&token.Token, &token.Jid, &token.Scope, &token.Expire)
 		if err != nil {
 			return nil, err
 		}
+	} else {
+		// No rows found, return a custom error indicating "not found"
+		return nil, errors.New("not found")
 	}
 
 	return &token, nil

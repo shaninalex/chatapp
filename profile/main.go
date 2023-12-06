@@ -13,6 +13,9 @@ var (
 	APP_PORT              = os.Getenv("APP_PORT")
 	EJABBERD_DATABASE_URL = os.Getenv("EJABBERD_DATABASE_URL")
 	EJABBERD_API_URL      = os.Getenv("EJABBERD_API_URL")
+	ADMIN_JID             = os.Getenv("ADMIN_JID")
+	ADMIN_PASSWORD        = os.Getenv("ADMIN_PASSWORD")
+	DEFAULT_USER_SCOPE    = "sasl_auth;change_room_option;create_room;create_room_with_opts;destroy_room;get_room_affiliation;get_room_affiliations;get_room_history;get_room_occupants;get_room_occupants_number;get_room_options;get_subscribers;send_direct_invitation;set_room_affiliation;subscribe_room;subscribe_room_many;unsubscribe_room"
 )
 
 func main() {
@@ -38,6 +41,16 @@ func main() {
 		}
 		token, err := DB.GetAuthTokenByUser(user_id)
 		if err != nil {
+			if err.Error() == "not found" {
+				token, err := createNewToken(user_id)
+				if err != nil {
+					ResponseJson(err.Error(), http.StatusBadRequest, w)
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				json.NewEncoder(w).Encode(token)
+				return
+			}
 			ResponseJson(err.Error(), http.StatusBadRequest, w)
 			return
 		}

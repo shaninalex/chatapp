@@ -49,6 +49,7 @@ listen:
     request_handlers:
       "/ws": ejabberd_http_ws
       "/api": mod_http_api
+      "/admin": ejabberd_web_admin
   -
     port: 1883
     ip: "::"

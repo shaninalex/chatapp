@@ -9,7 +9,12 @@ export class XmppService {
     private connection: any;
 
     constructor() {
-        this.connection = new Strophe.Connection(environment.WEBSOCKET_ADDRESS);  // , {mechanisms:[Strophe.SASLXOAuth2]}
+        this.connection = new Strophe.Connection(
+            environment.WEBSOCKET_ADDRESS,
+            // {
+            //     mechanisms: [Strophe.SASLXOAuth2]
+            // }
+        );
     }
 
     connect(jid: string, password: string) {
@@ -19,7 +24,6 @@ export class XmppService {
     private onConnect(status: string) {
         if (status === Strophe.Status.CONNECTED) {
             console.log('Connected to XMPP server');
-            // Implement further actions upon successful connection
         } else {
             console.error('Failed to connect to XMPP server');
         }
@@ -28,6 +32,4 @@ export class XmppService {
     disconnect() {
         this.connection.disconnect();
     }
-
-    // Implement other functions as needed (send message, presence, etc.)
 }
