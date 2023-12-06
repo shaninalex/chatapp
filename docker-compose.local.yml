@@ -33,6 +33,19 @@ services:
     depends_on:
       - kratos
 
+  # profile:
+  #   build: ./profile
+  #   restart: on-failure
+  #   ports:
+  #     - 8082:8082
+  #   environment:
+  #     - APP_PORT=8082
+  #     - EJABBERD_DATABASE_URL=${PSQL_EJABBERD_DATABASE_URL}
+  #     - EJABBERD_API_URL=http://ejabberd:5280/api
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
   # # ==================================== 
   # # INFRASTRUCTURE
   # # ==================================== 
@@ -79,9 +92,9 @@ services:
     build: ./configs/migrate_ejabberd_db
     environment:
       - DB_HOST=postgres
-      - DB_NAME=${DATABASE_KRATOS}
-      - DB_USER=${DATABASE_USER}
-      - PGPASSWORD=${DATABASE_PASSWORD}
+      - DB_NAME=ejabberd
+      - DB_USER=user
+      - PGPASSWORD=password
     restart: on-failure
     depends_on:
       postgres:
