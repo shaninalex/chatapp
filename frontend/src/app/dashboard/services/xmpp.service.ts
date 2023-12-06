@@ -9,7 +9,7 @@ export class XmppService {
     private connection: any;
 
     constructor() {
-        this.connection = new Strophe.Connection(environment.WEBSOCKET_ADDRESS, {mechanisms:[Strophe.SASLXOAuth2]});
+        this.connection = new Strophe.Connection(environment.WEBSOCKET_ADDRESS);  // , {mechanisms:[Strophe.SASLXOAuth2]}
     }
 
     connect(jid: string, password: string) {

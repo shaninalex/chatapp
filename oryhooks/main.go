@@ -56,7 +56,6 @@ func main() {
 			})
 			c.JSON(http.StatusOK, nil)
 		}
-
 		c.JSON(http.StatusOK, nil)
 	})
 

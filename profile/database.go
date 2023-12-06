@@ -25,10 +25,10 @@ func InitializeDatabase(db_url string) (*Database, error) {
 	return database, nil
 }
 
-func (db *Database) GetAuthTokenByUser(user string) (*TokenObject, error) {
+func (db *Database) GetAuthTokenByUser(user_id string) (*TokenObject, error) {
 	rows, err := db.conn.Query(
 		`SELECT "token", "jid", "scope", "expire" FROM "oauth_token" WHERE jid=$1 LIMIT 1`,
-		fmt.Sprintf("%s@localhost", user),
+		fmt.Sprintf("%s@localhost", user_id),
 	)
 	if err != nil {
 		return nil, err

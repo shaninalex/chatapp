@@ -31,6 +31,7 @@ func main() {
 
 	http.HandleFunc("/obtain-token", func(w http.ResponseWriter, r *http.Request) {
 		user_id := r.Header.Get("X-User")
+		log.Println(user_id)
 		if user_id == "" {
 			ResponseJson("User id should not be empty", http.StatusBadRequest, w)
 			return
