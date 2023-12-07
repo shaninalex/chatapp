@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
-import { PresenceShow } from 'stanza/Constants';
 
 
 @Injectable()
@@ -25,19 +24,28 @@ export class XmppService {
         this.client.sasl.register('X-OAUTH2', Stanza.SASL.PLAIN, 2000);
 
         this.client.on('session:started', () => {
+
+            // get contact list
             this.client.getRoster().then(data => {
-                console.log("get Roster");
-                console.log(data);
+                console.log("get Roster", data);
             });
+
+            // change your status to "online"
             this.client.sendPresence();
         });
 
+        this.client.on('iq', (msg: any) => {
+            console.log("iq:", msg);
+        });
+
+
+        this.client.on('stanza', (msg: any) => {
+            console.log("stanza:", msg);
+        });
+
+
         this.client.on('chat', (msg: any) => {
-            console.log(msg);
-            this.client.sendMessage({
-                to: msg.from,
-                body: 'You sent: ' + msg.body
-            });
+            console.log("chat:", msg);
         });
         
         this.client.connect();

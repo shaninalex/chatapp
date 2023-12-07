@@ -27,10 +27,6 @@ export class DashboardComponent implements OnDestroy {
         });
     }
 
-    // send() {
-    //   this.xmpp.send();
-    // }
-
     ngOnDestroy(): void {
         this.xmpp.disconnect();
     }
