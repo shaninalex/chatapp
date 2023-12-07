@@ -20,6 +20,7 @@
     "@angular/router": "^17.0.0",
     "@ngrx/effects": "^17.0.1",
     "@ngrx/store": "^17.0.1",
+    "@ngrx/store-devtools": "^17.0.1",
     "@types/node-fetch": "^2.6.9",
     "rxjs": "~7.8.0",
     "stanza": "^12.19.0",

@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
+import { Store } from '@ngrx/store';
+import { ChatState } from 'stanza/Constants';
+import { setContactsList } from '../../store/chat/chat.actions';
 
 
 @Injectable()
 export class XmppService {
     private client: Stanza.Agent;
 
-    constructor() {}
+    constructor(
+        private store: Store<ChatState>
+    ) {}
 
     connect(username: string, password: string): void {
         this.client = Stanza.createClient({
@@ -26,8 +31,8 @@ export class XmppService {
         this.client.on('session:started', () => {
 
             // get contact list
-            this.client.getRoster().then(data => {
-                console.log("get Roster", data);
+            this.client.getRoster().then((data:any) => {
+                this.store.dispatch(setContactsList({list: data.items}));
             });
 
             // change your status to "online"

@@ -8,13 +8,15 @@ import { HeaderComponent } from './ui/header/header.component';
 import { XmppService } from './services/xmpp.service';
 import { ProfileService } from './services/profile.service';
 
+
 const DASHBOARD_ROUTES: Routes = [{
     path: "",
     component: DashboardComponent,
     children: [
 
     ]
-}]
+}];
+
 
 @NgModule({
     declarations: [
