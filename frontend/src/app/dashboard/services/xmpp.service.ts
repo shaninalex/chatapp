@@ -19,16 +19,15 @@ export class XmppService {
             }
         });
 
-        const factory = new Stanza.SASL.Factory();
-        factory.register('PLAIN', Stanza.SASL.PLAIN, 10);
-    
-        this.client.
+        // https://github.com/legastero/stanza/blob/8fe6380677d38982cd9926a71ade72c8f4f0eb28/src/Client.ts#L60
+        // This thing should have the highest priority to be used first.
+        this.client.sasl.register('X-OAUTH2', Stanza.SASL.PLAIN, 2000);
 
         this.client.on('session:started', () => {
             this.client.getRoster();
             this.client.sendPresence();
         });
-        
+
         this.client.on('chat', (msg: any) => {
             this.client.sendMessage({
                 to: msg.from,

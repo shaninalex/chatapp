@@ -12,6 +12,9 @@ certfiles:
 
 ca_file: "/home/ejabberd/conf/cacert.pem"
 
+disable_sasl_mechanisms: ["SCRAM-SHA-512"]
+
+
 listen:
   -
     port: 5222

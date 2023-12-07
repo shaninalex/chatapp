@@ -23,10 +23,7 @@ export class DashboardComponent implements OnDestroy {
     ) {
         this.identity$ = this.store.select(selectTraits);
         this.profile.getCredentials().subscribe({
-            next: data => {
-                console.log(data.jid, data.token);
-                this.xmpp.connect(data.jid, "5ba0a5fe-2a13-48c1-8979-f64f55f92883");
-            }
+            next: data => this.xmpp.connect(data.jid, data.token)
         });
     }
 
