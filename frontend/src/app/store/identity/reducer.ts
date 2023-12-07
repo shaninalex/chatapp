@@ -2,11 +2,11 @@ import { createReducer, on } from '@ngrx/store';
 import * as IdentityActions from './actions';
 import { IdentityObject } from '../../typedefs/identity';
 
-export interface AppState {
+export interface IdentityState {
     identity: IdentityObject | null;
 }
 
-export const initialState: AppState = {
+export const initialState: IdentityState = {
     identity: null,
 };
 
