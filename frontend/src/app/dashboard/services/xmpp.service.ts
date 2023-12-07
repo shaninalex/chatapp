@@ -1,35 +1,52 @@
 import { Injectable } from '@angular/core';
+import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
-declare const Strophe: any;
-
 
 
 @Injectable()
 export class XmppService {
-    private connection: any;
+    private client: Stanza.Agent;
 
-    constructor() {
-        this.connection = new Strophe.Connection(
-            environment.WEBSOCKET_ADDRESS,
-            // {
-            //     mechanisms: [Strophe.SASLXOAuth2]
-            // }
-        );
+    constructor() {}
+
+    connect(username: string, password: string): void {
+        this.client = Stanza.createClient({
+            jid: username,
+            password: password,
+            transports: {
+                websocket: environment.WEBSOCKET_ADDRESS,
+                bosh: false
+            }
+        });
+
+        const factory = new Stanza.SASL.Factory();
+        factory.register('PLAIN', Stanza.SASL.PLAIN, 10);
+    
+        this.client.
+
+        this.client.on('session:started', () => {
+            this.client.getRoster();
+            this.client.sendPresence();
+        });
+        
+        this.client.on('chat', (msg: any) => {
+            this.client.sendMessage({
+                to: msg.from,
+                body: 'You sent: ' + msg.body
+            });
+        });
+        
+        this.client.connect();
     }
 
-    connect(jid: string, password: string) {
-        this.connection.connect(jid, password, this.onConnect.bind(this));
+    sendMessage(to: string, body: string): void {
+        this.client.sendMessage({
+            to: to,
+            body: body,
+        });
     }
 
-    private onConnect(status: string) {
-        if (status === Strophe.Status.CONNECTED) {
-            console.log('Connected to XMPP server');
-        } else {
-            console.error('Failed to connect to XMPP server');
-        }
-    }
-
-    disconnect() {
-        this.connection.disconnect();
+    disconnect(): void {
+        this.client.disconnect();
     }
 }

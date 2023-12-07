@@ -20,10 +20,10 @@
     "@angular/router": "^17.0.0",
     "@ngrx/effects": "^17.0.1",
     "@ngrx/store": "^17.0.1",
+    "@types/node-fetch": "^2.6.9",
     "rxjs": "~7.8.0",
-    "strophe.js": "^1.6.2",
+    "stanza": "^12.19.0",
     "tslib": "^2.3.0",
-    "xmpp-bosh-client": "^0.4.1",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {

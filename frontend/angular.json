@@ -37,9 +37,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [
-              "node_modules/strophe.js/dist/strophe.umd.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

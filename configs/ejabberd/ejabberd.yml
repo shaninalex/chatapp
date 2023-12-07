@@ -50,6 +50,7 @@ listen:
       "/ws": ejabberd_http_ws
       "/api": mod_http_api
       "/admin": ejabberd_web_admin
+      "/http-bind": mod_bosh
   -
     port: 1883
     ip: "::"
