@@ -1,20 +1,14 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppState } from './reducer';
-import { IdentityObject } from '../../typedefs/identity';
+import { createSelector } from '@ngrx/store';
+import { IAppState } from '..';
+import { IdentityState } from './reducer';
 
 
-export const selectIdentityFeature = createFeatureSelector<AppState, IdentityObject>('identity');
-
-
-export const selectIdentity = createSelector(
-    selectIdentityFeature,
-    (state: IdentityObject) => state
-);
+export const selectIdentityFeature = (state: IAppState) => state.identity;
 
 
 export const selectTraits = createSelector(
-    selectIdentity,
-    (state: any) => {
-        return state?.identity.identity.traits
+    selectIdentityFeature,
+    state => {
+        return state.identity?.identity.traits
     }
 );

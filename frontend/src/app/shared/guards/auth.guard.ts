@@ -2,7 +2,7 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@a
 import { Observable, catchError, finalize, map, of, shareReplay } from "rxjs";
 import { inject } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { AppState } from "../../store/identity/reducer";
+import { IdentityState } from "../../store/identity/reducer";
 import { SetIdentity } from "../../store/identity/actions";
 import { HttpClient } from "@angular/common/http";
 import { UiService } from "../services/ui.service";
@@ -16,7 +16,7 @@ export function CanActiveteAccountPage(route: ActivatedRouteSnapshot, state: Rou
 {
     const router = inject(Router);
     const http = inject(HttpClient);
-    const store = inject(Store<AppState>);
+    const store = inject(Store<IdentityState>);
     const ui = inject(UiService);
 
     const session = http.get<any>(`/api/v2/auth/session`, { withCredentials: true }).pipe(

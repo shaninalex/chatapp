@@ -1,11 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import * as chatActions from './chat.actions';
 
-export interface ChatState {
+export interface IChatState {
     contactList: any | null;
 }
 
-export const initialState: ChatState = {
+export const initialState: IChatState = {
     contactList: null,
 };
 

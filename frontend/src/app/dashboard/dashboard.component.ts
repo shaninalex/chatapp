@@ -1,8 +1,8 @@
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Traits } from '../typedefs/identity';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/identity/reducer';
+import { IAppState } from '../store';
 import { selectTraits } from '../store/identity/selectors';
 import { XmppService } from './services/xmpp.service';
 import { ProfileService } from './services/profile.service';
@@ -14,10 +14,10 @@ import { ProfileService } from './services/profile.service';
     encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnDestroy {
-    identity$: Observable<Traits>;
+    identity$: Observable<Traits | undefined>;
 
     constructor(
-        private store: Store<AppState>,
+        private store: Store<IAppState>,
         private xmpp: XmppService,
         private profile: ProfileService
     ) {

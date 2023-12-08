@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { ChatState } from "stanza/Constants";
 import { selectContactList } from "../../../store/chat/chat.selectors";
+import { IAppState } from "../../../store";
 
 @Component({
     selector: "app-sidebar",
@@ -12,14 +12,10 @@ export class SidebarComponent {
 
 
     constructor(
-        private store: Store<ChatState>
+        private store: Store<IAppState>
     ) {
         this.store.select(selectContactList).subscribe({
-            next: data => {
-                console.log(data);
-            }
+            next: data => this.users = data
         })
     }
-
-
 }
