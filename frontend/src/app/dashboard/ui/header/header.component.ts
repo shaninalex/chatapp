@@ -5,10 +5,11 @@ import { Traits } from "../../../typedefs/identity";
 import { selectTraits } from "../../../store/identity/selectors";
 import { IAppState } from "../../../store";
 import { ProfileService } from "../../services/profile.service";
+import { XmppService } from "../../services/xmpp.service";
 
 
 @Component({
-    selector: "app-header",
+    selector: "#app-header",
     templateUrl: "header.component.html"
 })
 export class HeaderComponent {
@@ -16,6 +17,7 @@ export class HeaderComponent {
 
     constructor(
         private store: Store<IAppState>,
+        private xmpp: XmppService,
         private profile: ProfileService,
     ) {
         this.identity$ = this.store.select(selectTraits);
@@ -23,7 +25,10 @@ export class HeaderComponent {
 
     logout(): void {
         this.profile.getLogoutLink().subscribe({
-            next: data => window.location.href = data.logout_url
+            next: data => {
+                this.xmpp.disconnect();
+                window.location.href = data.logout_url;
+            }
         })
     }
 }

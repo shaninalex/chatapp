@@ -30,11 +30,8 @@ export class XmppService {
         this.client.sasl.register('X-OAUTH2', Stanza.SASL.PLAIN, 2000);
 
         this.client.on('session:started', () => {
-
             // get contact list
-            this.client.getRoster().then((data:any) => {
-                this.store.dispatch(setContactsList({list: data.items}));
-            });
+            this.client.getRoster().then((data:any) => this.store.dispatch(setContactsList({list: data.items})));
 
             // change your status to "online"
             this.client.sendPresence();
@@ -44,15 +41,14 @@ export class XmppService {
             console.log("iq:", msg);
         });
 
-
-        this.client.on('stanza', (msg: any) => {
-            console.log("stanza:", msg);
+        this.client.on('stanza', (msg: Stanza.Stanzas.Message | Stanza.Stanzas.Presence | Stanza.Stanzas.IQ) => {
+            console.log("type:", msg.type, "payload:", msg);
         });
 
         this.client.on('chat', (msg: any) => {
             console.log("chat:", msg);
         });
-        
+
         this.client.connect();
     }
 
@@ -67,8 +63,13 @@ export class XmppService {
         this.client.disconnect();
     }
 
-    getVCard(jid: string): void {
+    getVCard(jid: string): Promise<any> {
         // response of this request will be handled in xmpp events handlers
-        this.client.getVCard(jid);
+        return this.client.getVCard(jid)
+    }
+
+    getMessages(): void {
+        // https://github.com/legastero/stanza/blob/master/docs/Reference.md#searchhistory
+        // this.client.searchHistory()
     }
 }
