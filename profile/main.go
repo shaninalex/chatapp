@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 var (
@@ -52,6 +53,18 @@ func main() {
 				return
 			}
 			ResponseJson(err.Error(), http.StatusBadRequest, w)
+			return
+		}
+
+		// If expired
+		if int64(token.Expire) < time.Now().Unix() {
+			token, err := createNewToken(user_id)
+			if err != nil {
+				ResponseJson(err.Error(), http.StatusBadRequest, w)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(token)
 			return
 		}
 

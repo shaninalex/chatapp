@@ -110,6 +110,11 @@ func (o *OryHooks) SetVCard(payload *RegistrationPayload) error {
 		),
 	}
 
+	// NOTE:
+	// If user registered from Social sign in - traits will have "picture" field
+	// with image url, and we will able to save it. But image url is not the binary
+	// data expected in https://xmpp.org/extensions/xep-0153.html. Probably require
+	// to download it and save binary... Or not. We already have avatar in Kratos...
 	for _, p := range payloads {
 		err := o.makeRequest("POST", "api/set_vcard2", p)
 		if err != nil {
