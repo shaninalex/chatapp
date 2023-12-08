@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -76,7 +77,7 @@ func (o *OryHooks) Register(payload *RegistrationPayload) error {
 
 func (o *OryHooks) AuthToken(payload *RegistrationPayload) error {
 	ejabberd_payload := strings.NewReader(
-		fmt.Sprintf(`{"jid": "%s","ttl": %d,"scopes": "%s"}`,
+		fmt.Sprintf(`{"jid": "%s@localhost","ttl": %d,"scopes": "%s"}`,
 			payload.UserId,
 			o.TokenLifeTime,
 			DEFAULT_USER_SCOPE,
@@ -87,5 +88,35 @@ func (o *OryHooks) AuthToken(payload *RegistrationPayload) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (o *OryHooks) SetVCard(payload *RegistrationPayload) error {
+	payloads := []*strings.Reader{
+		strings.NewReader(
+			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "N", "subname": "FAMILY", "content": "%s"}`,
+				payload.UserId, payload.Traits.Name.Last,
+			),
+		),
+		strings.NewReader(
+			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "N", "subname": "GIVEN", "content": "%s"}`,
+				payload.UserId, payload.Traits.Name.First,
+			),
+		),
+		strings.NewReader(
+			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "EMAIL", "subname": "USERID", "content": "%s"}`,
+				payload.UserId, payload.Traits.Email,
+			),
+		),
+	}
+
+	for _, p := range payloads {
+		err := o.makeRequest("POST", "api/set_vcard2", p)
+		if err != nil {
+			// send error signal into monitoring system
+			log.Println(err)
+		}
+	}
+
 	return nil
 }

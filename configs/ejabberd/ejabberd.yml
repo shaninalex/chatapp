@@ -114,22 +114,16 @@ api_permissions:
       - access:
           - allow:
             - acl: admin
-      - oauth:
-        - scope: "ejabberd:admin"
-        - access:
-          - allow:
-              - acl: admin
     what:
       - "*"
-      - "!stop"
-      - "!start"
   "API used from localhost allows all calls":
     from:
       - ejabberd_ctl
       - mod_http_api
-    who:
-      acl: apicommands
-    what: "*"
+    who: 
+      - "*"
+    what: 
+      - "*"
 
 
 shaper:
