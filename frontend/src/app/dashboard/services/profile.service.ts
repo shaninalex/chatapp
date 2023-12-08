@@ -12,4 +12,8 @@ export class ProfileService {
     getCredentials(): Observable<any> {
         return this.http.get<any>("/api/v2/profile/obtain-token", { withCredentials: true })
     }
+
+    getLogoutLink(): Observable<any> {
+        return this.http.get<any>("/api/v2/auth/logout", { withCredentials: true })
+    }
 }

@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment.development';
 import { Store } from '@ngrx/store';
 import { ChatState } from 'stanza/Constants';
 import { setContactsList } from '../../store/chat/chat.actions';
+import { Observable, from } from 'rxjs';
 
 
 @Injectable()
@@ -48,7 +49,6 @@ export class XmppService {
             console.log("stanza:", msg);
         });
 
-
         this.client.on('chat', (msg: any) => {
             console.log("chat:", msg);
         });
@@ -65,5 +65,10 @@ export class XmppService {
 
     disconnect(): void {
         this.client.disconnect();
+    }
+
+    getVCard(jid: string): void {
+        // response of this request will be handled in xmpp events handlers
+        this.client.getVCard(jid);
     }
 }
