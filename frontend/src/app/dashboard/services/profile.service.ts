@@ -16,4 +16,8 @@ export class ProfileService {
     getLogoutLink(): Observable<any> {
         return this.http.get<any>("/api/v2/auth/logout", { withCredentials: true })
     }
+
+    getListOfPeople(): Observable<any> {
+        return this.http.get<any>("/api/v2/profile/people-list", { withCredentials: true })
+    }
 }

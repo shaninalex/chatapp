@@ -44,6 +44,7 @@ services:
       - EJABBERD_API_URL=http://ejabberd:5280
       - ADMIN_JID=${ADMIN_JID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - KRATOS_URL=http://kratos:4433
     depends_on:
       postgres:
         condition: service_healthy

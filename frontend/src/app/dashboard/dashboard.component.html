@@ -1,13 +1,6 @@
 @if (identity$ | async; as identity) {
     <div id="app-header"></div>
     <div class="container-xl">
-        <div class="row">
-            <div id="app-sidebar" class="col-md-3 border"></div>
-            <div class="col-md-9">
-                <div class="alert alert-secondary">
-                    Conversation area comming soon...
-                </div>
-            </div>
-        </div>
+        <router-outlet />
     </div>
 }
