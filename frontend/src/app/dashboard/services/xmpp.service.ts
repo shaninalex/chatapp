@@ -68,6 +68,11 @@ export class XmppService {
         return this.client.getVCard(jid)
     }
 
+    addFriend(id: string): void {
+      // add person to your contacts list
+      this.client.subscribe(`${id}@localhost`);
+    }
+
     getMessages(): void {
         // https://github.com/legastero/stanza/blob/master/docs/Reference.md#searchhistory
         // this.client.searchHistory()

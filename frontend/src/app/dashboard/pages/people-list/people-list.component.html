@@ -1,9 +1,14 @@
 @for(identity of profiles$ | async; track identity.id) {
-    {{ identity | json }}
-    <div class="mb-2 d-flex align-items-center" >
-        <img [src]="identity.traits.image" class="rounded-circle" style="widht:2rem; height:2rem"/>
+    <div class="mb-2 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <img [src]="identity.traits.image" class="rounded-circle" style="widht:2rem; height:2rem"/>
+          <div>
+              {{ identity.traits.name.first }} {{ identity.traits.name.last }}
+          </div>
+        </div>
+
         <div>
-            {{ identity.traits.name.first }} {{ identity.traits.name.last }}
+          <button type="" class="btn btn-sm btn-outline-info" (click)="addFriend(identity.id)">add friend</button>
         </div>
     </div>
 }

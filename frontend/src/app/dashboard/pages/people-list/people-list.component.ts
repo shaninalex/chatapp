@@ -4,6 +4,7 @@ import { ProfileService } from '../../services/profile.service';
 import { Store } from '@ngrx/store';
 import { selectIdentityFeature } from '../../../store/identity/selectors';
 import { IAppState } from '../../../store';
+import { XmppService } from '../../services/xmpp.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class PeopleListComponent {
   constructor(
     private profile: ProfileService,
     private store: Store<IAppState>,
+    private xmpp: XmppService
   ) {
     this.store.select(selectIdentityFeature).subscribe({
       next: data => {
@@ -27,5 +29,10 @@ export class PeopleListComponent {
         );
       }
     });
+  }
+
+  addFriend(id: string): void {
+    console.log(id);
+    this.xmpp.addFriend(id);
   }
 }
