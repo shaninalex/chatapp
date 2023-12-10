@@ -11,10 +11,9 @@ import { PeopleListComponent } from './pages/people-list/people-list.component';
 import { ConversationComponent } from './pages/conversation/conversation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
-import { AppState } from './store';
 import { EffectsModule } from '@ngrx/effects';
-import { IdentityEffects } from './store/identity/effects';
 import { ChatEffects } from './store/chat/chat.effects';
+import { dashboardReducer } from './store';
 
 
 const DASHBOARD_ROUTES: Routes = [{
@@ -40,8 +39,8 @@ const DASHBOARD_ROUTES: Routes = [{
         SharedModule,
         HttpClientModule,
         RouterModule.forChild(DASHBOARD_ROUTES),
-        StoreModule.forFeature("dashboard", AppState),
-        EffectsModule.forFeature(IdentityEffects, ChatEffects)
+        StoreModule.forFeature("dashboard", dashboardReducer),
+        EffectsModule.forFeature(ChatEffects)
     ],
     providers: [
         XmppService,

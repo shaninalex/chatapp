@@ -1,14 +1,12 @@
-import { IdentityState, identityReducer } from "./identity/reducer";
 import { chatReducer } from "./chat/chat.reducer";
 import { IChatState } from "./chat/chat.reducer";
+import { combineReducers } from "@ngrx/store";
 
 
 export interface IAppState {
-    identity: IdentityState,
-    chat: IChatState,
+  chat: IChatState,
 }
 
-export const AppState = {
-    identity: identityReducer,
-    chat: chatReducer,
-}
+export const dashboardReducer = combineReducers({
+  chat: chatReducer,
+});

@@ -44,8 +44,8 @@ export const routes: Routes = [
         BrowserModule,
         HttpClientModule,
         RouterModule.forRoot(routes),
-        StoreModule.forRoot(),
-        EffectsModule.forRoot(),
+        StoreModule.forRoot({}, {}),
+        EffectsModule.forRoot([]),
     ],
     providers: [],
     bootstrap: [AppComponent]
