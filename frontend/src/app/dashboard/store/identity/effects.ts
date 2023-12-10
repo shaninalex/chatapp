@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs';
-import { VerifiableAddress } from '../../typedefs/identity';
-import { MessagesService } from '../../shared/services/messages.service';
-import { Message } from '../../typedefs/messages';
+import { VerifiableAddress } from '../../../typedefs/identity';
+import { MessagesService } from '../../../shared/services/messages.service';
+import { Message } from '../../../typedefs/messages';
 
 
 @Injectable()

@@ -2,8 +2,8 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@a
 import { Observable, catchError, finalize, map, of, shareReplay } from "rxjs";
 import { inject } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { IdentityState } from "../../store/identity/reducer";
-import { SetIdentity } from "../../store/identity/actions";
+import { IdentityState } from "../../dashboard/store/identity/reducer";
+// import { SetIdentity } from "../../store/identity/actions";
 import { HttpClient } from "@angular/common/http";
 import { UiService } from "../services/ui.service";
 
@@ -16,17 +16,16 @@ export function CanActiveteAccountPage(route: ActivatedRouteSnapshot, state: Rou
 {
     const router = inject(Router);
     const http = inject(HttpClient);
-    const store = inject(Store<IdentityState>);
-    const ui = inject(UiService);
-
+    // const store = inject(Store<IdentityState>);
+    // const ui = inject(UiService);
     const session = http.get<any>(`/api/v2/auth/session`, { withCredentials: true }).pipe(
-        finalize(() => ui.loading.next(false)),
+        // finalize(() => ui.loading.next(false)),
         shareReplay()
     );
 
     return <Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree>session.pipe(
         map((data) => {
-            if (data) store.dispatch(SetIdentity({user_info: data}));
+            if (data) console.log("save data to store some how"); // store.dispatch(SetIdentity({user_info: data}));
             return of(true);
         }),
         catchError((err) => {

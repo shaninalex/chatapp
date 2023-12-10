@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { Traits } from "../../../typedefs/identity";
-import { selectTraits } from "../../../store/identity/selectors";
-import { IAppState } from "../../../store";
+import { selectTraits } from "../../store/identity/selectors";
+import { IAppState } from "../../store";
 import { ProfileService } from "../../services/profile.service";
 import { XmppService } from "../../services/xmpp.service";
 

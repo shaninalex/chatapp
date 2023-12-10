@@ -1,28 +1,23 @@
 import { Component } from "@angular/core";
+import { RosterItem } from "stanza/protocol";
+import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectContactList } from "../../../store/chat/chat.selectors";
-import { IAppState } from "../../../store";
-import { XmppService } from "../../services/xmpp.service";
+import { selectContactList } from "../../store/chat/chat.selectors";
+import { IChatState } from "../../store/chat/chat.reducer";
+import { IAppState } from "../../store";
 
 @Component({
     selector: "div#app-sidebar",
     templateUrl: "sidebar.component.html"
 })
 export class SidebarComponent {
-    users: any[];
+    users$: Observable<RosterItem[]>;
 
-    constructor(
-        private xmpp: XmppService,
-        private store: Store<IAppState>
-    ) {
-        this.store.select(selectContactList).subscribe({
-            next: data => this.users = data
-        })
-    }
+    constructor(private store: Store<IAppState>) {
+        this.users$ = this.store.select(selectContactList);
 
-    getVCard(jid: string) {
-        this.xmpp.getVCard(jid).then(data => {
-            console.log(data);
-        });
+        // this.xmpp.vcard$.pipe(filter(isNotNull)).subscribe(data => {
+        //     console.log(data);
+        // })
     }
 }

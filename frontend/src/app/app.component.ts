@@ -5,12 +5,6 @@ import { SharedModule } from './shared/shared.module';
 
 @Component({
     selector: '#root',
-    standalone: true,
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        SharedModule
-    ],
     templateUrl: './app.component.html',
     encapsulation: ViewEncapsulation.None
 })
