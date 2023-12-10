@@ -15,9 +15,9 @@ services:
       - EJABBERD_ROOT=${EJABBERD_ROOT}
       - ADMIN_JID=${ADMIN_JID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - APP_PORT=${APP_PORT}
+      - APP_PORT=${ORY_HOOKS_APP_PORT}
     ports:
-      - 8081:8081
+      - ${ORY_HOOKS_APP_PORT}:${ORY_HOOKS_APP_PORT}
     depends_on:
       ejabberd:
         condition: service_started
@@ -26,10 +26,10 @@ services:
     image: shanart/m-kratos-forms-proxy:latest
     restart: on-failure
     ports:
-      - 8000:8000
+      - ${KRATOS_PROXY_PORT}:${KRATOS_PROXY_PORT}
     environment:
-      - PORT=8000
-      - KRATOS_URL=http://kratos:4433
+      - PORT=${KRATOS_PROXY_PORT}
+      - KRATOS_URL=${KRATOS_URL}
     depends_on:
       - kratos
 
@@ -37,14 +37,14 @@ services:
     build: ./profile
     restart: on-failure
     ports:
-      - 8082:8082
+      - ${PROFILE_SERVICE_PORT}:${PROFILE_SERVICE_PORT}
     environment:
-      - APP_PORT=8082
+      - APP_PORT=${PROFILE_SERVICE_PORT}
       - EJABBERD_DATABASE_URL=${PSQL_EJABBERD_DATABASE_URL}
-      - EJABBERD_API_URL=http://ejabberd:5280
+      - EJABBERD_API_URL=${EJABBERD_ROOT}
       - ADMIN_JID=${ADMIN_JID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - KRATOS_URL=http://kratos:4433
+      - KRATOS_URL=${KRATOS_URL}
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,10 +94,10 @@ services:
   migrate_ejabberd_db:
     build: ./configs/migrate_ejabberd_db
     environment:
-      - DB_HOST=postgres
-      - DB_NAME=ejabberd
-      - DB_USER=user
-      - PGPASSWORD=password
+      - DB_HOST=${DATABASE_HOST}
+      - DB_NAME=${DATABASE_EJABBERD}
+      - DB_USER=${DATABASE_USER}
+      - PGPASSWORD=${DATABASE_PASSWORD}
     restart: on-failure
     depends_on:
       postgres:
