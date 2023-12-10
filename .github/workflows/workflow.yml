@@ -1,11 +1,13 @@
 name: ChatApp Workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   release:
     name: release
-    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
