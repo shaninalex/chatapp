@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs';
 import { VerifiableAddress } from './typedefs';
 import { MessagesService } from '../shared/services/messages.service';
-import { Message } from '../typedefs/messages';
+import { Message } from '../shared/services/messages.service';
 
 
 @Injectable()
@@ -17,7 +17,6 @@ export class IdentityEffects {
     setIdentity$ = createEffect(() => this.actions$.pipe(
         ofType('[identity] Set'),
         tap((data: any) => {
-
             for (let i = 0; i < data.user_info.identity.verifiable_addresses.length; i++) {
                 let address: VerifiableAddress = data.user_info.identity.verifiable_addresses[i];
                 if (!address.verified) {

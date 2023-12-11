@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { IAppState } from './appstate';
+import { IAppState } from './store';
 
 
 export const selectIdentityFeature = (state: IAppState) => state.identity;

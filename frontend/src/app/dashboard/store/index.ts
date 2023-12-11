@@ -3,7 +3,7 @@ import { IChatState } from "./chat/chat.reducer";
 import { combineReducers } from "@ngrx/store";
 
 
-export interface IAppState {
+export interface IDashboardState {
   chat: IChatState,
 }
 

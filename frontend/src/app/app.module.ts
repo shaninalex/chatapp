@@ -7,7 +7,8 @@ import { CanActiveteAccountPage } from './shared/guards/auth.guard';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
-
+import { IdentityEffects } from './store/effects';
+import { identityReducer } from './store/reducer';
 
 export const routes: Routes = [
     {
@@ -44,8 +45,10 @@ export const routes: Routes = [
         BrowserModule,
         HttpClientModule,
         RouterModule.forRoot(routes),
-        StoreModule.forRoot({}, {}),
-        EffectsModule.forRoot([]),
+        StoreModule.forRoot({
+            identity: identityReducer
+        }, {}),
+        EffectsModule.forRoot([IdentityEffects]),
     ],
     providers: [],
     bootstrap: [AppComponent]

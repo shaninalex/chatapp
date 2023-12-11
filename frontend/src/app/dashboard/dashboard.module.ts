@@ -14,6 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ChatEffects } from './store/chat/chat.effects';
 import { dashboardReducer } from './store';
+import { MessagesService } from '../shared/services/messages.service';
 
 
 const DASHBOARD_ROUTES: Routes = [{
@@ -44,7 +45,8 @@ const DASHBOARD_ROUTES: Routes = [{
     ],
     providers: [
         XmppService,
-        ProfileService
+        ProfileService,
+        MessagesService
     ]
 })
 export class DashboardModule { }
