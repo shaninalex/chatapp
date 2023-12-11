@@ -1,7 +1,14 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-@Injectable()
+export interface Message {
+    type: string
+    text: string
+}
+
+@Injectable({
+    providedIn: 'root'
+})
 export class MessagesService {
     public message: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
     public messages: any[] = [];

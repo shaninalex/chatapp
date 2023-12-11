@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
+import { BehaviorSubject, filter } from 'rxjs';
+import { RosterItem, RosterResult, VCardTemp } from 'stanza/protocol';
+import { Store } from '@ngrx/store';
+import { ChatState } from 'stanza/Constants';
+import { setContactsList } from '../store/chat/chat.actions';
 
 
 @Injectable()
 export class XmppService {
     private client: Stanza.Agent;
 
-    constructor() {}
+    constructor(private store: Store<ChatState>) {}
 
     connect(username: string, password: string): void {
         this.client = Stanza.createClient({
@@ -24,24 +29,27 @@ export class XmppService {
         this.client.sasl.register('X-OAUTH2', Stanza.SASL.PLAIN, 2000);
 
         this.client.on('session:started', () => {
+
             // get contact list
-            this.client.getRoster();
+            this.client.getRoster().then(data => {
+                if (data) this.store.dispatch(setContactsList({list: data.items}))
+            });
 
             // change your status to "online"
             this.client.sendPresence();
         });
 
-        this.client.on('iq', (msg: any) => {
-            console.log("iq:", msg);
-        });
+        // this.client.on('iq', (msg: any) => {
+        //     console.log("iq:", msg);
+        // });
 
-        this.client.on('stanza', (msg: Stanza.Stanzas.Message | Stanza.Stanzas.Presence | Stanza.Stanzas.IQ) => {
-            console.log("type:", msg.type, "payload:", msg);
-        });
+        // this.client.on('stanza', (msg: Stanza.Stanzas.Message | Stanza.Stanzas.Presence | Stanza.Stanzas.IQ) => {
+        //     console.log("type:", msg.type, "payload:", msg);
+        // });
 
-        this.client.on('chat', (msg: any) => {
-            console.log("chat:", msg);
-        });
+        // this.client.on('chat', (msg: any) => {
+        //     console.log("chat:", msg);
+        // });
 
         this.client.connect();
     }
@@ -57,9 +65,10 @@ export class XmppService {
         this.client.disconnect();
     }
 
-    getVCard(jid: string): Promise<any> {
-        // response of this request will be handled in xmpp events handlers
-        return this.client.getVCard(jid)
+    getVCard(jid: string): void {
+        this.client.getVCard(jid).then(vcard => {
+            if (vcard) console.log("save to store: ", vcard);
+        })
     }
 
     addFriend(id: string): void {

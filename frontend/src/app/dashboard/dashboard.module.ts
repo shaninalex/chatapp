@@ -9,6 +9,12 @@ import { XmppService } from './services/xmpp.service';
 import { ProfileService } from './services/profile.service';
 import { PeopleListComponent } from './pages/people-list/people-list.component';
 import { ConversationComponent } from './pages/conversation/conversation.component';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { ChatEffects } from './store/chat/chat.effects';
+import { dashboardReducer } from './store';
+import { MessagesService } from '../shared/services/messages.service';
 
 
 const DASHBOARD_ROUTES: Routes = [{
@@ -32,11 +38,15 @@ const DASHBOARD_ROUTES: Routes = [{
     imports: [
         CommonModule,
         SharedModule,
-        RouterModule.forChild(DASHBOARD_ROUTES)
+        HttpClientModule,
+        RouterModule.forChild(DASHBOARD_ROUTES),
+        StoreModule.forFeature("dashboard", dashboardReducer),
+        EffectsModule.forFeature(ChatEffects)
     ],
     providers: [
         XmppService,
-        ProfileService
+        ProfileService,
+        MessagesService
     ]
 })
 export class DashboardModule { }
