@@ -5,7 +5,7 @@ import { BehaviorSubject, filter } from 'rxjs';
 import { RosterItem, RosterResult, VCardTemp } from 'stanza/protocol';
 import { Store } from '@ngrx/store';
 import { ChatState } from 'stanza/Constants';
-import { setContactsList } from '../store/chat/chat.actions';
+import { setContactsList, setVCardItem } from '../store/chat/chat.actions';
 
 
 @Injectable()
@@ -67,7 +67,7 @@ export class XmppService {
 
     getVCard(jid: string): void {
         this.client.getVCard(jid).then(vcard => {
-            if (vcard) console.log("save to store: ", vcard);
+            if (vcard) this.store.dispatch(setVCardItem({jid, vcard}));
         })
     }
 

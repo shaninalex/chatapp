@@ -10,13 +10,9 @@ import { IDashboardState } from "../../store";
     templateUrl: "sidebar.component.html"
 })
 export class SidebarComponent {
-    users$: Observable<RosterItem[]>;
+    users$: Observable<any[]>;
 
     constructor(private store: Store<IDashboardState>) {
         this.users$ = this.store.select(selectContactList);
-
-        // this.xmpp.vcard$.pipe(filter(isNotNull)).subscribe(data => {
-        //     console.log(data);
-        // })
     }
 }
