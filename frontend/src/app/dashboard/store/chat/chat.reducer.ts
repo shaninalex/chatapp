@@ -4,10 +4,12 @@ import * as chatActions from './chat.actions';
 
 export interface IChatState {
     contactList: any[]; // RosterItem
+    activeConversation: string | null
 }
 
 export const initialState: IChatState = {
     contactList: [],
+    activeConversation: null
 };
 
 export const chatReducer = createReducer(
@@ -29,5 +31,6 @@ export const chatReducer = createReducer(
             }
             return item
         })
-    }))
+    })),
+    on(chatActions.selectConversation, (state, action) => ({...state, activeConversation: action.jid}))
 );

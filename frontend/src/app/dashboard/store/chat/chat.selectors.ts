@@ -11,3 +11,8 @@ export const selectContactList = createSelector(
     (state: IChatState) => state.contactList
 );
 
+export const selectConversation = createSelector(
+    selectChatFeature,
+    (state: IChatState) => state.activeConversation
+);
+
