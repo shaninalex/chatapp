@@ -1,8 +1,15 @@
 <div class="row">
-    <div id="app-sidebar" class="col-md-3 border"></div>
+    <div id="app-sidebar" class="col-md-3 border py-2 rounded"></div>
     <div class="col-md-9">
-        <div class="alert alert-secondary">
-            Conversation area comming soon...
-        </div>
+        @if (conversationJid$ | async; as convid) {
+            <div>
+                <div>Conversation with {{ convid }}</div>
+                <small>Conversation component goes here.</small>
+            </div>
+        } @else {
+            <div class="alert alert-secondary">
+                Conversation does not selected
+            </div>
+        }
     </div>
 </div>

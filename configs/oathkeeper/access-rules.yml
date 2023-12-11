@@ -33,3 +33,22 @@
     handler: allow
   errors:
     - handler: json
+
+# https://www.ory.sh/docs/oathkeeper/guides/proxy-websockets
+- id: "api:chat"
+  upstream:
+    preserve_host: true
+    url: "http://ejabberd:5280"
+  match:
+    url: "http://localhost:8080/ws"
+    methods:
+      - GET
+      - POST
+  authenticators:
+    - handler: cookie_session
+  mutators:
+    - handler: header
+  authorizer:
+    handler: allow
+  errors:
+    - handler: json

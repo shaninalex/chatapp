@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as IdentityActions from './actions';
-import { Identity, IdentityObject } from '../../typedefs/identity';
+import { IdentityObject } from './typedefs';
 
 export interface IdentityState {
     identity: IdentityObject | null;
