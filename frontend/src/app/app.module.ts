@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { IdentityEffects } from './store/effects';
 import { identityReducer } from './store/reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 export const routes: Routes = [
     {
@@ -49,6 +50,7 @@ export const routes: Routes = [
             identity: identityReducer
         }, {}),
         EffectsModule.forRoot([IdentityEffects]),
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
     ],
     providers: [],
     bootstrap: [AppComponent]
