@@ -67,6 +67,7 @@ export class XmppService {
 
     getVCard(jid: string): void {
         this.client.getVCard(jid).then(vcard => {
+            console.log(vcard);
             if (vcard) this.store.dispatch(setVCardItem({jid, vcard}));
         })
     }

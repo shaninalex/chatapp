@@ -21,7 +21,7 @@ export const chatReducer = createReducer(
             if (item.jid === action.jid) {
                 item = { 
                     ...item, 
-                    fullname: action.vcard.name,
+                    fullname: action.vcard.fullName,
                 }
                 action.vcard.records?.forEach(record => {
                     if (record.type === "photo") {
