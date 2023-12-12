@@ -15,38 +15,40 @@ import { EffectsModule } from '@ngrx/effects';
 import { ChatEffects } from './store/chat/chat.effects';
 import { dashboardReducer } from './store';
 import { MessagesService } from '../shared/services/messages.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const DASHBOARD_ROUTES: Routes = [{
-    path: "",
-    component: DashboardComponent,
-    children: [
-        { path: "", component: ConversationComponent },
-        { path: "people", component: PeopleListComponent }
-    ]
+  path: "",
+  component: DashboardComponent,
+  children: [
+    { path: "", component: ConversationComponent },
+    { path: "people", component: PeopleListComponent }
+  ]
 }];
 
 
 @NgModule({
-    declarations: [
-        DashboardComponent,
-        SidebarComponent,
-        HeaderComponent,
-        PeopleListComponent,
-        ConversationComponent,
-    ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        HttpClientModule,
-        RouterModule.forChild(DASHBOARD_ROUTES),
-        StoreModule.forFeature("dashboard", dashboardReducer),
-        EffectsModule.forFeature(ChatEffects)
-    ],
-    providers: [
-        XmppService,
-        ProfileService,
-        MessagesService
-    ]
+  declarations: [
+    DashboardComponent,
+    SidebarComponent,
+    HeaderComponent,
+    PeopleListComponent,
+    ConversationComponent,
+  ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(DASHBOARD_ROUTES),
+    StoreModule.forFeature("dashboard", dashboardReducer),
+    EffectsModule.forFeature(ChatEffects)
+  ],
+  providers: [
+    XmppService,
+    ProfileService,
+    MessagesService
+  ]
 })
 export class DashboardModule { }

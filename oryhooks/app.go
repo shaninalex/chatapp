@@ -99,8 +99,8 @@ func (o *OryHooks) SetVCard(payload *RegistrationPayload) error {
 			),
 		),
 		strings.NewReader(
-			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "EMAIL", "content": "%s"}`,
-				payload.UserId, payload.Traits.Email,
+			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "URL", "content": "%s"}`,
+				payload.UserId, payload.Traits.Image,
 			),
 		),
 	}
