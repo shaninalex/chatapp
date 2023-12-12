@@ -13,6 +13,7 @@ export class XmppService {
   constructor(private store: Store<ChatState>) { }
 
   connect(username: string, password: string): void {
+
     this.client = Stanza.createClient({
       jid: username,
       password: password,
@@ -45,9 +46,9 @@ export class XmppService {
     //     console.log("type:", msg.type, "payload:", msg);
     // });
 
-    // this.client.on('chat', (msg: any) => {
-    //     console.log("chat:", msg);
-    // });
+    /* this.client.on('chat', (msg: any) => {
+      console.log("chat:", msg);
+    }); */
 
     this.client.connect();
   }
@@ -65,7 +66,6 @@ export class XmppService {
 
   getVCard(jid: string): void {
     this.client.getVCard(jid).then(vcard => {
-      console.log(vcard);
       if (vcard) this.store.dispatch(setVCardItem({ jid, vcard }));
     })
   }
