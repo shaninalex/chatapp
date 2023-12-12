@@ -98,6 +98,11 @@ func (o *OryHooks) SetVCard(payload *RegistrationPayload) error {
 				payload.UserId, payload.Traits.Name.First, payload.Traits.Name.Last,
 			),
 		),
+		strings.NewReader(
+			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "URL", "content": "%s"}`,
+				payload.UserId, payload.Traits.Image,
+			),
+		),
 	}
 
 	// NOTE:

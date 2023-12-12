@@ -7,6 +7,7 @@ type RegistrationPayload struct {
 			First string `json:"first"`
 			Last  string `json:"last"`
 		} `json:"name"`
+		Image string `json:"image"`
 	} `json:"traits"`
 	UserId string `json:"userId"`
 }

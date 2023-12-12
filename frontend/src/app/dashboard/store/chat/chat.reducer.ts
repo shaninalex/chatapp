@@ -24,8 +24,8 @@ export const chatReducer = createReducer(
                     fullname: action.vcard.fullName,
                 }
                 action.vcard.records?.forEach(record => {
-                    if (record.type === "photo") {
-                        item.photo = record.data
+                    if (record.type === "url") {
+                        item.photo = record.value
                     }
                 })
             }

@@ -14,7 +14,7 @@
     @for (user of users; track $index) {
     <div (click)="selectConversation(user.jid)">
         @if (user.photo) {
-        <img class="rounded-circle" src="data:image/png;base64,{{user.photo}}" style="width: 2rem;height: 2rem" />
+            <img class="rounded-circle" src="{{user.photo}}" style="width: 2rem;height: 2rem" />
         } @else {
         <svg width="2rem" height="2rem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path fill="gray"
