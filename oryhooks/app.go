@@ -92,33 +92,27 @@ func (o *OryHooks) AuthToken(payload *RegistrationPayload) error {
 }
 
 func (o *OryHooks) SetVCard(payload *RegistrationPayload) error {
-	payloads := []*strings.Reader{
-		strings.NewReader(
-			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "FN", "content": "%s %s"}`,
-				payload.UserId, payload.Traits.Name.First, payload.Traits.Name.Last,
-			),
+	err := o.makeRequest("POST", "api/set_vcard", strings.NewReader(
+		fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "FN", "content": "%s %s"}`,
+			payload.UserId, payload.Traits.Name.First, payload.Traits.Name.Last,
 		),
-		strings.NewReader(
+	))
+
+	if err != nil {
+		log.Println(err)
+	}
+	
+	if payload.Traits.Image != "" {
+		err = o.makeRequest("POST", "api/set_vcard", strings.NewReader(
 			fmt.Sprintf(`{ "user": "%s", "host": "localhost", "name": "URL", "content": "%s"}`,
 				payload.UserId, payload.Traits.Image,
 			),
-		),
-	}
-
-	// NOTE:
-	// If user registered from Social sign in - traits will have "picture" field
-	// with image url, and we will able to save it. But image url is not the binary
-	// data expected in https://xmpp.org/extensions/xep-0153.html. Probably require
-	// to download it and save binary... Or not. We already have avatar in Kratos...
-	// UPD1: xep-0054 has example with "field" "URL" - May be store user image in
-	//		this field?
-	for _, p := range payloads {
-		err := o.makeRequest("POST", "api/set_vcard", p)
+		))
 		if err != nil {
-			// send error signal into monitoring system
 			log.Println(err)
 		}
 	}
 
 	return nil
+
 }
