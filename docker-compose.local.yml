@@ -72,7 +72,7 @@ services:
   # Ejabberd server
   # Main part of the application that will handle all user comunication
   ejabberd:
-    image: ejabberd/ecs
+    image: ejabberd/ecs:23.10
     restart: on-failure
     container_name: ejabberdcore
     ports:
