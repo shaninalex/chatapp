@@ -1,15 +1,24 @@
 import { createReducer, on } from '@ngrx/store';
 import * as chatActions from './chat.actions';
+import { ChatMessage } from '../../services/xmpp.service';
 // import { RosterItem } from 'stanza/protocol';
 
+export interface IConversation {
+    id: string
+    authors: Array<any>
+    messages: Array<ChatMessage>
+}
+
 export interface IChatState {
-    contactList: any[]; // RosterItem
+    contactList: Array<any> // RosterItem
     activeConversation: string | null
+    conversations: Array<IConversation>
 }
 
 export const initialState: IChatState = {
     contactList: [],
-    activeConversation: null
+    activeConversation: null,
+    conversations: []
 };
 
 export const chatReducer = createReducer(

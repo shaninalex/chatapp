@@ -3,7 +3,25 @@ import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
 import { Store } from '@ngrx/store';
 import { ChatState } from 'stanza/Constants';
-import { setContactsList, setVCardItem } from '../store/chat/chat.actions';
+import { newMessage, setContactsList, setVCardItem } from '../store/chat/chat.actions';
+
+
+export interface ChatMessage {
+  from: string
+  id: string
+  lang: string
+  to: string
+  alternateLanguageBodies: AlternateLanguageBody[]
+  body: string
+  type: string
+  chatState: string
+}
+
+export interface AlternateLanguageBody {
+  lang: string
+  value: string
+}
+
 
 
 @Injectable()
@@ -42,13 +60,13 @@ export class XmppService {
     //     console.log("iq:", msg);
     // });
 
-    // this.client.on('stanza', (msg: Stanza.Stanzas.Message | Stanza.Stanzas.Presence | Stanza.Stanzas.IQ) => {
-    //     console.log("type:", msg.type, "payload:", msg);
-    // });
+    this.client.on('stanza', (msg: Stanza.Stanzas.Message | Stanza.Stanzas.Presence | Stanza.Stanzas.IQ) => {
+        console.log("type:", msg.type, "payload:", msg);
+    });
 
-    /* this.client.on('chat', (msg: any) => {
-      console.log("chat:", msg);
-    }); */
+    this.client.on('chat', (msg: any) => {
+      this.store.dispatch(newMessage({message: msg as ChatMessage}))
+    });
 
     this.client.connect();
   }
