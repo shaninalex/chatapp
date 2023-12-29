@@ -3,7 +3,7 @@ import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
 import { Store } from '@ngrx/store';
 import { ChatState } from 'stanza/Constants';
-import { newMessage, setContactsList, setVCardItem } from '../store/chat/chat.actions';
+import { setContactsList, setVCardItem } from '../store/chat/chat.actions';
 
 
 export interface ChatMessage {
@@ -56,16 +56,32 @@ export class XmppService {
       this.client.sendPresence();
     });
 
-    // this.client.on('iq', (msg: any) => {
-    //     console.log("iq:", msg);
-    // });
-
-    this.client.on('stanza', (msg: Stanza.Stanzas.Message | Stanza.Stanzas.Presence | Stanza.Stanzas.IQ) => {
-        console.log("type:", msg.type, "payload:", msg);
+    this.client.on('iq', (msg: any) => {
+        console.log("iq:", msg);
     });
 
     this.client.on('chat', (msg: any) => {
-      this.store.dispatch(newMessage({message: msg as ChatMessage}))
+      console.log("chat:", msg);
+    });
+
+    this.client.on('subscribe', (msg: any) => {
+      console.log("subscribe:", msg);
+    });
+
+    this.client.on('subscribed', (msg: any) => {
+      console.log("subscribed:", msg);
+    });
+
+    this.client.on('roster:update', (msg: any) => {
+      console.log("roster:update:", msg);
+    });
+
+    this.client.on('presence', (msg: any) => {
+      console.log("presence:", msg);
+    });
+
+    this.client.on('groupchat', (msg: any) => {
+      console.log("groupchat:", msg);
     });
 
     this.client.connect();

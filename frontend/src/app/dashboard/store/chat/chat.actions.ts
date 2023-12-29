@@ -16,8 +16,3 @@ export const selectConversation = createAction(
   "[Chat] select conversation",
   props<{ jid: string }>()
 )
-
-export const newMessage = createAction(
-  "[Chat] new message",
-  props<{message: ChatMessage}>()
-);
