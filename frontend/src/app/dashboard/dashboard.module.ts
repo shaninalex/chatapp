@@ -13,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ChatEffects } from './store/chat/chat.effects';
-import { dashboardReducer } from './store';
+import { dashboardReducer } from './store/store';
 import { MessagesService } from '../shared/services/messages.service';
 import { ReactiveFormsModule } from '@angular/forms';
 

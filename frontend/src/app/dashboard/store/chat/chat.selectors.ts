@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { IChatState } from './chat.reducer';
-import { IDashboardState } from '..';
+import { IDashboardState } from '../store';
 
 
 export const selectChatFeature = (state:any) => state.dashboard.chat;

@@ -3,7 +3,7 @@ import { RosterItem } from "stanza/protocol";
 import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectContactList } from "../../store/chat/chat.selectors";
-import { IDashboardState } from "../../store";
+import { IDashboardState } from "../../store/store";
 import { selectConversation } from "../../store/chat/chat.actions";
 
 @Component({

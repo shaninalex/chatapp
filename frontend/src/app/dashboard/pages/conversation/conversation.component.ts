@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { IDashboardState } from '../../store';
+import { IDashboardState } from '../../store/store';
 import { selectConversation } from '../../store/chat/chat.selectors';
 import { Observable, tap } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
