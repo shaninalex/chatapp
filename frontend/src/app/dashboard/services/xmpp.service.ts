@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { environment } from '../../../environments/environment.development';
 import { Store } from '@ngrx/store';
-import { ChatState } from 'stanza/Constants';
 import { setContactsList, setVCardItem } from '../store/chat/chat.actions';
+import { IDashboardState } from '../store/store';
+import { Sub } from '../store/sub.reducers';
+import { SubsActions } from '../store/actions';
+import { v4 as uuid } from 'uuid';
 
 
 export interface ChatMessage {
@@ -28,7 +31,7 @@ export interface AlternateLanguageBody {
 export class XmppService {
   private client: Stanza.Agent;
 
-  constructor(private store: Store<ChatState>) { }
+  constructor(private store: Store<IDashboardState>) { }
 
   connect(username: string, password: string): void {
 
@@ -65,6 +68,8 @@ export class XmppService {
     });
 
     this.client.on('subscribe', (msg: any) => {
+      const newSub: Sub = {id: uuid(), ...msg };
+      this.store.dispatch(SubsActions.new({sub: newSub}));
       console.log("subscribe:", msg);
     });
 

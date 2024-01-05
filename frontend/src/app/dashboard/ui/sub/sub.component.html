@@ -1,0 +1,13 @@
+@if(subs | async) {
+<div class="container">
+  <div class="list-group">
+    @for (item of subs | async; track $index) {
+      <div class="list-group-item">
+        {{ item.from }}
+        -
+        <button type="button" (click)="approve(item.id)">+</button>
+      </div>
+    }
+  </div>
+</div>
+}

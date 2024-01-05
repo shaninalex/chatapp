@@ -16,6 +16,7 @@ import { ChatEffects } from './store/chat/chat.effects';
 import { dashboardReducer } from './store/store';
 import { MessagesService } from '../shared/services/messages.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SubComponent } from './ui/sub/sub.component';
 
 
 const DASHBOARD_ROUTES: Routes = [{
@@ -35,6 +36,7 @@ const DASHBOARD_ROUTES: Routes = [{
     HeaderComponent,
     PeopleListComponent,
     ConversationComponent,
+    SubComponent,
   ],
   imports: [
     CommonModule,
