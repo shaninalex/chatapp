@@ -33,6 +33,6 @@ export class PeopleListComponent {
 
   addFriend(id: string): void {
     console.log(id);
-    this.xmpp.addFriend(id);
+    this.xmpp.subscribe(id);
   }
 }

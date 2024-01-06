@@ -4,9 +4,9 @@ import { environment } from '../../../environments/environment.development';
 import { Store } from '@ngrx/store';
 import { setContactsList, setVCardItem } from '../store/chat/chat.actions';
 import { IDashboardState } from '../store/store';
-import { Sub } from '../store/sub.reducers';
 import { SubsActions } from '../store/actions';
 import { v4 as uuid } from 'uuid';
+import { Observable, of } from 'rxjs';
 
 
 export interface ChatMessage {
@@ -60,7 +60,7 @@ export class XmppService {
     });
 
     this.client.on('iq', (msg: any) => {
-        console.log("iq:", msg);
+      console.log("iq:", msg);
     });
 
     this.client.on('chat', (msg: any) => {
@@ -68,13 +68,11 @@ export class XmppService {
     });
 
     this.client.on('subscribe', (msg: any) => {
-      const newSub: Sub = {id: uuid(), ...msg };
-      this.store.dispatch(SubsActions.new({sub: newSub}));
-      console.log("subscribe:", msg);
+      this.store.dispatch(SubsActions.new({ sub: { id: msg.from, ...msg } }));
     });
 
     this.client.on('subscribed', (msg: any) => {
-      console.log("subscribed:", msg);
+      // this.store.dispatch(SubsActions.approve_sub({ from: msg }));
     });
 
     this.client.on('roster:update', (msg: any) => {
@@ -109,13 +107,21 @@ export class XmppService {
     })
   }
 
-  addFriend(id: string): void {
+  subscribe(id: string): void {
     // add person to your contacts list
     this.client.subscribe(`${id}@localhost`);
+  }
+
+  approve_sub(from: string): Observable<any> {
+    return of(this.client.sendPresence({ to: from, type: "subscribed" }));
   }
 
   getMessages(): void {
     // https://github.com/legastero/stanza/blob/master/docs/Reference.md#searchhistory
     // this.client.searchHistory()
+  }
+
+  getRoster(): Observable<any> {
+    return of(this.client.getRoster());
   }
 }

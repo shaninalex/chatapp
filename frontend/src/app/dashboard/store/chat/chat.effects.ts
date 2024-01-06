@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as chatActions from './chat.actions';
 import { XmppService } from '../../services/xmpp.service';
 
@@ -14,10 +13,10 @@ export class ChatEffects {
       items.list.forEach(item => this.xmpp.getVCard(item.jid))
       return items.list;
     })
-  ), { dispatch: false})
+  ), { dispatch: false })
 
   constructor(
     private actions$: Actions,
     private xmpp: XmppService
-  ) {}
+  ) { }
 }

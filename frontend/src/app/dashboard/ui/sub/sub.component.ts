@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Sub } from '../../store/sub.reducers';
 import { selectSubsList } from '../../store/sub.selectors';
+import { SubsActions } from '../../store/actions';
 
 @Component({
   selector: 'app-sub',
@@ -18,5 +19,6 @@ export class SubComponent {
   }
 
   approve(id: string): void {
+    this.store.dispatch(SubsActions.approve_sub({ from: id }));
   }
 }
