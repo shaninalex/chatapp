@@ -2,11 +2,13 @@ package main
 
 import (
 	"chat/pkg/web"
+	"os"
 	"strconv"
 )
 
 var (
-	PORT = "8001" // os.Getenv("PORT")
+	PORT          = os.Getenv("PORT")
+	EJABBERD_HOST = os.Getenv("EJABBERD_HOST")
 )
 
 func main() {

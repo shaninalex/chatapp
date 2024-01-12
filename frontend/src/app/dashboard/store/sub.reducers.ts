@@ -18,7 +18,7 @@ export const initialSubState: SubState = subAdapter.getInitialState();
 export const subReducer = createReducer(
   initialSubState,
   on(SubsActions.new, (state, action) => subAdapter.addOne(action.sub, state)),
-  on(SubsActions.subscribed, (state, action) => subAdapter.removeOne(action.id, state))
+  on(SubsActions.subscribed, (state, action) => subAdapter.removeOne(action.id, state)) 
 );
 
 const {
