@@ -22,14 +22,22 @@ func (c *Client) XMPPMessageHandler(s xmpp.Sender, p stanza.Packet) {
 	c.WSConnection.WriteMessage(1, compileMessage(msg))
 }
 
-func compileMessage(msg stanza.Message) []byte {
-	m, err := json.Marshal(map[string]interface{}{
-		"from": msg.From,
-		"to":   msg.To,
-		"body": msg.Body,
-	})
-	if err != nil {
-		return nil
+func (c *Client) XMPPPresenseHandler(s xmpp.Sender, p stanza.Packet) {
+	presense, ok := p.(stanza.Presence)
+	if !ok {
+		_, _ = fmt.Fprintf(os.Stdout, "Ignoring packet: %T\n", p)
+		return
 	}
-	return m
+	v, _ := json.Marshal(presense)
+	c.WSConnection.WriteMessage(1, v)
+}
+
+func (c *Client) XMPPIqHandler(s xmpp.Sender, p stanza.Packet) {
+	iq, ok := p.(*stanza.IQ)
+	if !ok {
+		_, _ = fmt.Fprintf(os.Stdout, "Ignoring packet: %T\n", p)
+		return
+	}
+	v, _ := json.Marshal(iq)
+	c.WSConnection.WriteMessage(1, v)
 }

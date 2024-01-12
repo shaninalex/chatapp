@@ -56,6 +56,8 @@ func (c *Client) InitXMPPClient() {
 
 	router := xmpp.NewRouter()
 	router.HandleFunc("message", c.XMPPMessageHandler)
+	router.HandleFunc("presense", c.XMPPPresenseHandler)
+	router.HandleFunc("iq", c.XMPPIqHandler)
 	xmppClient, err := xmpp.NewClient(&config, router, errorHandler)
 	if err != nil {
 		log.Fatalf("%+v", err)
