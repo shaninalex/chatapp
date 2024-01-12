@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IDashboardState } from '../../store/store';
-import { selectConversation } from '../../store/chat/chat.selectors';
 import { Observable, tap } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { XmppService } from '../../services/xmpp.service';
@@ -21,11 +20,11 @@ export class ConversationComponent {
     private store: Store<IDashboardState>,
     private xmpp: XmppService,
   ) {
-    this.conversationJid$ = this.store.select(selectConversation).pipe(
-      tap(data => {
-        this.conversationJid = data as string;
-      })
-    );
+    // this.conversationJid$ = this.store.select(selectConversation).pipe(
+    //   tap(data => {
+    //     this.conversationJid = data as string;
+    //   })
+    // );
   }
 
   onSubmitMessage(): void {

@@ -1,17 +1,15 @@
-import { chatReducer } from "./chat/chat.reducer";
-import { IChatState } from "./chat/chat.reducer";
 import { combineReducers, createFeatureSelector } from "@ngrx/store";
-import { SubState, subReducer } from "./sub.reducers";
+import { SubState, subReducer } from "./sub.reducer";
+import { ContactsState, contactsReducer } from "./contacts.reducer";
 
 export interface IDashboardState {
-  chat: IChatState
+  contacts: ContactsState
   subscriptions: SubState
 }
 
 export const selectDashboardFeature = createFeatureSelector<IDashboardState>('dashboard');
 
-
 export const dashboardReducer = combineReducers({
-  chat: chatReducer,
+  contacts: contactsReducer,
   subscriptions: subReducer,
 });
