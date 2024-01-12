@@ -31,3 +31,11 @@ rebuild:
 
 create_user_token:
 	docker exec -it ejabberdcore /home/ejabberd/bin/ejabberdctl oauth_issue_token $(user)@localhost 3600 ejabberd:admin
+
+build_for_chat:
+	docker compose \
+		-f ./docker-compose.chat.yml \
+		--env-file .env \
+		up -d --build
+
+

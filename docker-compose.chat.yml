@@ -1,0 +1,57 @@
+version: "3.7"
+
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_MULTIPLE_DATABASES=${DATABASE_EJABBERD}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./configs/db/:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_EJABBERD}'"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Ejabberd server
+  # Main part of the application that will handle all user comunication
+  ejabberd:
+    image: ejabberd/ecs:23.10
+    restart: on-failure
+    container_name: ejabberdcore
+    ports:
+      - 5222:5222 # client to server
+      - 5280:5280 # web console
+      # - websocket
+    environment:
+      - CTL_ON_CREATE=register ${ADMIN_USERNAME} localhost ${ADMIN_PASSWORD}
+      # - CTL_ON_START=register admin localhost password ;
+      #                check_password admin localhost password ;
+      #                status
+    volumes:
+      - ./configs/ejabberd/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+    depends_on:
+      migrate_ejabberd_db:
+        condition: service_completed_successfully
+
+  # Migration task. Create schema in the database before ejabberd starts
+  migrate_ejabberd_db:
+    build: ./configs/migrate_ejabberd_db
+    environment:
+      - DB_HOST=${DATABASE_HOST}
+      - DB_NAME=${DATABASE_EJABBERD}
+      - DB_USER=${DATABASE_USER}
+      - PGPASSWORD=${DATABASE_PASSWORD}
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+

@@ -19,7 +19,9 @@ func WebSocket(port int) {
 		client.ServeWebsocket(user, w, r)
 	})
 
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	addr := fmt.Sprintf(":%d", port)
+	log.Printf("host is running on: %s", addr)
+	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Println(err)
 	}

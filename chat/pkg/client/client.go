@@ -11,29 +11,41 @@ import (
 	"gosrc.io/xmpp"
 )
 
+var (
+	EJABBERD_HOST = os.Getenv("EJABBERD_HOST")
+)
+
 type Client struct {
-	ID           string
-	ClientId     string
+	User         map[string]interface{}
 	WSConnection *websocket.Conn
 	Context      context.Context
 	XMPPClient   *xmpp.Client
 }
 
 func initClient(user map[string]interface{}, ws *websocket.Conn) (*Client, error) {
+	client := &Client{
+		WSConnection: ws,
+		User:         user,
+	}
+	client.InitXMPPClient()
+	return client, nil
+}
 
-	jid, ok := user["jid"].(string)
+func (c *Client) InitXMPPClient() {
+	jid, ok := c.User["jid"].(string)
 	if !ok {
-		return nil, errors.New("unable to get user jid")
+		log.Println(errors.New("unable to get user jid"))
 	}
 
+	// TODO: make getUserXMPPAuthToken function as an method of Client
 	token, err := getUserXMPPAuthToken(jid)
 	if err != nil {
-		return nil, errors.New("unable to get user jid")
+		log.Println(errors.New("unable to get user token"))
 	}
 
 	config := xmpp.Config{
 		TransportConfiguration: xmpp.TransportConfiguration{
-			Address:   "localhost:5222",
+			Address:   EJABBERD_HOST,
 			TLSConfig: &tls.Config{InsecureSkipVerify: true},
 		},
 		Jid:          jid,
@@ -43,24 +55,16 @@ func initClient(user map[string]interface{}, ws *websocket.Conn) (*Client, error
 	}
 
 	router := xmpp.NewRouter()
-	router.HandleFunc("message", nil)
-
-	xmppClient, err := xmpp.NewClient(&config, router, nil)
+	router.HandleFunc("message", c.XMPPMessageHandler)
+	xmppClient, err := xmpp.NewClient(&config, router, errorHandler)
 	if err != nil {
 		log.Fatalf("%+v", err)
 	}
-
-	// If you pass the client to a connection manager, it will handle the reconnect policy
-	// for you automatically.
-
-	client := &Client{
-		WSConnection: ws,
-		XMPPClient:   xmppClient,
-	}
-	return client, nil
+	c.XMPPClient = xmppClient
 }
 
 func (c *Client) ConsumeIncommingMessages() {
+	log.Println("Consume incomming messages")
 	for {
 		_, message, err := c.WSConnection.ReadMessage()
 		if err != nil {
@@ -70,10 +74,16 @@ func (c *Client) ConsumeIncommingMessages() {
 			break
 		}
 		log.Println(message)
+		// TODO: is chat message
+		// TODO: generate XMPP stanza
+		// TODO: send generated XMPP message
 	}
 }
 
 func (c *Client) ConsumeXMPPMessages() {
+	// If you pass the client to a connection manager, it will handle the reconnect policy
+	// for you automatically.
+	log.Println("Consume XMPP messages")
 	cm := xmpp.NewStreamManager(c.XMPPClient, nil)
 	log.Fatal(cm.Run())
 }

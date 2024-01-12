@@ -8,7 +8,8 @@ import "net/http"
 // authorized.
 func validateRequest(r *http.Request) (map[string]interface{}, error) {
 	user := map[string]interface{}{
-		"id": "2138912039",
+		"id":  "2138912039",
+		"jid": "admin@localhost",
 	}
 	return user, nil
 }

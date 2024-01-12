@@ -7,8 +7,7 @@ import (
 )
 
 var (
-	PORT          = os.Getenv("PORT")
-	EJABBERD_HOST = os.Getenv("EJABBERD_HOST")
+	PORT = os.Getenv("PORT")
 )
 
 func main() {
