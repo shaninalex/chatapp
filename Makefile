@@ -32,10 +32,17 @@ rebuild:
 create_user_token:
 	docker exec -it ejabberdcore /home/ejabberd/bin/ejabberdctl oauth_issue_token $(user)@localhost 3600 ejabberd:admin
 
+create_users:
+	docker exec ejabberdcore ./bin/ejabberdctl register bob localhost 111 && \
+	docker exec ejabberdcore ./bin/ejabberdctl register alice localhost 111 && \
+	docker exec ejabberdcore ./bin/ejabberdctl register jack localhost 111 && \
+	docker exec ejabberdcore ./bin/ejabberdctl register cat localhost 111
+
+registred_users:
+	docker exec ejabberdcore ./bin/ejabberdctl registered_users localhost
+
 build_for_chat:
 	docker compose \
 		-f ./docker-compose.chat.yml \
 		--env-file .env \
 		up -d --build
-
-

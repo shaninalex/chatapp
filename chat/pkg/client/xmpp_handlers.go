@@ -23,13 +23,23 @@ func (c *Client) XMPPMessageHandler(s xmpp.Sender, p stanza.Packet) {
 }
 
 func (c *Client) XMPPPresenseHandler(s xmpp.Sender, p stanza.Packet) {
-	presense, ok := p.(stanza.Presence)
+	presence, ok := p.(stanza.Presence)
 	if !ok {
 		_, _ = fmt.Fprintf(os.Stdout, "Ignoring packet: %T\n", p)
 		return
 	}
-	v, _ := json.Marshal(presense)
-	c.WSConnection.WriteMessage(1, v)
+
+	log.Println(presence.Type)
+	// is subscribe request
+	if presence.Type == stanza.PresenceTypeSubscribe {
+		b, err := createSubscribeMessage(presence)
+		if err != nil {
+			log.Println(err)
+		}
+		c.WSConnection.WriteMessage(1, b)
+	}
+
+	// is availability request
 }
 
 func (c *Client) XMPPIqHandler(s xmpp.Sender, p stanza.Packet) {

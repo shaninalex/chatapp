@@ -56,8 +56,9 @@ func (c *Client) InitXMPPClient() {
 
 	router := xmpp.NewRouter()
 	router.HandleFunc("message", c.XMPPMessageHandler)
-	router.HandleFunc("presense", c.XMPPPresenseHandler)
+	router.HandleFunc("presence", c.XMPPPresenseHandler)
 	router.HandleFunc("iq", c.XMPPIqHandler)
+
 	xmppClient, err := xmpp.NewClient(&config, router, errorHandler)
 	if err != nil {
 		log.Fatalf("%+v", err)
@@ -75,10 +76,7 @@ func (c *Client) ConsumeIncommingMessages() {
 			}
 			break
 		}
-		log.Println(message)
-		// TODO: is chat message
-		// TODO: generate XMPP stanza
-		// TODO: send generated XMPP message
+		c.handleWebsocketMessage(message)
 	}
 }
 

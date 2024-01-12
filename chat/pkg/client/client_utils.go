@@ -17,6 +17,7 @@ func errorHandler(err error) {
 	log.Println(err)
 }
 
+// Deprecated: It was using only for debug
 func compileMessage(msg stanza.Message) []byte {
 	m, err := json.Marshal(map[string]interface{}{
 		"from": msg.From,
@@ -27,4 +28,15 @@ func compileMessage(msg stanza.Message) []byte {
 		return nil
 	}
 	return m
+}
+
+func createSubscribeMessage(p stanza.Presence) ([]byte, error) {
+	b, err := json.Marshal(map[string]interface{}{
+		"type": "subscribe",
+		"from": p.From,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return b, nil
 }
