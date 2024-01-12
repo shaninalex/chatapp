@@ -32,4 +32,5 @@ func ServeWebsocket(user map[string]interface{}, w http.ResponseWriter, r *http.
 	}
 
 	client.ConsumeIncommingMessages()
+	client.ConsumeXMPPMessages()
 }
