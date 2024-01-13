@@ -14,14 +14,14 @@ type IncommingMessage struct {
 
 func (c *Client) handleWebsocketMessage(message []byte) {
 	var msg IncommingMessage
-	err := json.Unmarshal(message, &msg)
+
 	// is chat message
+	err := json.Unmarshal(message, &msg)
 	if err != nil {
 		log.Println(err)
 	}
 
-	// generate XMPP stanza
-	// var m stanza.Message
+	// enerate response
 	if msg.Type == stanza.PresenceTypeSubscribed {
 		to, ok := msg.Payload["to"].(string)
 		if !ok {
@@ -31,6 +31,4 @@ func (c *Client) handleWebsocketMessage(message []byte) {
 			To: to, From: "admin@localhost", Type: stanza.PresenceTypeSubscribed}}
 		c.XMPPClient.Send(m)
 	}
-
-	// send generated XMPP message
 }

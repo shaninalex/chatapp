@@ -10,16 +10,65 @@ import (
 	"gosrc.io/xmpp/stanza"
 )
 
+/*
+TODO: NEED TO PARSE ALL THIS MESSAGES
+
+<message
+
+	xml:lang='en'
+	to='admin@localhost'
+	from='bob@localhost'
+	type='chat'
+	id='purple9d2b0d49'>
+		<composing xmlns='http://jabber.org/protocol/chatstates'/>
+
+</message>
+
+<message
+
+	xml:lang='en'
+	to='admin@localhost'
+	from='bob@localhost'
+	type='chat'
+	id='purple9d2b0d4a'>
+	<paused xmlns='http://jabber.org/protocol/chatstates'/>
+
+</message>
+
+<message
+
+	xml:lang='en'
+	to='admin@localhost'
+	from='bob@localhost'
+	type='chat'
+	id='purple9d2b0d4b'>
+	<active xmlns='http://jabber.org/protocol/chatstates'/>
+
+</message>
+
+<message
+
+	xml:lang='en'
+	to='admin@localhost'
+	from='bob@localhost'
+	type='chat'
+	id='purple9d2b0d57'>
+	<active xmlns='http://jabber.org/protocol/chatstates'/>
+	<body>actual new message</body>
+
+</message>
+*/
 func (c *Client) XMPPMessageHandler(s xmpp.Sender, p stanza.Packet) {
 	msg, ok := p.(stanza.Message)
 	if !ok {
 		_, _ = fmt.Fprintf(os.Stdout, "Ignoring packet: %T\n", p)
 		return
 	}
-	// _, _ = fmt.Fprintf(os.Stdout, "Body = %s - from = %s\n", msg.Body, msg.From)
-	log.Printf("Body = %s - from = %s\n", msg.Body, msg.From)
 
-	c.WSConnection.WriteMessage(1, compileMessage(msg))
+	if msg.Type == stanza.MessageTypeChat {
+		c.WSConnection.WriteMessage(1, createChatMessage(msg))
+	}
+
 }
 
 func (c *Client) XMPPPresenseHandler(s xmpp.Sender, p stanza.Packet) {
