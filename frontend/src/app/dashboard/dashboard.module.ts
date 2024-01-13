@@ -12,10 +12,12 @@ import { ConversationComponent } from './pages/conversation/conversation.compone
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { ChatEffects } from './store/chat/chat.effects';
-import { dashboardReducer } from './store';
+import { dashboardReducer } from './store/store';
 import { MessagesService } from '../shared/services/messages.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SubComponent } from './ui/sub/sub.component';
+import { SubsribtionEffects } from './store/sub.effects';
+import { ContactsEffects } from './store/contacts.effects';
 
 
 const DASHBOARD_ROUTES: Routes = [{
@@ -35,6 +37,7 @@ const DASHBOARD_ROUTES: Routes = [{
     HeaderComponent,
     PeopleListComponent,
     ConversationComponent,
+    SubComponent,
   ],
   imports: [
     CommonModule,
@@ -43,7 +46,7 @@ const DASHBOARD_ROUTES: Routes = [{
     ReactiveFormsModule,
     RouterModule.forChild(DASHBOARD_ROUTES),
     StoreModule.forFeature("dashboard", dashboardReducer),
-    EffectsModule.forFeature(ChatEffects)
+    EffectsModule.forFeature([ContactsEffects, SubsribtionEffects])
   ],
   providers: [
     XmppService,
