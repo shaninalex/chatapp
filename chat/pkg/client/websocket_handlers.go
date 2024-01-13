@@ -8,8 +8,8 @@ import (
 )
 
 type IncommingMessage struct {
-	Type    stanza.StanzaType `json:"type" binding:"required"`
-	Payload interface{}       `json:"payload" binding:"required"`
+	Type    stanza.StanzaType      `json:"type" binding:"required"`
+	Payload map[string]interface{} `json:"payload" binding:"required"`
 }
 
 func (c *Client) handleWebsocketMessage(message []byte) {
@@ -21,8 +21,16 @@ func (c *Client) handleWebsocketMessage(message []byte) {
 	}
 
 	// generate XMPP stanza
-	m := stanza.Message{Attrs: stanza.Attrs{To: "alice@localhost"}, Body: "Hello, buddy..."}
+	// var m stanza.Message
+	if msg.Type == stanza.PresenceTypeSubscribed {
+		to, ok := msg.Payload["to"].(string)
+		if !ok {
+			log.Println("unable to parse Presence payload")
+		}
+		m := stanza.Presence{Attrs: stanza.Attrs{
+			To: to, From: "admin@localhost", Type: stanza.PresenceTypeSubscribed}}
+		c.XMPPClient.Send(m)
+	}
 
 	// send generated XMPP message
-	c.XMPPClient.Send(m)
 }

@@ -38,8 +38,11 @@ create_users:
 	docker exec ejabberdcore ./bin/ejabberdctl register jack localhost 111 && \
 	docker exec ejabberdcore ./bin/ejabberdctl register cat localhost 111
 
-registred_users:
+registered_users:
 	docker exec ejabberdcore ./bin/ejabberdctl registered_users localhost
+
+enter_ejabberd:
+	docker exec -it ejabberdcore sh
 
 build_for_chat:
 	docker compose \

@@ -9,7 +9,7 @@ import (
 
 // Get user Xmpp Auth token from ejabberd server
 func getUserXMPPAuthToken(jid string) (string, error) {
-
+	// for now this is only for debug.
 	return "password", nil
 }
 
