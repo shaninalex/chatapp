@@ -2,8 +2,10 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
+	"github.com/google/uuid"
 	"gosrc.io/xmpp/stanza"
 )
 
@@ -38,7 +40,7 @@ func (c *Client) handleWebsocketMessage(message []byte) {
 		}
 		m := stanza.Presence{Attrs: stanza.Attrs{
 			To: to, From: c.XMPPClient.Session.BindJid, Type: stanza.PresenceTypeSubscribed}}
-		c.XMPPClient.Send(m)
+		go c.XMPPClient.Send(m)
 	}
 
 	// enerate response
@@ -49,7 +51,8 @@ func (c *Client) handleWebsocketMessage(message []byte) {
 		}
 		m := stanza.Presence{Attrs: stanza.Attrs{
 			To: to, From: c.XMPPClient.Session.BindJid, Type: stanza.PresenceTypeSubscribe}}
-		c.XMPPClient.Send(m)
+
+		go c.XMPPClient.Send(m)
 	}
 
 	if msg.Type == stanza.MessageTypeChat {
@@ -78,9 +81,44 @@ func (c *Client) handleWebsocketMessage(message []byte) {
 		}
 
 		if body_ok || status_ok {
-			c.XMPPClient.Send(m)
+			go c.XMPPClient.Send(m)
 		}
 	}
+
+	if msg.Type == stanza.IQTypeSet {
+		action, ok := msg.Payload["action"].(string)
+		if !ok {
+			log.Println("unable to parse \"action\" payload")
+		}
+		if action == "create_room" {
+			// check is user allwed to create rooms
+			room_name, ok := msg.Payload["room_name"].(string)
+			if !ok {
+				log.Println("unable to parse \"room_name\" payload")
+			}
+
+			// unique room id
+			// room_id := fmt.Sprintf("%s-%s", room_name, uuid.New().String())
+
+			rawIq := fmt.Sprintf(`<iq type='set' id='%s' to='%s@conference.localhost'>
+				<query xmlns='http://jabber.org/protocol/muc#owner'>
+				<x xmlns='jabber:x:data' type='submit'>
+					<field var='FORM_TYPE' type='hidden'>
+						<value>http://jabber.org/protocol/muc#roomconfig</value>
+					</field>
+					<field var='muc#roomconfig_roomname'>
+						<value>%s</value>
+					</field>
+					<field var='muc#roomconfig_persistentroom'>
+						<value>1</value>
+					</field>
+				</x>
+				</query>
+			</iq>`, uuid.New().String(), room_name, room_name)
+			go c.XMPPClient.SendRaw(rawIq)
+		}
+	}
+
 }
 
 func generateChatStateNotification(status string) stanza.MsgExtension {

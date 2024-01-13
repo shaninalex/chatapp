@@ -18,7 +18,7 @@ func (c *Client) XMPPMessageHandler(s xmpp.Sender, p stanza.Packet) {
 	}
 
 	// if msg.Type == stanza.MessageTypeChat {
-	c.WSConnection.WriteMessage(1, createChatMessage(msg))
+	go c.WSConnection.WriteMessage(1, createChatMessage(msg))
 	// }
 
 }
@@ -37,7 +37,7 @@ func (c *Client) XMPPPresenseHandler(s xmpp.Sender, p stanza.Packet) {
 		if err != nil {
 			log.Println(err)
 		}
-		c.WSConnection.WriteMessage(1, b)
+		go c.WSConnection.WriteMessage(1, b)
 	}
 
 	// is availability request
@@ -50,5 +50,5 @@ func (c *Client) XMPPIqHandler(s xmpp.Sender, p stanza.Packet) {
 		return
 	}
 	v, _ := json.Marshal(iq)
-	c.WSConnection.WriteMessage(1, v)
+	go c.WSConnection.WriteMessage(1, v)
 }

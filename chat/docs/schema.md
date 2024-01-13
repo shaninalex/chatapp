@@ -57,8 +57,9 @@ Sending `chat` messages without body or status will not send in xmpp server
 
 ```json
 {
-    "type": "chat",
+    "type": "set",
     "payload": {
+        "action": "create_room",
         "room_name": "room_name",
         "public": false,
         "invite": [
