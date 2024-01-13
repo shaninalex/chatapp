@@ -2,7 +2,6 @@ package client
 
 import (
 	"encoding/json"
-	"errors"
 	"log"
 
 	"gosrc.io/xmpp/stanza"
@@ -20,11 +19,6 @@ func errorHandler(err error) {
 
 func createChatMessage(msg stanza.Message) []byte {
 
-	msgStatusType, err := getMessageStatusType(&msg)
-	if err != nil {
-		log.Println(err)
-	}
-
 	messageMap := map[string]interface{}{
 		"type": stanza.MessageTypeChat,
 		"payload": map[string]interface{}{
@@ -33,6 +27,7 @@ func createChatMessage(msg stanza.Message) []byte {
 		},
 	}
 
+	msgStatusType := getMessageStatusType(msg)
 	if msgStatusType != nil {
 		messageMap["payload"].(map[string]interface{})["status"] = &msgStatusType
 	}
@@ -48,33 +43,34 @@ func createChatMessage(msg stanza.Message) []byte {
 	return m
 }
 
-func getMessageStatusType(msg *stanza.Message) (*string, error) {
+func getMessageStatusType(msg stanza.Message) *string {
+	log.Println(msg)
 	if msg.Get(&stanza.StateActive{}) {
 		status := "active"
-		return &status, nil
+		return &status
 	}
 
 	if msg.Get(&stanza.StateComposing{}) {
 		status := "composing"
-		return &status, nil
+		return &status
 	}
 
 	if msg.Get(&stanza.StatePaused{}) {
 		status := "paused"
-		return &status, nil
+		return &status
 	}
 
 	if msg.Get(&stanza.StateGone{}) {
 		status := "gone"
-		return &status, nil
+		return &status
 	}
 
 	if msg.Get(&stanza.StateInactive{}) {
 		status := "inactive"
-		return &status, nil
+		return &status
 	}
 
-	return nil, errors.New("unable to get message type")
+	return nil
 }
 
 func createSubscribeMessage(p stanza.Presence) ([]byte, error) {

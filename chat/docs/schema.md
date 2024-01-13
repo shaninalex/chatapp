@@ -15,6 +15,32 @@
 To get information about some one presence ( basicaly "add friend" ) we need to 
 unwer to users presence request with this message.
 
+### Chat
+```json
+{
+    "type": "chat",
+    "payload": {
+        "to": "bob@localhost",
+        "body": "message text",
+        "status": "active
+    }
+}
+```
+Chat messages has required `to` attribute in payload and optional `body` and `status`
+`status` field needs to send user chat status notification. I can be only this 
+types:
+- `active`
+- `composing`
+- `paused`
+- `gone`
+- `inactive`
+
+`body` - is simple text message.
+
+Sending `chat` messages without body or status will not send in xmpp server
+
+
+
 ## INCOMMING:
 
 ### Subscribe
