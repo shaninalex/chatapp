@@ -1,6 +1,20 @@
-# schema
+# CLIENT SEND
 
-## OUTGOING
+### Subscribe
+
+```json
+{
+    "type": "subscribe",
+    "payload": {
+        "to": "bob@localhost"
+    }
+}
+```
+
+To get information about his presence ( basicaly "add friend" ) we need to send
+this payload. If user confirm your request with response below ( "subscribed" ),
+Your roster will be updated. Roster is basicaly list of entities you subscribed
+to see their presence ( if I understand correctly )
 
 ### Subscribed
 
@@ -12,17 +26,17 @@
     }
 }
 ```
-To get information about some one presence ( basicaly "add friend" ) we need to 
-unwer to users presence request with this message.
+To confirm some one's request about your presence we need to answer to users presence request with this message. After that recepient will be able to see 
+your presence information ( online/offline etc... )
 
 ### Chat
 ```json
 {
     "type": "chat",
     "payload": {
-        "to": "bob@localhost",
+        "to": "bob@localhost/<deviceId>",
         "body": "message text",
-        "status": "active
+        "status": "active"
     }
 }
 ```
@@ -41,7 +55,7 @@ Sending `chat` messages without body or status will not send in xmpp server
 
 
 
-## INCOMMING:
+# CLIENT RECEIVE
 
 ### Subscribe
 
@@ -49,13 +63,16 @@ Sending `chat` messages without body or status will not send in xmpp server
 {
     "type":"subscribe",
     "payload": {
-        "from": "bob@localhost"
+        "from": "bob@localhost/<deviceId>"
     }
 }
 ```
 
 This request basicaly mean that some `bob@localhost` want to add you to your 
 contact list ( or, technicaly speaking, want to know your presence information ).
+
+Same object by with `type` = `subscribed` you receive when some one authorize
+your subscribtion request.
 
 ### Chat messages
 
@@ -69,8 +86,8 @@ he is simple active and ready to get messages
 {
     "type": "chat",
     "payload": {
-        "from": "bob@localhost",
-        "status": "active/paused/composing"
+        "from": "bob@localhost/<deviceId>",
+        "status": "<status type>"
     }
 }
 ```
@@ -84,9 +101,16 @@ message body.
 {
     "type": "chat",
     "payload": {
-        "from": "bob@localhost",
-        "status": "active/paused/composing"
+        "from": "bob@localhost/<deviceId>",
+        "status": "<status type>",
         "body": "Actual text message payload"
     }
 }
 ```
+
+Statuses can be only:
+- `active`
+- `composing`
+- `paused`
+- `gone`
+- `inactive`
