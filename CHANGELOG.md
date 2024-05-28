@@ -1,4 +1,4 @@
-## v1.1.0 (2024-05-28)
+## v1.2.0 (2024-05-28)
 
 ### Feat
 
@@ -10,26 +10,6 @@
 - hide ejabberd websocket under the oathkeeper api gateway
 - simplify vcard
 - select conversation by jid
-
-### Fix
-
-- Chat redux
-- update regular registration jsonnet payload
-- save vcard to redux contact item
-- add store devtools module
-- redux and remove typedefs folder
-- move identity store to root reducer
-
-## v1.0.1 (2023-12-10)
-
-### Fix
-
-- remove redux despatch on xmpp service
-
-## v1.0.0 (2023-12-10)
-
-### Feat
-
 - add release workflow
 - making types for messages
 - making auth pages
@@ -40,6 +20,13 @@
 
 ### Fix
 
+- Chat redux
+- update regular registration jsonnet payload
+- save vcard to redux contact item
+- add store devtools module
+- redux and remove typedefs folder
+- move identity store to root reducer
+- remove redux despatch on xmpp service
 - add permission to workflow
 - release workflow
 - release workflow
