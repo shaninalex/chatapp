@@ -144,3 +144,9 @@ services:
     restart: on-failure
     volumes:
       - ./configs/oathkeeper:/etc/config/oathkeeper
+
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    ports:
+      - 4436:4436
+      - 4437:4437

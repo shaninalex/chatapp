@@ -53,7 +53,47 @@ types:
 
 Sending `chat` messages without body or status will not send in xmpp server
 
+### Create Chat room
 
+```json
+{
+    "type": "set",
+    "payload": {
+        "action": "create_room",
+        "room_name": "room_name",
+        // "public": false,
+        // "invite": [
+        //     {"name": "bob@localhost", "message": "Join us!"},
+        //     {"name": "alice@localhos", "message": "Join our group, please"},
+        //     {"name": "patric@localhost"}
+        // ]
+    }
+}
+```
+`room_name` - required, string
+
+### Direct Invite to room
+
+```json
+{
+    "type": "set",
+    "payload": {
+        "action": "invite_to_room",
+        "to": "bob@localhost",
+        "room_name": "eng@conference.localhost",
+        "message": "Join us!"
+    }
+}
+```
+
+<!-- `public` - required, boolean, can be `true` or `false`
+`invite` - optional, contain list of objects:
+{
+    name: str,
+    message: Optional<str>
+}
+invitations with messages will send invitation request to user with the message,
+when without message - will send default invitations. -->
 
 # CLIENT RECEIVE
 

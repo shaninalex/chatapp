@@ -23,7 +23,7 @@ clear_volumes:
 		down -v
 
 # example usage 
-# $ make action service=auth
+# $ make service=auth rebuild
 # output: 
 # 	auth
 rebuild:
