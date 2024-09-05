@@ -4,10 +4,11 @@ log:
 
 serve:
   proxy:
+    port: 8080
     cors:
       enabled: true
       allowed_origins:
-        - "*"
+        - http://localhost:4200
       allowed_methods:
         - POST
         - GET
@@ -27,6 +28,18 @@ errors:
     - json
 
   handlers:
+    redirect:
+      enabled: true
+      config:
+        to: http://localhost:8082/login
+        when:
+          - error:
+              - unauthorized
+              - forbidden
+            request:
+              header:
+                accept:
+                  - text/html
     json:
       enabled: true
       config:
@@ -34,8 +47,10 @@ errors:
 
 access_rules:
   matching_strategy: glob
-  repositories:
-    - file:///etc/config/oathkeeper/access-rules.yml
+  # repositories:
+  # this file provided by env variable ACCESS_RULES_REPOSITORIES.
+  # see in .env.example
+  # - file:///<absolute path to access rules config>/access-rules.yml
 
 authenticators:
   anonymous:
@@ -46,7 +61,7 @@ authenticators:
   cookie_session:
     enabled: true
     config:
-      check_session_url: http://kratos:4433/sessions/whoami
+      check_session_url: http://localhost:4433/sessions/whoami
       preserve_path: true
       extra_from: "@this"
       subject_from: "identity.id"
@@ -64,6 +79,7 @@ mutators:
   noop:
     enabled: true
   header:
+    # Set enabled to true if the authenticator should be enabled and false to disable the authenticator. Defaults to false.
     enabled: true
     config:
       headers:
