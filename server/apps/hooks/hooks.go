@@ -62,16 +62,8 @@ func (app *app) handleRegister(ctx *gin.Context) {
 		return
 	}
 
-	// user, err := repositories.UserCreate(database.GetDB(), &payload)
-	// if err != nil {
-	// 	ctx.JSON(http.StatusBadRequest, domain.NewResponse(nil, nil, err))
-	// 	return
-	// }
-	//
-	// go func() {
-	// 	app.xmppUserAndVCard(&payload, user)
-	// }()
-	user := kratos.EmptyUser()
+	// TODO: get real user by payload.UserId
+	user := kratos.Api.EmptyUser()
 	ejabberd.Api.CreateUser(&payload, user)
 	ctx.JSON(http.StatusOK, domain.NewResponse(nil, []string{"Successfully registered"}, nil))
 }

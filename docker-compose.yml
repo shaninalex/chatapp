@@ -1,7 +1,11 @@
-version: "3.7"
+name: chatapp
 
 volumes:
   postgres_data:
+  postgres_ejabberd_data:
+
+networks:
+  intranet:
 
 services:
   postgres:
@@ -13,7 +17,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./configs/db/:/docker-entrypoint-initdb.d/
+      - ./config/db/:/docker-entrypoint-initdb.d/
       - postgres_data:/var/lib/postgresql/data/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U chatuser -d postgres"]
@@ -74,8 +78,8 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_NAME=ejabberd
-      - DB_USER=muser
-      - PGPASSWORD=mpassword
+      - DB_USER=chatuser
+      - PGPASSWORD=chatpassword
     restart: on-failure
     volumes:
       - postgres_ejabberd_data:/var/lib/postgresql/data/
@@ -84,7 +88,6 @@ services:
         condition: service_healthy
     networks:
       - intranet
-
 
   mailslurper:
     image: oryd/mailslurper:latest-smtps

@@ -229,5 +229,5 @@ default_db: sql
 sql_type: pgsql
 sql_server: postgres
 sql_database: ejabberd
-sql_username: muser
-sql_password: mpassword
+sql_username: chatuser
+sql_password: chatpassword
