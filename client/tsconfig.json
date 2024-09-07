@@ -7,6 +7,7 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
+    "strictPropertyInitialization": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -24,6 +25,9 @@
       "dom"
     ],
     "paths": {
+      "lib": [
+        "./dist/lib"
+      ],
       "ui": [
         "./dist/ui"
       ]
