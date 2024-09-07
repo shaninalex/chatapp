@@ -35,17 +35,17 @@ type api struct {
 
 // InitKratos is the package initializer. Require kratos url string config
 // to be provided from settings
-func init() {
+func Init() api {
 	configuration := ory.NewConfiguration()
 	configuration.Servers = []ory.ServerConfiguration{
 		{
 			URL: settings.GetString("kratos_url"),
 		},
 	}
-	Api = api{
+	log.Println("Init kratos")
+	return api{
 		kratos: ory.NewAPIClient(configuration),
 	}
-	log.Println("Init kratos")
 }
 
 // GetLoginFlow is the method that return created login flow based on user
@@ -141,6 +141,7 @@ func (api *api) GetIdentities(ctx context.Context, id string) (*ory.Identity, *h
 	return api.kratos.IdentityAPI.GetIdentity(ctx, id).Execute()
 }
 
-func (api *api) EmptyUser() *ory.Identity {
+func (api *api) GetUser(id string) *ory.Identity {
+	// TODO: get real user by payload.UserId
 	return &ory.Identity{}
 }

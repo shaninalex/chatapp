@@ -14,6 +14,9 @@ Why use an auth token instead of a password? Because Ejabberd is a separate serv
 
 The main idea behind this app is to "include" a chat feature in an existing application and hide XMPP from the outer world. For example, if you're asked to add the "chat feature" to a client app where users are logged in via the Ory Kratos identity system (as shown here). Or if your current backend is unable to implement chat, or if you already have a microservices architecture... Or you do not want to reinvent the wheel and create yet another WebSocket chat.
 
-### Now
+### Run app
 
-Now, I'm working on an actual chat user interface. I'm planning to do this with NgRx - XMPP services are listening to events and dispatching particular actions when events are happening.
+```bash
+# Runing app in hooks mode
+go run ./server/app/main.go --config=./server/config.yaml
+```

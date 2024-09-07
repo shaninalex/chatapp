@@ -6,6 +6,14 @@ port: 8082
 kratos_url: "http://localhost:4433"
 static_assets: "<absolute path to assets folder>/assets"
 
-hooks:
-  port: 8060
+ejabberd:
+  dsn: postgres://chatuser:chatpassword@postgres:5432/ejabberd?sslmode=disable
+  token_life_time: 86400
+  http_root: "http://localhost:5280"
+  admin:
+    jid: "admin@localhost"
+    username: "admin"
+    password: "a0sdf9un0a49unf"
 
+kratos:
+  dsn: postgres://chatuser:chatpassword@postgres:5432/kratos?sslmode=disable

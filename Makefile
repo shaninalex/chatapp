@@ -20,3 +20,7 @@ clear:
 # Docs: https://www.ory.sh/docs/oathkeeper/install
 oathkeeper:
 	oathkeeper serve proxy -c ./config/oathkeeper/oathkeeper.yml
+
+app:
+	go run ./server/app/main.go --config=./server/config.yaml
+
