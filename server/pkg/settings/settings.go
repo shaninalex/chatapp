@@ -73,3 +73,7 @@ func GetOriginsString() string {
 func GetKratosRedirectionUrl(path string) string {
 	return fmt.Sprintf("%s%s", GetString("kratos.url_browser"), path)
 }
+
+func GetJid(id string) string {
+	return fmt.Sprintf("%s@%s", id, GetString("ejabberd.domain"))
+}

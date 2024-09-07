@@ -18,6 +18,7 @@ import (
 )
 
 func (s *api) register(user *ory.Identity) error {
+	// TODO: Change request to handle with makeAdminRequest
 	r := fmt.Sprintf(`{"user": %q, "host": %q, "password": %q}`,
 		user.Id,
 		"localhost",
@@ -129,6 +130,7 @@ func (s *api) setAffiliations(name string) {
 }
 
 func (s *api) authToken(user *ory.Identity) (*domain.XmppAuthTokenResponse, error) {
+	// TODO: Change request to handle with makeAdminRequest
 	r := fmt.Sprintf("{\"jid\": \"%s@localhost\", \"ttl\": %d, \"scopes\": \"%s\"}",
 		user.Id,
 		settings.GetInt("ejabberd.token_life_time"),
@@ -173,6 +175,8 @@ func generateAdminToken() {
 	// TODO: check if token exists
 	// if exists - do not create new one
 	// if exists but expired - recreate
+
+	// TODO: Change request to handle with makeAdminRequest
 	client := http.Client{}
 	r := fmt.Sprintf("{\"jid\": \"%s\", \"ttl\": %d, \"scopes\": \"%s\"}",
 		settings.GetString("ejabberd.admin.jid"),
@@ -184,13 +188,14 @@ func generateAdminToken() {
 		fmt.Sprintf("%s/%s", settings.GetString("ejabberd.http_root"), "api/oauth_issue_token"),
 		strings.NewReader(r),
 	)
+	if err != nil {
+		panic(err)
+	}
+
 	auth := base64.StdEncoding.EncodeToString(
 		[]byte(fmt.Sprintf("%s:%s", settings.GetString("ejabberd.admin.jid"), settings.GetString("ejabberd.admin.password"))),
 	)
 	request.Header.Add("Authorization", fmt.Sprintf("Basic %s", auth))
-	if err != nil {
-		panic(err)
-	}
 
 	resp, err := client.Do(request)
 	if err != nil {
@@ -204,4 +209,19 @@ func generateAdminToken() {
 	}
 
 	log.Println("token created")
+}
+
+func (s *api) addUserToLobby(user *ory.Identity) error {
+	sub := domain.SubscribeRoom{
+		User: settings.GetJid(user.Id),
+		Nick: user.Id, // TODO: need to dial with nicknames
+		Room: fmt.Sprintf("lobby@conference.%s", settings.GetString("ejabberd.domain")),
+		Nodes: []string{
+			"urn:xmpp:mucsub:nodes:messages",
+			"urn:xmpp:mucsub:nodes:affiliations",
+		},
+	}
+
+	url := fmt.Sprintf("%s/api/subscribe_room", settings.GetString("ejabberd.http_root"))
+	return s.makeAdminRequest(sub, url)
 }
