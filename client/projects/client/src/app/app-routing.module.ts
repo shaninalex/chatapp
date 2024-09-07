@@ -4,11 +4,13 @@ import { ErrorComponent } from './lib/pages/error/error.component';
 import { UnauthorizedComponent } from './lib/pages/unauthorized/unauthorized.component';
 import { ErrorPermissionComponent } from './lib/pages/error-permission/error-permission.component';
 import { NotFoundComponent } from './lib/pages/not-found/not-found.component';
+import { AuthGuard } from './lib/guards/auth.guard';
 
 const routes: Routes = [
     {
         path: "",
         loadChildren: () => import("./modules/main/main.module").then(m => m.MainModule),
+        canMatch: [AuthGuard]
     },
     {
         path: "auth",
