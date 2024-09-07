@@ -5,7 +5,7 @@ import { FormBuilder } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-    selector: "mst-auth-error",
+    selector: "app-auth-error",
     template: `
 @if (error; as err) {
     <div class="alert alert-danger" role="alert">

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'mst-error-permission',
-  templateUrl: './error-permission.component.html',
-  styleUrl: './error-permission.component.scss'
+    selector: 'app-error-permission',
+    templateUrl: './error-permission.component.html',
+    styleUrl: './error-permission.component.scss'
 })
 export class ErrorPermissionComponent {
 

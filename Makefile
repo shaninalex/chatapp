@@ -1,3 +1,10 @@
+# use local .env file
+# load .env file on start eny commands in Makefile
+# ifneq (,$(wildcard ./.env))
+#     include .env
+#     export
+# endif
+
 start:
 	docker compose \
 		-f ./docker-compose.yml \

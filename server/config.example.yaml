@@ -3,7 +3,6 @@ origins:
 
 frontend_url: "http://localhost:4200"
 port: 8082
-kratos_url: "http://localhost:4433"
 static_assets: "<absolute path to assets folder>/assets"
 
 ejabberd:
@@ -18,3 +17,5 @@ ejabberd:
 
 kratos:
   dsn: postgres://chatuser:chatpassword@localhost:5432/kratos?sslmode=disable
+  url_admin: "http://localhost:4434"
+  url_browser: "http://localhost:4433"

@@ -8,7 +8,7 @@ import { setFormControllsFromNodes } from "@lib";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-    selector: "mst-recovery-login",
+    selector: "app-recovery-login",
     template: `
 @if(loaded) {
     <ui-form-messages [messages]="messages" />

@@ -9,7 +9,7 @@ import { setFormControllsFromNodes } from "@lib";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-    selector: "mst-verification-login",
+    selector: "app-verification-login",
     template: `
 @if(loaded) {
     <ui-form-messages [messages]="messages" />

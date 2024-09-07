@@ -39,7 +39,7 @@ func Init() api {
 	configuration := ory.NewConfiguration()
 	configuration.Servers = []ory.ServerConfiguration{
 		{
-			URL: settings.GetString("kratos_url"),
+			URL: settings.GetString("kratos.url_browser"),
 		},
 	}
 	log.Println("Init kratos")
@@ -137,11 +137,6 @@ func (api *api) GetSession(ctx context.Context, cookie string) (*ory.Session, *h
 		Execute()
 }
 
-func (api *api) GetIdentities(ctx context.Context, id string) (*ory.Identity, *http.Response, error) {
+func (api *api) GetIdentity(ctx context.Context, id string) (*ory.Identity, *http.Response, error) {
 	return api.kratos.IdentityAPI.GetIdentity(ctx, id).Execute()
-}
-
-func (api *api) GetUser(id string) *ory.Identity {
-	// TODO: get real user by payload.UserId
-	return &ory.Identity{}
 }

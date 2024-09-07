@@ -71,5 +71,5 @@ func GetOriginsString() string {
 
 // GetKratosRedirectionUrl returns string with url contains redirect url
 func GetKratosRedirectionUrl(path string) string {
-	return fmt.Sprintf("%s%s", GetString("kratos_url"), path)
+	return fmt.Sprintf("%s%s", GetString("kratos.url_browser"), path)
 }
