@@ -8,7 +8,7 @@ describe('UiComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UiComponent]
+      declarations: [UiComponent]
     })
     .compileComponents();
 
