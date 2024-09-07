@@ -1,0 +1,61 @@
+
+<!-- a -->
+@if (node.type === 'a') {
+    <div>
+        <a class="border block rounded-md text-center px-4 py-1 text-green-400 border-green-400 hover:bg-green-400 hover:text-white"
+            [attr.id]="attr().id" [attr.href]="attr().href">
+            {{ node.meta.label?.text }}
+        </a>
+    </div>
+}
+
+<!-- image -->
+@if (node.type === 'img') {
+    <div>
+        <p>{{node.meta.label?.text}}</p>
+        <img class="img-fluid" [attr.id]="attr().id" [attr.alt]="attr().name" [attr.width]="attr().width"
+            [attr.height]="attr().height" [attr.src]="attr().src" />
+    </div>
+}
+
+<!-- input -->
+@if (node.attributes.node_type === 'input') {
+    @if (attr().type === 'submit') {
+        <div>
+            <button
+                class="block rounded-md text-center px-4 py-1 bg-orange-400 text-white"
+                [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name" [attr.type]="attr().type"
+                [attr.value]="attr().value">
+                {{ node.meta.label?.text }}
+            </button>
+        </div>
+    } @else {
+        @if (attr().type === 'hidden') {
+            <input [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name" [attr.required]="attr().required"
+                [attr.type]="attr().type" [attr.placeholder]="node.meta.label?.text"
+                [attr.value]="attr().value? attr().value: null" />
+        } @else {
+            <div>
+                <input class="border block w-full rounded-md px-4 py-1.5 text-slate-800 border-slate-400"
+                    [attr.disabled]="attr().disabled ? true : null" [attr.autocomplete]="attr().autocomplete"
+                    [attr.name]="attr().name" [attr.required]="attr().required" [attr.type]="attr().type"
+                    [attr.placeholder]="node.meta.label?.text" [attr.value]="attr().value? attr().value: null" />
+                @for(message of node.messages; track message) {
+                <div class="text-red-600 border block rounded-md" [class.text-danger]="message.type === 'error'"
+                    [class.text-info]="message.type === 'info'" [class.text-success]="message.type === 'success'">
+                    {{ message.text }}
+                </div>
+                }
+            </div>
+        }
+    }
+}
+<!-- script (not implemented) -->
+
+<!-- text -->
+@if (node.type === 'text') {
+    <div class="alert alert-info" role="alert">
+        <h4 [id]="attr().id" class="alert-heading">{{ attr().text.text}}</h4>
+        <p [id]="node.meta.label?.id">{{node.meta.label?.text}}</p>
+    </div>
+}

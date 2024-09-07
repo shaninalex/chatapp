@@ -61,11 +61,11 @@ func Init() api {
 	return a
 }
 
-func (s *api) Listener(client *xmpp.Client) {
+func (s *api) Listener() {
 	// run xmpp listener
 	// If you pass the client to a connection manager, it will handle the reconnect policy
 	// for you automatically.
-	cm := xmpp.NewStreamManager(client, nil)
+	cm := xmpp.NewStreamManager(s.XmppClient, nil)
 	log.Fatal(cm.Run())
 }
 

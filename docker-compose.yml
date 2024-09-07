@@ -1,3 +1,10 @@
+# This is local config.
+# It allow to run database, ejabberd, kratos and mailslurper in docker environment
+# but main application should be runnig manualy to simplify development. All configs
+# for this environment contiain "localhost" instead of docker hosts aliases and 
+# connect with outerworld via "host.docker.internal:host-gateway".
+# To run everything in docker configuration should be changed!
+
 name: chatapp
 
 volumes:
@@ -53,7 +60,6 @@ services:
       - intranet
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
 
   ejabberd:
     image: ejabberd/ecs:23.10
