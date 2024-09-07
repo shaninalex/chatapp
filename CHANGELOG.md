@@ -1,3 +1,13 @@
+## v1.3.0 (2024-09-07)
+
+### Feat
+
+- **develop**: setup docker config for local development
+
+### Fix
+
+- **server**: connect application to infrastructure
+
 ## v1.2.0 (2024-05-28)
 
 ### Feat
