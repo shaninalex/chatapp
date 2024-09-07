@@ -8,7 +8,7 @@ import (
 
 func InitApi(app *gin.Engine) {
 	// public routes
-	auth.InitController(app, "api/v1/auth")
+	auth.InitController(app, "api/auth")
 
 	// private routes
 	// TODO: require auth middleware

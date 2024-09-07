@@ -4,7 +4,7 @@
     url: "http://localhost:8082"
     # strip_path: "/api/auth"
   match:
-    url: "http://localhost:8080/api/auth/<**>"
+    url: "http://localhost:8080/<{hooks/*,api/auth/*}>"
     methods:
       - GET
       - POST

@@ -48,9 +48,9 @@ errors:
 access_rules:
   matching_strategy: glob
   # repositories:
-  # this file provided by env variable ACCESS_RULES_REPOSITORIES.
-  # see in .env.example
-  # - file:///<absolute path to access rules config>/access-rules.yml
+  # NOTE: this file provided by env variable ACCESS_RULES_REPOSITORIES!
+  # repositories:
+  #   - file:///home/alex/projects/ChatApp/config/oathkeeper/access-rules.yml
 
 authenticators:
   anonymous:

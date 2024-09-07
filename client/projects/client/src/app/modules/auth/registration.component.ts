@@ -21,7 +21,7 @@ import { HttpErrorResponse } from "@angular/common/http";
         </form>
     }
 
-    Already have an account? <a [routerLink]="['/auth/login']">Login</a>
+    Already have an account? <a [routerLink]="['/auth/login']" class="text-blue-600">Login</a>
 } @else {
     <p>loading...</p>
 }`
