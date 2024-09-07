@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"server/app/api"
 	"server/app/hooks"
 	"server/pkg/database"
 	"server/pkg/ejabberd"
@@ -13,6 +15,8 @@ import (
 
 func main() {
 	configPath := flag.String("config", "", "Absolute path for configuration file")
+	flagXmppListener := flag.Bool("runXmpp", false, "Run xmpp listener")
+
 	flag.Parse()
 	err := settings.InitConfig(*configPath)
 	if err != nil {
@@ -25,11 +29,20 @@ func main() {
 	ejabberd.Api = ejabberd.Init()
 
 	router := gin.Default()
+
+	// Initialize routers
+	// Every module initilize it's own set of routes, some of them can be
+	// incapsulated with it's own subrouter
 	hooks.InitHooksApp(router)
+	api.InitApi(router)
 
-	ejabberd.Api.Listener(ejabberd.Api.XmppClient)
+	if *flagXmppListener {
+		go func() {
+			ejabberd.Api.Listener()
+		}()
+	}
 
-	// if err = router.Run(fmt.Sprintf(":%d", settings.GetInt("port"))); err != nil {
-	// 	panic(err)
-	// }
+	if err = router.Run(fmt.Sprintf(":%d", settings.GetInt("port"))); err != nil {
+		panic(err)
+	}
 }
