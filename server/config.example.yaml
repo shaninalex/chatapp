@@ -6,6 +6,7 @@ port: 8082
 static_assets: "<absolute path to assets folder>/assets"
 
 ejabberd:
+  domain: "localhost"
   dsn: postgres://chatuser:chatpassword@localhost:5432/ejabberd?sslmode=disable
   token_life_time: 86400
   http_root: "http://localhost:5280"

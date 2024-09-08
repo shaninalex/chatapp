@@ -16,6 +16,7 @@ import (
 func main() {
 	configPath := flag.String("config", "", "Absolute path for configuration file")
 	flagXmppListener := flag.Bool("runXmpp", false, "Run xmpp listener")
+	flagCreateLobby := flag.Bool("createLobby", false, "Create lobby")
 
 	flag.Parse()
 	err := settings.InitConfig(*configPath)
@@ -28,11 +29,18 @@ func main() {
 	kratos.Api = kratos.Init()
 	ejabberd.Api = ejabberd.Init()
 
-	router := gin.Default()
+	if *flagCreateLobby {
+		err = ejabberd.Api.CreateLobby()
+		if err != nil {
+			panic(err)
+		}
+		return
+	}
 
 	// Initialize routers
 	// Every module initilize it's own set of routes, some of them can be
 	// incapsulated with it's own subrouter
+	router := gin.Default()
 	hooks.InitHooksApp(router)
 	api.InitApi(router)
 

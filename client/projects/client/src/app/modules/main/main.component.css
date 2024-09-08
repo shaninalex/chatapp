@@ -1,0 +1,7 @@
+.dashboard {
+    height: 100vh;
+}
+
+.dashboard-content {
+    height: calc(100% - 60px)
+}

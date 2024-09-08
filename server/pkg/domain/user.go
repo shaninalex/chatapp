@@ -9,9 +9,10 @@ type RegistrationPayload struct {
 
 // Traits this is kratos user traits object
 type Traits struct {
-	Email string `json:"email"`
-	Name  Name   `json:"name"`
-	Image string `json:"image"`
+	Email    string  `json:"email"`
+	Name     Name    `json:"name"`
+	Nickname *string `json:"nickname"` // can be null if login/register via google
+	Image    string  `json:"image"`
 }
 
 // Name this is kratos user name object
