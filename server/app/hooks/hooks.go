@@ -27,6 +27,9 @@ func InitHooksApp(e *gin.Engine) {
 // should be restricted!
 func (app *app) setupRoutes() {
 	// api versioning prefix ?
+
+	// after login/register hooks. In that hooks we already "have" a
+	// user by payload.UserId
 	app.router.POST("/hooks/register", app.handleRegister)
 	app.router.POST("/hooks/login", app.handleLogin)
 }
