@@ -4,15 +4,25 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MainComponent } from "./main.component";
 import { MainRoutingModule } from "./main-routing.module";
+import { HeaderComponent } from "./components/layout/header/header.component";
+import { SidebarComponent } from "./components/layout/sidebar/sidebar.component";
+import { UiModule } from "@ui";
+import { SettingsComponent } from "./components/settings/settings.component";
 
 @NgModule({
     declarations: [
-        MainComponent
+        MainComponent,
+        SettingsComponent,
+
+        // layout
+        HeaderComponent,
+        SidebarComponent,
     ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         MainRoutingModule,
+        UiModule,
     ],
     providers: [
         provideHttpClient(withInterceptorsFromDi())

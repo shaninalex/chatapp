@@ -7,3 +7,13 @@ export const selectProfile = createSelector(
     selectIdentityFeature,
     (state: IdentityState) => state.profile
 )
+
+export const selectLogoutLink = createSelector(
+    selectIdentityFeature,
+    (state: IdentityState) => state.logout
+)
+
+export const selectSettings = createSelector(
+    selectIdentityFeature,
+    (state: IdentityState) => state.settings
+)
