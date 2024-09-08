@@ -1,3 +1,21 @@
+## v1.4.0 (2024-09-08)
+
+### Feat
+
+- **schema**: adding user nickname to kratos schema
+- **client**: basic layout
+- **client**: ngrx
+- **xmpp**: create lobby and add user to lobby on register methods
+- **api**: add auth controller
+
+### Fix
+
+- **client**: connect to xmpp
+- registration pricess
+- **backend**: register user with ejabberd user creation process
+- **client**: move to module based application instead of standalone
+- **config**: update server example configuration
+
 ## v1.3.0 (2024-09-07)
 
 ### Feat
