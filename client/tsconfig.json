@@ -39,7 +39,8 @@
             // "ui": [
             //     "./dist/ui"
             // ]
-        }
+        },
+        "resolveJsonModule": true,
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
