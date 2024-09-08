@@ -34,3 +34,36 @@ type SubscribeRoom struct {
 	Room  string   `json:"room"`
 	Nodes []string `json:"nodes"`
 }
+
+/*
+Example:
+```go
+
+	{
+		"name": "room1",
+		"service": "conference.example.com",
+		"jid": "user2@example.com",
+		"affiliation": "member"
+	}
+
+```
+Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#set_room_affiliation
+*/
+type ChangeRoomAffiliation struct {
+	Name        string `json:"name"`
+	Service     string `json:"service"`
+	Jid         string `json:"jid"`
+	Affiliation string `json:"affiliation"`
+}
+
+type RegisterUser struct {
+	User     string `json:"user"`
+	Host     string `json:"host"`
+	Password string `json:"password"`
+}
+
+type CreateAuthToken struct {
+	Jid    string `json:"jid"`
+	Ttl    int    `json:"ttl"`
+	Scopes string `json:"scopes"`
+}

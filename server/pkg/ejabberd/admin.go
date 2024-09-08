@@ -9,18 +9,18 @@ import (
 	"server/pkg/settings"
 )
 
-func (s *api) makeAdminRequest(payload any, url string) error {
+func (s *api) makeAdminRequest(payload any, url string) (*http.Response, error) {
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println("Error marshaling JSON:", err)
-		return nil
+		return nil, err
 	}
 
 	// Create a new HTTP request
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
-		return nil
+		return nil, err
 	}
 
 	// Set the content type to JSON
@@ -35,9 +35,8 @@ func (s *api) makeAdminRequest(payload any, url string) error {
 	resp, err := client.Do(request)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
-		return nil
+		return nil, err
 	}
-	defer resp.Body.Close()
 
-	return nil
+	return resp, nil
 }

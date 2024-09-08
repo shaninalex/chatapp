@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"server/pkg/database"
 	"server/pkg/domain"
 	"server/pkg/settings"
 
@@ -24,19 +23,17 @@ type api struct {
 }
 
 func Init() api {
-	generateAdminToken()
-
-	token, err := database.GetToken(settings.GetString("ejabberd.admin.jid"))
-	if err != nil {
-		panic(err)
-	}
-
 	a := api{
-		Token:    token.Token,
 		XmppHost: settings.GetString("ejabberd.xmpp_host"),
 		AdminJid: settings.GetString("ejabberd.admin.jid"),
 	}
 
+	token, err := a.generateAdminToken()
+	if err != nil {
+		panic(err)
+	}
+
+	a.Token = token.Token
 	config := &xmpp.Config{
 		TransportConfiguration: xmpp.TransportConfiguration{
 			Address:   a.XmppHost,
@@ -106,14 +103,7 @@ func (s *api) CreateUser(ctx context.Context, user *ory.Identity) error {
 		return err
 	}
 
-	// TODO: add user to lobby muc
-	err = s.addUserToLobby(user)
-	if err != nil {
-		log.Println("unable to add user to lobby:", err)
-		return err
-	}
-
-	log.Println("Create user")
+	log.Println("Create user successfull")
 	return nil
 }
 
@@ -131,5 +121,6 @@ func (s *api) CreateLobby() error {
 	}
 
 	url := fmt.Sprintf("%s/api/create_room_with_opts", settings.GetString("ejabberd.http_root"))
-	return s.makeAdminRequest(room, url)
+	_, err := s.makeAdminRequest(room, url)
+	return err
 }

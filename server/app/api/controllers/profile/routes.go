@@ -9,6 +9,5 @@ import (
 func InitController(app *gin.Engine, apiPrefix string) {
 	profile := app.Group(apiPrefix)
 	profile.Use(middlewares.XUserMiddleware)
-
 	profile.GET("/me", handleProfile)
 }

@@ -18,4 +18,13 @@ import { MainRoutingModule } from "./main-routing.module";
         provideHttpClient(withInterceptorsFromDi())
     ]
 })
-export class MainModule { }
+export class MainModule {
+    /*
+    After login actions:
+    +   Get profile
+    -   check if user subscribed to notification node. If not, subscribe to a notification node.
+    -   check if user subscribed to a Lobby. If not - propose to subscribe. If user is outcasted - do nothing.
+    -   query all user rooms with online users in it.
+    -   get roster with statuses.
+    */
+}

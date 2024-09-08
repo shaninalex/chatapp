@@ -17,8 +17,8 @@ func (s *api) handleMessage(sender xmpp.Sender, p stanza.Packet) {
 	}
 
 	_, _ = fmt.Fprintf(os.Stdout, "Body = %s - from = %s\n", msg.Body, msg.From)
-	reply := stanza.Message{Attrs: stanza.Attrs{To: msg.From}, Body: msg.Body}
-	_ = sender.Send(reply)
+	// reply := stanza.Message{Attrs: stanza.Attrs{To: msg.From}, Body: msg.Body}
+	// _ = sender.Send(reply)
 }
 
 func (s *api) errorHandler(err error) {
