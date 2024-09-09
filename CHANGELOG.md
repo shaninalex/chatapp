@@ -1,3 +1,10 @@
+## v1.4.1 (2024-09-09)
+
+### Fix
+
+- **client**: check notification pubsub node
+- **client**: move xmpp client to client application since handlers on client and admin will be different anyways
+
 ## v1.4.0 (2024-09-08)
 
 ### Feat
