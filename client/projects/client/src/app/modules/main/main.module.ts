@@ -49,9 +49,8 @@ export class MainModule {
         this.store.select(selectProfile).subscribe({
             next: profile => {
                 if (profile) {
-                    const jid = `${profile.identity.id}@${environment.XMPP_HOST}`
                     const token = profile.token.token
-                    this.xmpp.connect(jid, token, environment.XMPP_WEBSOCKET_ADDRESS);
+                    this.xmpp.connect(profile.identity.id, token, environment.XMPP_WEBSOCKET_ADDRESS);
                 }
             }
         })
