@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "v1.4.0",
+  "version": "v1.4.1",
   "scripts": {
     "client": "ng serve --project=client --proxy-config=./projects/client/proxy.conf.json",
     "client-build": "ng build --project=client",
