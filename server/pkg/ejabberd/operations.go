@@ -15,6 +15,7 @@ import (
 )
 
 func (s *api) register(user *ory.Identity) error {
+	// if user.Traits contain nickname use nickname instead of id
 	d := domain.RegisterUser{
 		User: user.Id,
 		Host: settings.GetString("ejabberd.domain"),

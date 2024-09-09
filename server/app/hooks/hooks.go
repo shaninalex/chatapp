@@ -31,6 +31,9 @@ func (app *app) setupRoutes() {
 	// after login/register hooks. In that hooks we already "have" a
 	// user by payload.UserId
 	app.router.POST("/hooks/register", app.handleRegister)
+	app.router.POST("/hooks/before/register", app.handleBeforeRegister)
+	app.router.POST("/hooks/before/settings", app.handleBeforeSettings)
+	app.router.POST("/hooks/after/settings", app.handleAfterSettings)
 	app.router.POST("/hooks/login", app.handleLogin)
 }
 
@@ -66,4 +69,25 @@ func (app *app) handleRegister(ctx *gin.Context) {
 
 	ejabberd.Api.CreateUser(ctx, identity)
 	ctx.JSON(http.StatusOK, domain.NewResponse(nil, []string{"Successfully registered"}, nil))
+}
+
+func (app *app) handleBeforeRegister(ctx *gin.Context) {
+	// check if payload contains nickname
+	// if this nickname exists in ejabberd server users return error
+	// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#check_account
+	ctx.JSON(http.StatusOK, domain.NewResponse(nil, nil, nil))
+}
+
+func (app *app) handleBeforeSettings(ctx *gin.Context) {
+	// check if payload contains nickname
+	// if this nickname exists in ejabberd server users return error
+	// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#check_account
+	// We need this to prevent attempt to create ejabberd users with same nickname
+	ctx.JSON(http.StatusOK, domain.NewResponse(nil, nil, nil))
+}
+
+func (app *app) handleAfterSettings(ctx *gin.Context) {
+	// if user has change user.Traits["nickname"] - update ejabberd nickname
+	// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/?h=nickname#set_nickname
+	ctx.JSON(http.StatusOK, domain.NewResponse(nil, nil, nil))
 }
