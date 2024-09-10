@@ -4,6 +4,5 @@ function(ctx) {
     email: ctx.identity.traits.email,
     name: ctx.identity.traits.name,
     image: ctx.identity.traits.name,
-    nickname: ctx.identity.traits.nickname
   },
 }

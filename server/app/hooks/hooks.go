@@ -31,7 +31,6 @@ func (app *app) setupRoutes() {
 	// after login/register hooks. In that hooks we already "have" a
 	// user by payload.UserId
 	app.router.POST("/hooks/register", app.handleRegister)
-	app.router.POST("/hooks/after/settings", app.handleAfterSettings)
 	app.router.POST("/hooks/login", app.handleLogin)
 }
 
@@ -67,10 +66,4 @@ func (app *app) handleRegister(ctx *gin.Context) {
 
 	ejabberd.Api.CreateUser(ctx, identity)
 	ctx.JSON(http.StatusOK, domain.NewResponse(nil, []string{"Successfully registered"}, nil))
-}
-
-func (app *app) handleAfterSettings(ctx *gin.Context) {
-	// TODO: if user has change user.Traits["nickname"] - update ejabberd nickname
-	// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/?h=nickname#set_nickname
-	ctx.JSON(http.StatusOK, domain.NewResponse(nil, nil, nil))
 }

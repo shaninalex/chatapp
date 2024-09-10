@@ -16,32 +16,15 @@ import (
 )
 
 func (s *api) register(user *ory.Identity) error {
-	// if user.Traits contain nickname use nickname instead of id
-	traitsJSON, err := json.Marshal(user.Traits)
-	if err != nil {
-		return fmt.Errorf("error marshalling traits: %v", err)
-	}
-	var traits domain.Traits
-	if err := json.Unmarshal(traitsJSON, &traits); err != nil {
-		return fmt.Errorf("error unmarshalling traits into struct: %v", err)
-	}
-
-	username := user.Id
-	if traits.Nickname != nil {
-		if !s.isNicknameExists(*traits.Nickname) {
-			username = *traits.Nickname
-		}
-	}
-
 	d := domain.RegisterUser{
-		User: username,
+		User: user.Id,
 		Host: settings.GetString("ejabberd.domain"),
 		// users will never be able to login via password. Only Auth token
 		Password: uuid.New().String(),
 	}
 
 	url := fmt.Sprintf("%s/api/register", settings.GetString("ejabberd.http_root"))
-	_, err = s.makeAdminRequest(d, url)
+	_, err := s.makeAdminRequest(d, url)
 	return err
 }
 
@@ -58,7 +41,7 @@ func (s *api) setVCard(user *ory.Identity) error {
 	vcard := fmt.Sprintf(`<vCard xmlns='vcard-temp'><FN>%s %s</FN><NICKNAME>%s</NICKNAME></vCard>`,
 		traits.Name.First,
 		traits.Name.Last,
-		user.Id, // TODO: nickname - May be add this to the user traits on register?
+		user.Id,
 	)
 	return database.Ejabberd.Exec(`INSERT INTO vcard (username, vcard) VALUES (?, ?)`, user.Id, vcard).Error
 }
