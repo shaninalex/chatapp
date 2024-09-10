@@ -9,6 +9,7 @@ import (
 	"server/pkg/database"
 	"server/pkg/domain"
 	"server/pkg/settings"
+	"strings"
 
 	"github.com/google/uuid"
 	ory "github.com/ory/kratos-client-go"
@@ -16,15 +17,31 @@ import (
 
 func (s *api) register(user *ory.Identity) error {
 	// if user.Traits contain nickname use nickname instead of id
+	traitsJSON, err := json.Marshal(user.Traits)
+	if err != nil {
+		return fmt.Errorf("error marshalling traits: %v", err)
+	}
+	var traits domain.Traits
+	if err := json.Unmarshal(traitsJSON, &traits); err != nil {
+		return fmt.Errorf("error unmarshalling traits into struct: %v", err)
+	}
+
+	username := user.Id
+	if traits.Nickname != nil {
+		if !s.isNicknameExists(*traits.Nickname) {
+			username = *traits.Nickname
+		}
+	}
+
 	d := domain.RegisterUser{
-		User: user.Id,
+		User: username,
 		Host: settings.GetString("ejabberd.domain"),
 		// users will never be able to login via password. Only Auth token
 		Password: uuid.New().String(),
 	}
 
 	url := fmt.Sprintf("%s/api/register", settings.GetString("ejabberd.http_root"))
-	_, err := s.makeAdminRequest(d, url)
+	_, err = s.makeAdminRequest(d, url)
 	return err
 }
 
@@ -159,4 +176,36 @@ func (s *api) generateAdminToken() (*domain.XmppAuthTokenResponse, error) {
 		return nil, err
 	}
 	return authToken, nil
+}
+
+func (s *api) isNicknameExists(nickname string) bool {
+	d := struct {
+		User string `json:"user"`
+		Host string `json:"host"`
+	}{
+		User: nickname,
+		Host: settings.GetString("ejabberd.domain"),
+	}
+
+	url := fmt.Sprintf("%s/api/check_account", settings.GetString("ejabberd.http_root"))
+	resp, err := s.makeAdminRequest(d, url)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+	}
+	resultStr := strings.TrimSpace(string(body))
+	switch resultStr {
+	case "1":
+		return true
+	case "0":
+		return false
+	default:
+		return false
+	}
 }

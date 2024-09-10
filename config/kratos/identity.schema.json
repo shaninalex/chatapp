@@ -51,11 +51,18 @@
                 "nickname": {
                     "type": "string",
                     "title": "Nickname",
-                    "format": "string"
+                    "format": "string",
+                    "ory.sh/kratos": {
+                        "credentials": {
+                            "password": {
+                                "identifier": true
+                            }
+                        }
+                    }
                 }
             },
             "required": [
-               "email"
+                "email"
             ],
             "additionalProperties": false
         }
