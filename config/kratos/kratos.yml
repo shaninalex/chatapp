@@ -66,20 +66,9 @@ selfservice:
       ui_url: http://localhost:4200/auth/error
 
     settings:
-      ui_url: http://localhost:4200/settings/profile
+      ui_url: http://localhost:4200/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
-      # before:
-      #   hooks:
-      #     - hook: web_hook
-      #       config:
-      #         url: http://host.docker.internal:8082/hooks/before_profile_update
-      #         method: POST
-      #         body: base64://ZnVuY3Rpb24oY3R4KSB7IC4uLgp9  # Base64-encoded template
-      #         response:
-      #           ignore: false
-      #           parse: false
-      # this is hook to check users nickname uniquenes
 
     recovery:
       enabled: true
@@ -110,7 +99,7 @@ selfservice:
               config:
                 url: http://host.docker.internal:8082/hooks/login
                 method: POST
-                # base64 encoded jsonnet template ./registration_hook.jsonnet
+                # base64 encoded jsonnet template ./hook_registration_after.jsonnet
                 body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgdXNlcklkOiBjdHguaWRlbnRpdHkuaWQsCiAgdHJhaXRzOiB7CiAgICBlbWFpbDogY3R4LmlkZW50aXR5LnRyYWl0cy5lbWFpbCwKICAgIG5hbWU6IGN0eC5pZGVudGl0eS50cmFpdHMubmFtZSwKICB9LAp9
                 response:
                   ignore: false
@@ -121,7 +110,7 @@ selfservice:
               config:
                 url: http://host.docker.internal:8082/hooks/login
                 method: POST
-                # base64 encoded jsonnet template ./registration_hook.jsonnet
+                # base64 encoded jsonnet template ./hook_registration_after.jsonnet
                 body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgdXNlcklkOiBjdHguaWRlbnRpdHkuaWQsCiAgdHJhaXRzOiB7CiAgICBlbWFpbDogY3R4LmlkZW50aXR5LnRyYWl0cy5lbWFpbCwKICAgIG5hbWU6IGN0eC5pZGVudGl0eS50cmFpdHMubmFtZSwKICB9LAp9
                 response:
                   ignore: false
@@ -140,7 +129,7 @@ selfservice:
               config:
                 url: http://host.docker.internal:8082/hooks/register
                 method: POST
-                # base64 encoded jsonnet template ./registration_hook.jsonnet
+                # base64 encoded jsonnet template ./hook_registration_after.jsonnet
                 body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgdXNlcklkOiBjdHguaWRlbnRpdHkuaWQsCiAgdHJhaXRzOiB7CiAgICBlbWFpbDogY3R4LmlkZW50aXR5LnRyYWl0cy5lbWFpbCwKICAgIG5hbWU6IGN0eC5pZGVudGl0eS50cmFpdHMubmFtZSwKICB9LAp9
                 response:
                   ignore: false
@@ -153,22 +142,11 @@ selfservice:
               config:
                 url: http://host.docker.internal:8082/hooks/register
                 method: POST
-                # base64 encoded jsonnet template ./registration_hook.jsonnet
+                # base64 encoded jsonnet template ./hook_registration_after.jsonnet
                 body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgdXNlcklkOiBjdHguaWRlbnRpdHkuaWQsCiAgdHJhaXRzOiB7CiAgICBlbWFpbDogY3R4LmlkZW50aXR5LnRyYWl0cy5lbWFpbCwKICAgIG5hbWU6IGN0eC5pZGVudGl0eS50cmFpdHMubmFtZSwKICB9LAp9
                 response:
                   ignore: false
                   parse: false
-      # before:
-      #   hooks:
-      #     - hook: web_hook
-      #       config:
-      #         url: http://host.docker.internal:8082/hooks/before_registration
-      #         method: POST
-      #         body: base64://ZnVuY3Rpb24oY3R4KSB7IC4uLgp9  # Base64-encoded template
-      #         response:
-      #           ignore: false
-      #           parse: false
-      # this is hook to check users nickname uniquenes
 
 log:
   level: debug

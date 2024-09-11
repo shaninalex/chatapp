@@ -47,15 +47,10 @@
                     "type": "string",
                     "title": "User Image",
                     "format": "string"
-                },
-                "nickname": {
-                    "type": "string",
-                    "title": "Nickname",
-                    "format": "string"
                 }
             },
             "required": [
-               "email"
+                "email"
             ],
             "additionalProperties": false
         }

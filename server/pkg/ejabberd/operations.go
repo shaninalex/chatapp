@@ -9,6 +9,7 @@ import (
 	"server/pkg/database"
 	"server/pkg/domain"
 	"server/pkg/settings"
+	"strings"
 
 	"github.com/google/uuid"
 	ory "github.com/ory/kratos-client-go"
@@ -40,7 +41,7 @@ func (s *api) setVCard(user *ory.Identity) error {
 	vcard := fmt.Sprintf(`<vCard xmlns='vcard-temp'><FN>%s %s</FN><NICKNAME>%s</NICKNAME></vCard>`,
 		traits.Name.First,
 		traits.Name.Last,
-		user.Id, // TODO: nickname - May be add this to the user traits on register?
+		user.Id,
 	)
 	return database.Ejabberd.Exec(`INSERT INTO vcard (username, vcard) VALUES (?, ?)`, user.Id, vcard).Error
 }
@@ -158,4 +159,36 @@ func (s *api) generateAdminToken() (*domain.XmppAuthTokenResponse, error) {
 		return nil, err
 	}
 	return authToken, nil
+}
+
+func (s *api) isNicknameExists(nickname string) bool {
+	d := struct {
+		User string `json:"user"`
+		Host string `json:"host"`
+	}{
+		User: nickname,
+		Host: settings.GetString("ejabberd.domain"),
+	}
+
+	url := fmt.Sprintf("%s/api/check_account", settings.GetString("ejabberd.http_root"))
+	resp, err := s.makeAdminRequest(d, url)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+	}
+	resultStr := strings.TrimSpace(string(body))
+	switch resultStr {
+	case "1":
+		return true
+	case "0":
+		return false
+	default:
+		return false
+	}
 }

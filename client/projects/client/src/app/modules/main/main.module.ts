@@ -13,6 +13,7 @@ import { AppState } from "../../store/store";
 import { Store } from "@ngrx/store";
 import { selectProfile } from "../../store/identity/selectors";
 import { environment } from "../../../environments/environment.development";
+import { TabFormComponent } from "./components/settings/components/tab-form/tab-form.component";
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { environment } from "../../../environments/environment.development";
         // layout
         HeaderComponent,
         SidebarComponent,
+        TabFormComponent,
     ],
     imports: [
         CommonModule,
