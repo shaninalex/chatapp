@@ -1,0 +1,9 @@
+<form [action]="action" [method]="method" class="flex flex-col gap-4 mb-3">
+    @for (node of default_nodes; track node) {
+        <ui-kratos-input [node]="node" />
+    }
+
+    @for (node of target_nodes; track node) {
+        <ui-kratos-input [node]="node" />
+    }
+</form>

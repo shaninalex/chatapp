@@ -66,20 +66,9 @@ selfservice:
       ui_url: http://localhost:4200/auth/error
 
     settings:
-      ui_url: http://localhost:4200/settings/profile
+      ui_url: http://localhost:4200/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
-      # before:
-      #   hooks:
-      #     - hook: web_hook
-      #       config:
-      #         url: http://host.docker.internal:8082/hooks/before_profile_update
-      #         method: POST
-      #         body: base64://ZnVuY3Rpb24oY3R4KSB7IC4uLgp9  # Base64-encoded template
-      #         response:
-      #           ignore: false
-      #           parse: false
-      # this is hook to check users nickname uniquenes
 
     recovery:
       enabled: true
