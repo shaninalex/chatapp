@@ -30,8 +30,8 @@
                 "./dist/lib"
             ],
             "@ui": [
-                "./dist/ui",
-                "./projects/ui/src/public-api"
+                "./projects/ui/src/public-api",
+                "./dist/ui"
             ]
             // "lib": [
             //     "./dist/lib"

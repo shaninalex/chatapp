@@ -2,10 +2,12 @@ import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 
 import { v4 as uuid } from 'uuid';
 import { Injectable } from "@angular/core";
-import { IQType } from 'stanza/Constants';
-import { IQ } from 'stanza/protocol';
+import { DiscoInfo, DiscoItems, IQ } from 'stanza/protocol';
 import { environment } from '../../../../environments/environment.development';
 import { IXmppService, operations } from '@lib';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/store';
+import { ChatRoomAdd } from '../../../store/chat/reducers/actions';
 
 
 @Injectable()
@@ -14,10 +16,13 @@ export class XmppService implements IXmppService {
     private userId: string;
     private userJid: string;
     private domain: string = environment.XMPP_DOMAIN
+    private conference: string = `conference.${environment.XMPP_DOMAIN}`
 
-    private messageIds: {[key: string]: string; } = {}
+    // We can remove this cuz` Stanza.Agent.send*() return promise
+    // promise can be changed to Observable using rxjs.from method.
+    private messageIds: { [key: string]: string; } = {}
 
-    constructor() { }
+    constructor(private store: Store<AppState>) { }
 
     // public get userID() { return this.userId; }
     // public get userJID() { return this.userJid; }
@@ -27,7 +32,7 @@ export class XmppService implements IXmppService {
     }
 
     public connect(id: string, token: string, host: string): void {
-        this.userJid = `${id}@${environment.XMPP_DOMAIN}`;
+        this.userJid = `${id}@${this.domain}`;
         this.userId = id
         if (this._client !== undefined) return
         this._client = Stanza.createClient({
@@ -61,16 +66,40 @@ export class XmppService implements IXmppService {
         // NOTE: if user enable notifications in settings
         this._checkUserDefaultSubscription();
 
+        this.messageIds["queryRooms"] = uuid();
+        operations.queryRoomsOnline(this._client, this.conference, "items", this.messageIds["queryRooms"])
     }
 
     private _handleIq(msg: IQ) {
-        // check default notification pubsub node existance
+        // TODO: move confition logic out of handler
+
         if ("pubsub" in this.messageIds) {
             if (msg.id === this.messageIds["pubsub"]) {
                 if (!msg.pubsub?.subscriptions?.items?.find(i => i.node === this.userNotificationNode)) {
                     this._pubsub_subscribe(`pubsub.${this.domain}`, this.userNotificationNode)
                 }
                 delete this.messageIds["pubsub"];
+            }
+        }
+
+        if ("queryRooms" in this.messageIds) {
+            if (msg.id === this.messageIds["queryRooms"]) {
+                const result = msg.disco as DiscoItems
+                if (result.items) {
+                    result.items.forEach(item => {
+                        if (item.jid) {
+                            operations.queryRoomsOnline(this._client, item.jid, "info").subscribe({
+                                next: data => {
+                                    this.store.dispatch(ChatRoomAdd({payload: {
+                                        id: item.jid as string,
+                                        info: data.disco as DiscoInfo
+                                    }}))
+                                }
+                            })
+                        }
+                    })
+                }
+                delete this.messageIds["queryRooms"];
             }
         }
     }
