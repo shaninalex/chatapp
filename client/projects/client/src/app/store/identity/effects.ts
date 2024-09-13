@@ -1,12 +1,13 @@
 import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as actions from "./actions";
-import { EMPTY, catchError, exhaustMap, map } from "rxjs";
+import { EMPTY, catchError, exhaustMap, first, map, of, switchMap } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
-// import { UiService } from "@ui";
 import { ApiResponse, Profile } from "@lib";
 import { LogoutFlow, SettingsFlow } from "@ory/kratos-client";
+import { XmppService } from "../../lib/services/xmpp.service";
+import { environment } from "../../../environments/environment.development";
 
 
 export const loadIdentity = createEffect(
@@ -14,35 +15,44 @@ export const loadIdentity = createEffect(
         actions$ = inject(Actions),
         http = inject(HttpClient),
         router = inject(Router),
-        // ui = inject(UiService)
+        xmpp = inject(XmppService),
     ) => {
         return actions$.pipe(
             ofType(actions.SetSessionStart.type),
             exhaustMap(() => http.get<ApiResponse<Profile>>("/api/profile/me", { withCredentials: true }).pipe(
-                map((data: ApiResponse<Profile>) => {
-                    return actions.SetSession({ payload: data.data })
+                switchMap((data: ApiResponse<Profile>) => {
+                    const token = data.data.token.token;
+                    const id = data.data.identity.id;
+                    return xmpp.connected$.pipe(
+                        first(),
+                        switchMap((connected: boolean) => {
+                            if (!connected) {
+                                return xmpp.connect(id, token, environment.XMPP_WEBSOCKET_ADDRESS).pipe(
+                                    map(() => actions.SetSession({ payload: data.data }))
+                                );
+                            }
+                            return of(actions.SetSession({ payload: data.data }));
+                        })
+                    );
                 }),
-                catchError((error: HttpErrorResponse) => {
-                    // this.ui.addSimpleToast(error.message, true);
-                    switch (error.status) {
-                        // server routes configured incorrectly
-                        case 404:
-                            router.navigate(['/404'])
-                            break;
 
-                        // session is outdated or user is unauthorized. Required to login again
+                // Error handling
+                catchError((error: HttpErrorResponse) => {
+                    switch (error.status) {
+                        case 404:
+                            router.navigate(['/404']);
+                            break;
                         case 401:
-                            router.navigate(['/auth/login'])
+                            router.navigate(['/auth/login']);
                             break;
                         default:
-                            null
+                            null;
                     }
 
-                    actions.SetSessionEnd();
-                    return EMPTY;
-                }),
+                    return of(actions.SetSessionEnd());
+                })
             ))
-        )
+        );
     },
     { functional: true, dispatch: true }
 );

@@ -1,10 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { version } from '../../../../../../../../../package.json';
-import { AppState } from "../../../../../store/store";
-import { Store } from "@ngrx/store";
-// import { selectRooms } from "../../../../../store/chat/selectors";
-import { Observable } from "rxjs";
-import { DiscoItem } from "stanza/protocol";
+import { map, Observable, of, switchMap } from "rxjs";
+import { DiscoItem, DiscoItems } from "stanza/protocol";
+import { XmppService } from "../../../../../lib/services/xmpp.service";
+// import { XmppService } from "../../../services/xmpp.service";
 
 @Component({
     selector: 'app-sidebar',
@@ -12,12 +11,13 @@ import { DiscoItem } from "stanza/protocol";
 })
 export class SidebarComponent implements OnInit {
     version: string;
-    rooms$: Observable<DiscoItem[]>;
+    rooms$: Observable<DiscoItem[]> = of([]);
 
-    constructor(private store: Store<AppState>) {}
-
+    constructor(private xmpp: XmppService) { }
     ngOnInit(): void {
         this.version = version
-        // this.rooms$ = this.store.select(selectRooms)
+        this.rooms$ = this.xmpp.queryRoomsOnline().pipe(
+            map((data) => (data.disco as DiscoItems).items || [])
+        );
     }
 }
