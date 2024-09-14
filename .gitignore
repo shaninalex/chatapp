@@ -1,1 +1,7 @@
 .env
+
+config/oathkeeper/access-rules.yml
+config/oathkeeper/oathkeeper.yml
+config/kratos/kratos.yml
+config/ejabberd/config/ejabberd.yml
+
