@@ -47,10 +47,9 @@ errors:
 
 access_rules:
   matching_strategy: glob
+  # uncomment add add real path before run
   # repositories:
-  # NOTE: this file provided by env variable ACCESS_RULES_REPOSITORIES!
-  # repositories:
-  #   - file:///home/alex/projects/ChatApp/config/oathkeeper/access-rules.yml
+  #   - file:///<absolute project root path>/config/oathkeeper/access-rules.yml
 
 authenticators:
   anonymous:
