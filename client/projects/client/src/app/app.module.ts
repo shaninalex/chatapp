@@ -10,6 +10,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { effects, reducers } from './store/store';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { XmppService } from './lib/services/xmpp.service';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
     providers: [
+        XmppService,
         provideHttpClient(withInterceptorsFromDi())
     ],
     bootstrap: [AppComponent]

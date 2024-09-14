@@ -1,10 +1,10 @@
 <div class="h-full flex flex-col justify-between">
     <nav class="flex flex-col">
-        <a [routerLink]="['/']">Conversation #1</a>
-        <a [routerLink]="['/']">Conversation #1</a>
-        <a [routerLink]="['/']">Conversation #1</a>
-        <a [routerLink]="['/']">Conversation #1</a>
-        <a [routerLink]="['/']">Conversation #1</a>
+        @if(rooms$ | async; as rooms) {
+            @for (item of rooms; track $index) {
+                <a [routerLink]="['room', item.jid]">{{ item.name }}</a>
+            }
+        }
     </nav>
 
     <div class="text-sm text-slate-700 pt-4">

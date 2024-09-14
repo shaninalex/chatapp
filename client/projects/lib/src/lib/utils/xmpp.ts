@@ -1,8 +1,9 @@
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { IQType } from "stanza/Constants"
-import { IQ } from "stanza/protocol"
+import { IQ, Presence } from "stanza/protocol"
 
-export function pubsubSubscribe(client: Stanza.Agent, to: string, node: string, jid: string) {
+
+export function pubsubSubscribe(client: Stanza.Agent, to: string, node: string, jid: string): Promise<Stanza.Stanzas.IQ> {
     const iq: IQ = {
         type: IQType.Set,
         to: to,
@@ -13,10 +14,10 @@ export function pubsubSubscribe(client: Stanza.Agent, to: string, node: string, 
             }
         }
     }
-    client.sendIQ(iq)
+    return client.sendIQ(iq)
 }
 
-export function pubsubQuery(client: Stanza.Agent, to: string, id?: string) {
+export function pubsubQuery(client: Stanza.Agent, to: string): Promise<Stanza.Stanzas.IQ> {
     const iq: IQ = {
         type: IQType.Get,
         to: to,
@@ -25,8 +26,18 @@ export function pubsubQuery(client: Stanza.Agent, to: string, id?: string) {
             subscriptions: {}
         }
     }
-    if (id) {
-        iq.id = id
-    }
-    client.sendIQ(iq)
+    return client.sendIQ(iq)
 }
+
+export function queryRoomsOnline(client: Stanza.Agent, to: string, type: "info" | "items"): Promise<Stanza.Stanzas.IQ> {
+    const iq: IQ = {
+        type: IQType.Get,
+        to: to,
+        payloadType: 'disco',
+        disco: {
+            type: type,
+        }
+    }
+    return client.sendIQ(iq)
+}
+
