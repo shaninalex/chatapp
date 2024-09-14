@@ -1,6 +1,6 @@
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { IQType } from "stanza/Constants"
-import { IQ } from "stanza/protocol"
+import { IQ, Presence } from "stanza/protocol"
 
 
 export function pubsubSubscribe(client: Stanza.Agent, to: string, node: string, jid: string): Promise<Stanza.Stanzas.IQ> {
@@ -40,3 +40,4 @@ export function queryRoomsOnline(client: Stanza.Agent, to: string, type: "info" 
     }
     return client.sendIQ(iq)
 }
+
