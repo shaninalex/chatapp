@@ -9,10 +9,5 @@
     </div>
 }
 
-<div class="flex flex-col gap-4">
-    @for (message of messages; track message) {
-        <div class="bg-slate-100 p-4">
-            <pre>{{message | json}}</pre>
-        </div>
-    }
-</div>
+<app-messages [messages$]="messages$" />
+

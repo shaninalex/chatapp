@@ -12,14 +12,14 @@ export class RoomComponent implements OnInit {
     // TODO: proper close subscriptions
     // private subscriptions: Subscription = new Subscription();
 
-    messages: ReceivedMessage[] = [];
+    messages$: Observable<ReceivedMessage>;
     participants$: Observable<DiscoItems>;
 
     constructor(private route: ActivatedRoute, private xmpp: XmppService) { }
 
     ngOnInit(): void {
         // this.subscriptions.add(
-        this.route.params.pipe(
+        this.messages$ = this.route.params.pipe(
             switchMap(({ jid }) => {
                 this.xmpp.sendPresence(jid).subscribe();
                 this.participants$ = this.xmpp.getRoomParticipants(jid)
@@ -27,10 +27,7 @@ export class RoomComponent implements OnInit {
                     filter((message: ReceivedMessage) => message.from.startsWith(jid))
                 );
             })
-        ).subscribe({
-            next: (message: ReceivedMessage) => this.messages.push(message)
-        });
-
+        );
         // )
     }
 

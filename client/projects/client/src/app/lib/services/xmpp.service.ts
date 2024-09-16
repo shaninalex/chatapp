@@ -57,7 +57,7 @@ export class XmppService {
                 observer.complete();
             });
 
-            this._client.on("iq", iq => console.log("iq", iq))
+            // this._client.on("iq", iq => console.log("iq", iq))
 
             // add every new ReceivedMessage to BehaviorSubject
             // every room will filter every message by room jid

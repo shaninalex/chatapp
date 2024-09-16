@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-import { NgModule, OnDestroy } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MainComponent } from "./main.component";
 import { MainRoutingModule } from "./main-routing.module";
@@ -10,6 +10,9 @@ import { UiModule } from "@ui";
 import { SettingsComponent } from "./components/settings/settings.component";
 import { TabFormComponent } from "./components/settings/components/tab-form/tab-form.component";
 import { RoomComponent } from "./components/room/room.component";
+import { MessagesComponent } from "./components/room/components/messages/messages.component";
+import { MessageComponent } from "./components/room/components/message/message.component";
+import { ChatStateComponent } from "./components/room/components/chat-states/chat-states.component";
 
 
 @NgModule({
@@ -23,6 +26,9 @@ import { RoomComponent } from "./components/room/room.component";
         HeaderComponent,
         SidebarComponent,
         TabFormComponent,
+        MessagesComponent,
+        MessageComponent,
+        ChatStateComponent,
     ],
     imports: [
         CommonModule,
