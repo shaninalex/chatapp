@@ -4,9 +4,8 @@ import { Injectable } from "@angular/core";
 import { environment } from '../../../environments/environment.development';
 import { operations } from '@lib';
 import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
-import { DiscoItem, DiscoItems, IQ, Message, ReceivedMessage } from 'stanza/protocol';
+import { DiscoItems, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
 import { IQType } from 'stanza/Constants';
-import disco from 'stanza/plugins/disco';
 
 
 @Injectable({
@@ -15,7 +14,7 @@ import disco from 'stanza/plugins/disco';
 export class XmppService {
     private _client: Stanza.Agent | null = null;
     private _connected$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private _userJid: string;
+    // private _userJid: string;
     private _userID: string;
 
     private domain: string = environment.XMPP_DOMAIN;
@@ -23,7 +22,12 @@ export class XmppService {
     private pubsub: string = `pubsub.${environment.XMPP_DOMAIN}`;
 
     private _receivedMessage: ReplaySubject<ReceivedMessage> = new ReplaySubject(1);
+    private _receivedPrecense: ReplaySubject<ReceivedPresence> = new ReplaySubject(1);
+    private _receivedIQ: ReplaySubject<ReceivedIQ> = new ReplaySubject(1);
+
     public receivedMessage$: Observable<ReceivedMessage> = this._receivedMessage.asObservable();
+    public receivedPrecense$: Observable<ReceivedPresence> = this._receivedPrecense.asObservable();
+    public receivedIQ$: Observable<ReceivedIQ> = this._receivedIQ.asObservable();
 
     public get connected$(): Observable<boolean> {
         return this._connected$.asObservable();
@@ -36,7 +40,7 @@ export class XmppService {
 
         return new Observable<void>(observer => {
             const userJid = `${id}@${this.domain}`;
-            this._userJid = userJid;
+            // this._userJid = userJid;
             this._userID = id;
 
             this._client = Stanza.createClient({
@@ -57,12 +61,9 @@ export class XmppService {
                 observer.complete();
             });
 
-            // this._client.on("iq", iq => console.log("iq", iq))
-
-            // add every new ReceivedMessage to BehaviorSubject
-            // every room will filter every message by room jid
             this._client.on("message", (msg: ReceivedMessage) => this._receivedMessage.next(msg))
-            // this._client.on("message:acked", (msg: Message) => console.log("message:acked", msg))
+            this._client.on("presence", (p: ReceivedPresence) => this._receivedPrecense.next(p));
+            this._client.on("iq", (q: ReceivedIQ) => this._receivedIQ.next(q));
 
             this._client.on('disconnected', () => {
                 this._client = null;

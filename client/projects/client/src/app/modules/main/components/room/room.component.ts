@@ -12,6 +12,7 @@ export class RoomComponent implements OnInit {
     // TODO: proper close subscriptions
     // private subscriptions: Subscription = new Subscription();
 
+    jid: string;
     messages$: Observable<ReceivedMessage>;
     participants$: Observable<DiscoItems>;
 
@@ -21,8 +22,11 @@ export class RoomComponent implements OnInit {
         // this.subscriptions.add(
         this.messages$ = this.route.params.pipe(
             switchMap(({ jid }) => {
+                this.jid = jid;
                 this.xmpp.sendPresence(jid).subscribe();
-                this.participants$ = this.xmpp.getRoomParticipants(jid)
+
+                // I think this should be an IQ
+                // this.participants$ = this.xmpp.getRoomParticipants(jid)
                 return this.xmpp.receivedMessage$.pipe(
                     filter((message: ReceivedMessage) => message.from.startsWith(jid))
                 );
