@@ -1,8 +1,5 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col">
     @for (message of messages; track message) {
-        @if (printable(message)) {
-            <app-message [message]="message" />
-        } @else {
-        }
+        <app-message [message]="message" />
     }
 </div>

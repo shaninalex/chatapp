@@ -1,41 +1,46 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { XmppService } from "../../../../lib/services/xmpp.service";
 import { DiscoItems, ReceivedMessage } from "stanza/protocol";
-import { filter, Observable, switchMap } from "rxjs";
+import { filter, map, Observable, switchMap } from "rxjs";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../../store/store";
+import { ChatMessageAdd } from "../../../../store/chat/actions";
 
 @Component({
     selector: 'app-room',
-    templateUrl: './room.component.html'
+    templateUrl: './room.component.html',
 })
 export class RoomComponent implements OnInit {
-    // TODO: proper close subscriptions
-    // private subscriptions: Subscription = new Subscription();
-
     jid: string;
     messages$: Observable<ReceivedMessage>;
     participants$: Observable<DiscoItems>;
 
-    constructor(private route: ActivatedRoute, private xmpp: XmppService) { }
+    constructor(
+        private route: ActivatedRoute,
+        private xmpp: XmppService,
+        private store: Store<AppState>,
+    ) { }
 
     ngOnInit(): void {
-        // this.subscriptions.add(
-        this.messages$ = this.route.params.pipe(
-            switchMap(({ jid }) => {
+        this.route.params.subscribe({
+            next: ({ jid }) => {
                 this.jid = jid;
-                this.xmpp.sendPresence(jid).subscribe();
+                this.xmpp.sendPresenceRoom(jid).subscribe();
 
-                // I think this should be an IQ
-                // this.participants$ = this.xmpp.getRoomParticipants(jid)
-                return this.xmpp.receivedMessage$.pipe(
-                    filter((message: ReceivedMessage) => message.from.startsWith(jid))
+                this.messages$ = this.xmpp.receivedMessage$.pipe(
+                    filter((message: ReceivedMessage) => message.from.startsWith(jid)),
+                    map(msg => {
+                        if (msg.body) {
+                            // save to store only messages that has a "body" property
+                            this.store.dispatch(ChatMessageAdd({ payload: msg }))
+                        }
+                        // all not printable goes to <app-chat-state>
+                        return msg
+                    })
                 );
-            })
-        );
-        // )
-    }
+            }
+        })
 
-    // ngOnDesctroy(): void {
-    //     this.subscriptions.unsubscribe()
-    // }
+    }
 }

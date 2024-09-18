@@ -1,10 +1,13 @@
 import { combineReducers } from '@ngrx/store';
 import { roomsReducer, RoomsState } from './reducers/rooms';
+import { messagesReducer, MessagesState } from './reducers/messages';
 
 export interface XmppState {
-    rooms: RoomsState,
+    rooms: RoomsState
+    messages: MessagesState
 }
 
 export const xmppReducer = combineReducers({
-    rooms: roomsReducer
+    rooms: roomsReducer,
+    messages: messagesReducer,
 });

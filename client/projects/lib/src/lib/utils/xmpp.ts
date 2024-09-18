@@ -1,5 +1,5 @@
 import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
-import { IQType } from "stanza/Constants"
+import { IQType, MessageType } from "stanza/Constants"
 import { IQ, Presence } from "stanza/protocol"
 
 
@@ -41,3 +41,34 @@ export function queryRoomsOnline(client: Stanza.Agent, to: string, type: "info" 
     return client.sendIQ(iq)
 }
 
+export function queryRoomInfo(client: Stanza.Agent, roomJid: string): Promise<IQ> {
+    const iq: IQ = {
+        to: roomJid,
+        type: IQType.Get,
+        disco: {
+            type: "info"
+        },
+    }
+    return client.sendIQ(iq)
+}
+
+export function queryRoomItems(client: Stanza.Agent, roomJid: string): Promise<IQ> {
+    const iq: IQ = {
+        to: roomJid,
+        type: IQType.Get,
+        disco: {
+            type: "items"
+        },
+    }
+    return client.sendIQ(iq)
+}
+
+export function precenseRoom(client: Stanza.Agent, roomJid: string, resource: string): string {
+    return client.sendPresence({
+        to: `${roomJid}/${resource}`
+    })
+}
+
+export function sendRoomMessage(client: Stanza.Agent, to: string, body: string, from: string): string {
+    return client.sendMessage({to: to, body: body, type: MessageType.GroupChat, from: from })
+}

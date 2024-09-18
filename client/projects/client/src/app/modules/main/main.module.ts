@@ -13,6 +13,8 @@ import { RoomComponent } from "./components/room/room.component";
 import { MessagesComponent } from "./components/room/components/messages/messages.component";
 import { MessageComponent } from "./components/room/components/message/message.component";
 import { ChatStateComponent } from "./components/room/components/chat-states/chat-states.component";
+import { RoomItemComponent } from "./components/layout/sidebar/component/room-item/room-item.component";
+import { SenderComponent } from "./components/room/components/sender/sender.component";
 
 
 @NgModule({
@@ -29,6 +31,8 @@ import { ChatStateComponent } from "./components/room/components/chat-states/cha
         MessagesComponent,
         MessageComponent,
         ChatStateComponent,
+        RoomItemComponent,
+        SenderComponent,
     ],
     imports: [
         CommonModule,

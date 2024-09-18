@@ -1,22 +1,24 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 import { ReceivedMessage } from "stanza/protocol";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../../../../store/store";
+import { selectMessagesByRoom } from "../../../../../../store/chat/reducers/messages";
 
 @Component({
     selector: 'app-messages',
-    templateUrl: './messages.component.html'
+    templateUrl: './messages.component.html',
 })
 export class MessagesComponent implements OnInit {
-    @Input() messages$: Observable<ReceivedMessage>;
+    @Input() roomJid: string;
     messages: ReceivedMessage[] = [];
-
-    printable(msg: ReceivedMessage): boolean {
-        return msg.body ? true : false;
-    }
-
+    
+    constructor(private store: Store<AppState>) { }
+    
     ngOnInit(): void {
-        this.messages$.subscribe({
-            next: msg => this.messages.push(msg)
+        this.store.select(selectMessagesByRoom(this.roomJid)).subscribe({
+            next: msg => {
+                this.messages = msg;
+            }
         })
     }
 }

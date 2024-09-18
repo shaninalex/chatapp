@@ -9,6 +9,6 @@
     </div>
 }
 
-<app-messages [messages$]="messages$" />
+<app-messages [roomJid]="jid" />
 <app-chat-state [messages$]="messages$" />
-
+<app-sender [roomJid]="jid" />

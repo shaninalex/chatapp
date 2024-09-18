@@ -2,19 +2,19 @@ import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 
 import { Injectable } from "@angular/core";
 import { environment } from '../../../environments/environment.development';
-import { operations } from '@lib';
+import { IXmppService, operations } from '@lib';
 import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
-import { DiscoItems, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
+import { DiscoInfo, DiscoItems, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
 import { IQType } from 'stanza/Constants';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class XmppService {
+export class XmppService implements IXmppService {
     private _client: Stanza.Agent | null = null;
     private _connected$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    // private _userJid: string;
+    private _userJid: string;
     private _userID: string;
 
     private domain: string = environment.XMPP_DOMAIN;
@@ -29,6 +29,9 @@ export class XmppService {
     public receivedPrecense$: Observable<ReceivedPresence> = this._receivedPrecense.asObservable();
     public receivedIQ$: Observable<ReceivedIQ> = this._receivedIQ.asObservable();
 
+    public get userJid(): string { return this._userJid }
+    public get userID(): string { return this._userJid }
+
     public get connected$(): Observable<boolean> {
         return this._connected$.asObservable();
     }
@@ -40,7 +43,7 @@ export class XmppService {
 
         return new Observable<void>(observer => {
             const userJid = `${id}@${this.domain}`;
-            // this._userJid = userJid;
+            this._userJid = userJid;
             this._userID = id;
 
             this._client = Stanza.createClient({
@@ -95,36 +98,34 @@ export class XmppService {
         );
     }
 
-    public sendMessage(to: string, body: string): Observable<string> {
-        // TODO: move send operation to operations.ts
+    public sendRoomMessage(to: string, body: string, sender: string): Observable<string> {
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(this._client!.sendMessage({ to, body })))
+            switchMap(() => from(operations.sendRoomMessage(this._client!, to, body, sender )))
         );
     }
 
-    public sendPresence(to: string): Observable<string> {
-        // TODO: move send operation to operations.ts
+    public sendPresenceRoom(roomJid: string): Observable<string> {
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(this._client!.sendPresence({
-                to: `${to}/${this._userID}`,
-            })))
+            switchMap(() => from(operations.precenseRoom(this._client!, roomJid, this._userID)))
         )
     }
 
     public getRoomParticipants(roomJid: string): Observable<DiscoItems> {
-        // TODO: move send operation to operations.ts
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(this._client!.sendIQ({
-                to: roomJid,
-                type: IQType.Get,
-                disco: {
-                    type: "items"
-                },
-            })).pipe(
+            switchMap(() => from(operations.queryRoomItems(this._client!, roomJid)).pipe(
                 map(result => result.disco as DiscoItems)
+            ))
+        )
+    }
+
+    public getRoomInfo(roomJid: string): Observable<DiscoInfo> {
+        return this._connected$.pipe(
+            filter(connected => connected),
+            switchMap(() => from(operations.queryRoomInfo(this._client!, roomJid)).pipe(
+                map(result => result.disco as DiscoInfo)
             ))
         )
     }

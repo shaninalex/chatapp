@@ -8,6 +8,10 @@ import { ReceivedMessage } from "stanza/protocol";
 export class MessageComponent implements OnInit {
     @Input() message: ReceivedMessage;
 
+    get sender() {
+        return this.message.from.split('/')[1]
+    }
+
     ngOnInit() {
         // console.log(this.message);
     }
