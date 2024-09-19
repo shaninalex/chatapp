@@ -1,0 +1,12 @@
+<div class="py-4 flex items-start gap-4">
+    <div class="shrink-0">
+        <img src="/assets/images/default-profile-picture.jpg" class="rounded-full w-8 h-8" />
+    </div>
+    <div class="flex-grow">
+        <div class="flex items-center gap-4 mb-2">
+            <div class="font-bold text-sm text-rose-950">{{ sender }}</div>
+            <div class="text-xs text-slate-600">{{ message.delay?.timestamp | date }}</div>
+        </div>
+        <div>{{ message.body }}</div>
+    </div>
+</div>

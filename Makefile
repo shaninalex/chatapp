@@ -29,5 +29,6 @@ oathkeeper:
 	oathkeeper serve proxy -c ./config/oathkeeper/oathkeeper.yml
 
 app:
-	go run ./server/app/main.go --config=./server/config.yaml
+	go build -C ./server/app/ -o ../bin/chat
+	./server/bin/chat --config=./server/config.yaml --runXmpp
 

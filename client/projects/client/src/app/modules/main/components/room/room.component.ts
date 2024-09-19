@@ -1,40 +1,58 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { XmppService } from "../../../../lib/services/xmpp.service";
-import { DiscoItems, ReceivedMessage } from "stanza/protocol";
-import { filter, Observable, switchMap } from "rxjs";
+import { ReceivedMessage, ReceivedPresence } from "stanza/protocol";
+import { filter, map, Observable } from "rxjs";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../../store/store";
+import { ChatMessageAdd, ChatParticipantAdd, ChatParticipantRemove } from "../../../../store/chat/actions";
+import { PresenceType } from "stanza/Constants";
 
 @Component({
     selector: 'app-room',
-    templateUrl: './room.component.html'
+    templateUrl: './room.component.html',
 })
 export class RoomComponent implements OnInit {
-    // TODO: proper close subscriptions
-    // private subscriptions: Subscription = new Subscription();
+    jid: string;
+    messages$: Observable<ReceivedMessage>;
 
-    messages: ReceivedMessage[] = [];
-    participants$: Observable<DiscoItems>;
-
-    constructor(private route: ActivatedRoute, private xmpp: XmppService) { }
+    constructor(
+        private route: ActivatedRoute,
+        private xmpp: XmppService,
+        private store: Store<AppState>,
+    ) { }
 
     ngOnInit(): void {
-        // this.subscriptions.add(
-        this.route.params.pipe(
-            switchMap(({ jid }) => {
-                this.xmpp.sendPresence(jid).subscribe();
-                this.participants$ = this.xmpp.getRoomParticipants(jid)
-                return this.xmpp.receivedMessage$.pipe(
-                    filter((message: ReceivedMessage) => message.from.startsWith(jid))
+        this.route.params.subscribe({
+            next: ({ jid }) => {
+                this.jid = jid;
+                this.xmpp.sendPresenceRoom(jid).subscribe();
+
+                this.messages$ = this.xmpp.receivedMessage$.pipe(
+                    filter((message: ReceivedMessage) => message.from.startsWith(jid)),
+                    map(msg => {
+                        if (msg.body) {
+                            // save to store only messages that has a "body" property
+                            this.store.dispatch(ChatMessageAdd({ payload: msg }))
+                        }
+                        // all not printable goes to <app-chat-state>
+                        return msg
+                    })
                 );
-            })
-        ).subscribe({
-            next: (message: ReceivedMessage) => this.messages.push(message)
-        });
 
-        // )
+                this.xmpp.receivedPrecense$.pipe(
+                    filter((precense: ReceivedPresence) => precense.from.startsWith(jid)),
+                    filter((precense: ReceivedPresence) => precense.from.split(this.jid + "/").length > 1),
+                ).subscribe({
+                    next: p => {
+                        if (p.type === PresenceType.Unavailable) {
+                            this.store.dispatch(ChatParticipantRemove({ id: p.from }))
+                        } else {
+                            this.store.dispatch(ChatParticipantAdd({ payload: p }))
+                        }
+                    }
+                })
+            }
+        })
     }
-
-    // ngOnDesctroy(): void {
-    //     this.subscriptions.unsubscribe()
-    // }
 }
