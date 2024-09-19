@@ -1,13 +1,15 @@
 import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as actions from "./actions";
-import { EMPTY, catchError, exhaustMap, first, map, of, switchMap } from "rxjs";
+import { EMPTY, catchError, exhaustMap, finalize, first, map, of, switchMap } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { ApiResponse, Profile } from "@lib";
 import { LogoutFlow, SettingsFlow } from "@ory/kratos-client";
 import { XmppService } from "../../lib/services/xmpp.service";
 import { environment } from "../../../environments/environment.development";
+import { UserService } from "../../lib/services/user.service";
+import { UiService } from "@ui";
 
 
 export const loadIdentity = createEffect(
@@ -16,6 +18,8 @@ export const loadIdentity = createEffect(
         http = inject(HttpClient),
         router = inject(Router),
         xmpp = inject(XmppService),
+        user = inject(UserService),
+        ui = inject(UiService),
     ) => {
         return actions$.pipe(
             ofType(actions.SetSessionStart.type),
@@ -28,7 +32,10 @@ export const loadIdentity = createEffect(
                         switchMap((connected: boolean) => {
                             if (!connected) {
                                 return xmpp.connect(id, token, environment.XMPP_WEBSOCKET_ADDRESS).pipe(
-                                    map(() => actions.SetSession({ payload: data.data }))
+                                    map(() => {
+                                        user.setProfile(data.data)      
+                                        return actions.SetSession({ payload: data.data })
+                                    })
                                 );
                             }
                             return of(actions.SetSession({ payload: data.data }));
@@ -50,7 +57,9 @@ export const loadIdentity = createEffect(
                     }
 
                     return of(actions.SetSessionEnd());
-                })
+                }),
+
+                finalize(() => ui.appLoading.next(false))
             ))
         );
     },

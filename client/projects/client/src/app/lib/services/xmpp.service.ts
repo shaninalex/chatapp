@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment.development';
 import { IXmppService, operations } from '@lib';
 import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
 import { DiscoInfo, DiscoItems, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
-import { IQType } from 'stanza/Constants';
 
 
 @Injectable({
@@ -105,21 +104,12 @@ export class XmppService implements IXmppService {
         );
     }
 
-    public sendPresenceRoom(roomJid: string): Observable<string> {
+    public sendPresenceRoom(roomJid: string, nickname: string = this._userID): Observable<string> {
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(operations.precenseRoom(this._client!, roomJid, this._userID)))
+            switchMap(() => from(operations.precenseRoom(this._client!, roomJid, nickname)))
         )
     }
-
-    // public getRoomParticipants(roomJid: string): Observable<DiscoItems> {
-    //     return this._connected$.pipe(
-    //         filter(connected => connected),
-    //         switchMap(() => from(operations.queryRoomItems(this._client!, roomJid)).pipe(
-    //             map(result => result.disco as DiscoItems)
-    //         ))
-    //     )
-    // }
 
     public getRoomInfo(roomJid: string): Observable<DiscoInfo> {
         return this._connected$.pipe(

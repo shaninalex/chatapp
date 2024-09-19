@@ -11,6 +11,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { effects, reducers } from './store/store';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { XmppService } from './lib/services/xmpp.service';
+import { UserService } from './lib/services/user.service';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { XmppService } from './lib/services/xmpp.service';
     ],
     providers: [
         XmppService,
+        UserService,
         provideHttpClient(withInterceptorsFromDi())
     ],
     bootstrap: [AppComponent]

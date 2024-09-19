@@ -28,7 +28,11 @@ clear:
 oathkeeper:
 	oathkeeper serve proxy -c ./config/oathkeeper/oathkeeper.yml
 
-app:
+build_server:
 	go build -C ./server/app/ -o ../bin/chat
+
+app: build_server
 	./server/bin/chat --config=./server/config.yaml --runXmpp
 
+createLobby: build_server
+	./server/bin/chat --config=./server/config.yaml --createLobby

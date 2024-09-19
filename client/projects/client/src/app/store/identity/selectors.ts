@@ -8,6 +8,11 @@ export const selectProfile = createSelector(
     (state: IdentityState) => state.profile
 )
 
+export const selectIdentity = createSelector(
+    selectIdentityFeature,
+    (state: IdentityState) => state.profile?.identity
+)
+
 export const selectLogoutLink = createSelector(
     selectIdentityFeature,
     (state: IdentityState) => state.logout
