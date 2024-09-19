@@ -3,6 +3,7 @@ import { EntityAdapter, EntityState, createEntityAdapter } from "@ngrx/entity";
 import * as actions from '../actions';
 import { ReceivedMessage } from "stanza/protocol";
 import { XmppState } from "../reducer";
+import { selectXmppFeature } from "../selectors";
 
 export interface MessagesState extends EntityState<ReceivedMessage> { }
 export const MessagesAdapter: EntityAdapter<ReceivedMessage> = createEntityAdapter<ReceivedMessage>();
@@ -12,9 +13,6 @@ export const messagesReducer = createReducer(
     initialMessages,
     on(actions.ChatMessageAdd, (state, { payload }) => MessagesAdapter.addOne(payload, state)),
 )
-
-// selectors
-export const selectXmppFeature = createFeatureSelector<XmppState>('chat');
 
 export const selectMessagesFeature = createSelector(
     selectXmppFeature,

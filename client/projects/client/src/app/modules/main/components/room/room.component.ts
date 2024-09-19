@@ -1,11 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { XmppService } from "../../../../lib/services/xmpp.service";
-import { DiscoItems, ReceivedMessage } from "stanza/protocol";
-import { filter, map, Observable, switchMap } from "rxjs";
+import { ReceivedMessage, ReceivedPresence } from "stanza/protocol";
+import { filter, map, Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../../store/store";
-import { ChatMessageAdd } from "../../../../store/chat/actions";
+import { ChatMessageAdd, ChatParticipantAdd, ChatParticipantRemove } from "../../../../store/chat/actions";
+import { PresenceType } from "stanza/Constants";
 
 @Component({
     selector: 'app-room',
@@ -14,7 +15,6 @@ import { ChatMessageAdd } from "../../../../store/chat/actions";
 export class RoomComponent implements OnInit {
     jid: string;
     messages$: Observable<ReceivedMessage>;
-    participants$: Observable<DiscoItems>;
 
     constructor(
         private route: ActivatedRoute,
@@ -39,8 +39,20 @@ export class RoomComponent implements OnInit {
                         return msg
                     })
                 );
+
+                this.xmpp.receivedPrecense$.pipe(
+                    filter((precense: ReceivedPresence) => precense.from.startsWith(jid)),
+                    filter((precense: ReceivedPresence) => precense.from.split(this.jid + "/").length > 1),
+                ).subscribe({
+                    next: p => {
+                        if (p.type === PresenceType.Unavailable) {
+                            this.store.dispatch(ChatParticipantRemove({ id: p.from }))
+                        } else {
+                            this.store.dispatch(ChatParticipantAdd({ payload: p }))
+                        }
+                    }
+                })
             }
         })
-
     }
 }

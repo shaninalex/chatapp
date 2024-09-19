@@ -101,7 +101,7 @@ export class XmppService implements IXmppService {
     public sendRoomMessage(to: string, body: string, sender: string): Observable<string> {
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(operations.sendRoomMessage(this._client!, to, body, sender )))
+            switchMap(() => from(operations.sendRoomMessage(this._client!, to, body, sender)))
         );
     }
 
@@ -112,14 +112,14 @@ export class XmppService implements IXmppService {
         )
     }
 
-    public getRoomParticipants(roomJid: string): Observable<DiscoItems> {
-        return this._connected$.pipe(
-            filter(connected => connected),
-            switchMap(() => from(operations.queryRoomItems(this._client!, roomJid)).pipe(
-                map(result => result.disco as DiscoItems)
-            ))
-        )
-    }
+    // public getRoomParticipants(roomJid: string): Observable<DiscoItems> {
+    //     return this._connected$.pipe(
+    //         filter(connected => connected),
+    //         switchMap(() => from(operations.queryRoomItems(this._client!, roomJid)).pipe(
+    //             map(result => result.disco as DiscoItems)
+    //         ))
+    //     )
+    // }
 
     public getRoomInfo(roomJid: string): Observable<DiscoInfo> {
         return this._connected$.pipe(

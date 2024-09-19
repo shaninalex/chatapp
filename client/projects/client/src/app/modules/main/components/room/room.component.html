@@ -1,14 +1,10 @@
-@if (participants$ | async; as participants) {
-    <div class="mb-4 p-4 bg-slate-100">
-        Participants online:
-        @for (p of participants.items; track p) {
-            <div>
-                {{ p.name }} <small class="text-slate-500">({{ p.jid }})</small>
-            </div>
-        }
+<div class="flex items-start h-full">
+    <div class="flex-grow h-full pr-4">
+        <app-messages [roomJid]="jid" />
+        <app-chat-state [messages$]="messages$" />
+        <app-sender [roomJid]="jid" />
     </div>
-}
-
-<app-messages [roomJid]="jid" />
-<app-chat-state [messages$]="messages$" />
-<app-sender [roomJid]="jid" />
+    <div class="shrink-0 w-80 h-full border-l pl-4">
+        <app-participants [roomJid]="jid" />
+    </div>
+</div>

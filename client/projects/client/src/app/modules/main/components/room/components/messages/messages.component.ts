@@ -17,6 +17,7 @@ export class MessagesComponent implements OnInit {
     ngOnInit(): void {
         this.store.select(selectMessagesByRoom(this.roomJid)).subscribe({
             next: msg => {
+                // rerender whole message list on every new message ?
                 this.messages = msg;
             }
         })

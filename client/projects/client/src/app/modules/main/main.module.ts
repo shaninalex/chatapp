@@ -15,6 +15,7 @@ import { MessageComponent } from "./components/room/components/message/message.c
 import { ChatStateComponent } from "./components/room/components/chat-states/chat-states.component";
 import { RoomItemComponent } from "./components/layout/sidebar/component/room-item/room-item.component";
 import { SenderComponent } from "./components/room/components/sender/sender.component";
+import { ParticipantsComponent } from "./components/room/components/participants/participants.component";
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { SenderComponent } from "./components/room/components/sender/sender.comp
         ChatStateComponent,
         RoomItemComponent,
         SenderComponent,
+        ParticipantsComponent,
     ],
     imports: [
         CommonModule,
