@@ -44,7 +44,7 @@ export class SettingsComponent implements OnInit {
                     this.messages = settings.ui.messages;
 
                     this.nodes_default = settings.ui.nodes.filter((node: UiNode) => node.group === "default");
-                    this.nodes_profile = settings.ui.nodes.filter((node: UiNode) => node.group === "profile");
+                    this.nodes_profile = settings.ui.nodes.filter((node: UiNode) => node.group === "profile")
                     this.nodes_password = settings.ui.nodes.filter((node: UiNode) => node.group === "password");
                     this.nodes_oidc = settings.ui.nodes.filter((node: UiNode) => node.group === "oidc");
                     this.nodes_totp = settings.ui.nodes.filter((node: UiNode) => node.group === "totp" || node.group === "lookup_secret");

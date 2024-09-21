@@ -1,6 +1,7 @@
 package hooks
 
 import (
+	"log"
 	"net/http"
 	"server/pkg/domain"
 	"server/pkg/ejabberd"
@@ -62,6 +63,14 @@ func (app *app) handleRegister(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, domain.NewResponse(nil, []string{"error"}, err))
 		return
+	}
+
+	traits := &domain.Traits{}
+	traits.FromInterface(identity.Traits)
+	traits.Nickname = kratos.GenerateNickname(traits)
+	identity, _, err = kratos.Api.UpdateIdentityTraits(ctx, identity.Id, traits.ToMap())
+	if err != nil {
+		log.Println(err)
 	}
 
 	ejabberd.Api.CreateUser(ctx, identity)

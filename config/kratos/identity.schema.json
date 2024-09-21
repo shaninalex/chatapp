@@ -47,6 +47,11 @@
                     "type": "string",
                     "title": "User Image",
                     "format": "string"
+                },
+                "nickname": {
+                    "type": "string",
+                    "format": "string",
+                    "title": "Default nickname used in conversations"
                 }
             },
             "required": [
