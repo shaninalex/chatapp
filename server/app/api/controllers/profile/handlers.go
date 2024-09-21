@@ -2,13 +2,15 @@ package profile
 
 import (
 	"net/http"
-	"server/pkg/database"
 	"server/pkg/domain"
+	"server/pkg/ejabberd"
 	"server/pkg/kratos"
 	"server/pkg/settings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+
+	ory "github.com/ory/kratos-client-go"
 )
 
 func handleProfile(ctx *gin.Context) {
@@ -37,7 +39,7 @@ func handleProfile(ctx *gin.Context) {
 		return
 	}
 
-	token, err := database.GetToken(settings.GetJid(identity.Id))
+	token, err := ejabberd.GetToken(settings.GetJid(identity.Id))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, domain.NewResponse(nil, nil, err))
 		return
@@ -73,6 +75,20 @@ func handleSettings(ctx *gin.Context) {
 		return
 	}
 
+	nodes := []ory.UiNode{}
+	for _, n := range flow.Ui.Nodes {
+		if n.Attributes.UiNodeInputAttributes != nil {
+			if n.Attributes.UiNodeInputAttributes.Name == "traits.nickname" {
+				n.Attributes.UiNodeInputAttributes.Type = "hidden"
+			}
+			nodes = append(nodes, n)
+		} else {
+			nodes = append(nodes, n)
+		}
+	}
+
+	flow.Ui.Nodes = nodes
+
 	flowMap, err := flow.ToMap()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, domain.NewResponse(nil, nil, err))
@@ -80,4 +96,5 @@ func handleSettings(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, domain.NewResponse(flowMap, nil, nil))
+
 }

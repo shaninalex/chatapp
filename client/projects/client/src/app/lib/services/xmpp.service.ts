@@ -4,8 +4,7 @@ import { Injectable } from "@angular/core";
 import { environment } from '../../../environments/environment.development';
 import { IXmppService, operations } from '@lib';
 import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
-import { DiscoInfo, DiscoItems, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
-import { IQType } from 'stanza/Constants';
+import { DiscoInfo, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
 
 
 @Injectable({
@@ -66,6 +65,7 @@ export class XmppService implements IXmppService {
 
             this._client.on("message", (msg: ReceivedMessage) => this._receivedMessage.next(msg))
             this._client.on("presence", (p: ReceivedPresence) => this._receivedPrecense.next(p));
+            this._client.on("presence:error", (p: ReceivedPresence) => this._receivedPrecense.next(p))
             this._client.on("iq", (q: ReceivedIQ) => this._receivedIQ.next(q));
 
             this._client.on('disconnected', () => {
@@ -105,21 +105,12 @@ export class XmppService implements IXmppService {
         );
     }
 
-    public sendPresenceRoom(roomJid: string): Observable<string> {
+    public sendPresenceRoom(roomJid: string, nickname: string = this._userID): Observable<string> {
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(operations.precenseRoom(this._client!, roomJid, this._userID)))
+            switchMap(() => from(operations.precenseRoom(this._client!, roomJid, nickname)))
         )
     }
-
-    // public getRoomParticipants(roomJid: string): Observable<DiscoItems> {
-    //     return this._connected$.pipe(
-    //         filter(connected => connected),
-    //         switchMap(() => from(operations.queryRoomItems(this._client!, roomJid)).pipe(
-    //             map(result => result.disco as DiscoItems)
-    //         ))
-    //     )
-    // }
 
     public getRoomInfo(roomJid: string): Observable<DiscoInfo> {
         return this._connected$.pipe(

@@ -140,3 +140,12 @@ func (api *api) GetSession(ctx context.Context, cookie string) (*ory.Session, *h
 func (api *api) GetIdentity(ctx context.Context, id string) (*ory.Identity, *http.Response, error) {
 	return api.kratos.IdentityAPI.GetIdentity(ctx, id).Execute()
 }
+
+func (api *api) UpdateIdentityTraits(ctx context.Context, id string, traits map[string]interface{}) (*ory.Identity, *http.Response, error) {
+	payload := ory.UpdateIdentityBody{
+		Traits: traits,
+	}
+	return api.kratos.IdentityAPI.UpdateIdentity(ctx, id).
+		UpdateIdentityBody(payload).
+		Execute()
+}
