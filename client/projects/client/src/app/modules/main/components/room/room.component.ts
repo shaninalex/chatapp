@@ -33,7 +33,7 @@ export class RoomComponent implements OnInit {
 
                 // TODO: handle nickname conflict if exists.
                 // show modal before continue to change nickname
-                this.xmpp.sendPresenceRoom(jid, this.user.username()).subscribe();
+                this.xmpp.sendPresenceRoom(jid, this.user.username).subscribe();
 
                 this.messages$ = this.xmpp.receivedMessage$.pipe(
                     filter((message: ReceivedMessage) => message.from.startsWith(jid)),
@@ -52,11 +52,21 @@ export class RoomComponent implements OnInit {
                     filter((precense: ReceivedPresence) => precense.from.split(this.jid + "/").length > 1),
                 ).subscribe({
                     next: p => {
-                        if (p.type === PresenceType.Unavailable) {
-                            this.store.dispatch(ChatParticipantRemove({ id: p.from }))
-                        } else {
-                            this.store.dispatch(ChatParticipantAdd({ payload: p }))
+                        switch (p.type) {
+                            case PresenceType.Unavailable:
+                                this.store.dispatch(ChatParticipantRemove({ id: p.from }))
+                                break
+                            case PresenceType.Error:
+                                console.log(p)
+                                break
+                            default:
+                                this.store.dispatch(ChatParticipantAdd({ payload: p }))
                         }
+                        // if (p.type === PresenceType.Unavailable) {
+                        //     this.store.dispatch(ChatParticipantRemove({ id: p.from }))
+                        // } else {
+                        //     this.store.dispatch(ChatParticipantAdd({ payload: p }))
+                        // }
                     }
                 })
             }

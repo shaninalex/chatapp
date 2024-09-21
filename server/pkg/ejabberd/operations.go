@@ -38,10 +38,14 @@ func (s *api) setVCard(user *ory.Identity) error {
 	if err := json.Unmarshal(traitsJSON, &traits); err != nil {
 		return fmt.Errorf("error unmarshalling traits into struct: %v", err)
 	}
+	nickname := traits.Nickname
+	if nickname == "" {
+		nickname = user.Id
+	}
 	vcard := fmt.Sprintf(`<vCard xmlns='vcard-temp'><FN>%s %s</FN><NICKNAME>%s</NICKNAME></vCard>`,
 		traits.Name.First,
 		traits.Name.Last,
-		user.Id,
+		nickname,
 	)
 	return database.Ejabberd.Exec(`INSERT INTO vcard (username, vcard) VALUES (?, ?)`, user.Id, vcard).Error
 }

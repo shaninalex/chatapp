@@ -4,26 +4,26 @@
 </div>
 
 <div class="flex items-center gap-4 mb-4">
-    <button 
-        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white" 
+    <button
+        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white"
         [ngClass]="{'bg-blue-500': tab === 'profile'}"
         (click)="changeTab('profile')">
         Profile
     </button>
-    <button 
-        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white" 
+    <button
+        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white"
         [ngClass]="{'bg-blue-500': tab === 'password'}"
         (click)="changeTab('password')">
         Password
     </button>
-    <button 
-        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white" 
+    <button
+        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white"
         [ngClass]="{'bg-blue-500': tab === 'oidc'}"
         (click)="changeTab('oidc')">
         OIDC
     </button>
-    <button 
-        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white" 
+    <button
+        class="block rounded-md text-center px-4 py-1 bg-blue-300 text-white"
         [ngClass]="{'bg-blue-500': tab === 'totp'}"
         (click)="changeTab('totp')">
         TOTP
@@ -43,6 +43,9 @@
 
 @if (tab === "oidc") {
     <app-tab-form [action]="actionUrl" [method]="method" [default_nodes]="nodes_default" [target_nodes]="nodes_oidc" />
+    <div>
+        Google/Facebook/Twitter etc connection information.
+    </div>
 }
 
 @if (tab === "totp") {

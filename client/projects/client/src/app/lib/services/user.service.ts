@@ -1,13 +1,13 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Profile } from "@lib";
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserService{
+export class UserService {
     private _profile: Profile
 
-    constructor() {}
+    constructor() { }
 
     public setProfile(p: Profile) {
         this._profile = p
@@ -17,7 +17,7 @@ export class UserService{
         return this._profile
     }
 
-    public username(): string {
+    public get username(): string {
         const identity = this._profile.identity;
         if (identity.traits["nickname"]) {
             return identity.traits["nickname"]

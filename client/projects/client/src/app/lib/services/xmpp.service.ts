@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { environment } from '../../../environments/environment.development';
 import { IXmppService, operations } from '@lib';
 import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
-import { DiscoInfo, DiscoItems, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
+import { DiscoInfo, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
 
 
 @Injectable({
@@ -65,6 +65,7 @@ export class XmppService implements IXmppService {
 
             this._client.on("message", (msg: ReceivedMessage) => this._receivedMessage.next(msg))
             this._client.on("presence", (p: ReceivedPresence) => this._receivedPrecense.next(p));
+            this._client.on("presence:error", (p: ReceivedPresence) => this._receivedPrecense.next(p))
             this._client.on("iq", (q: ReceivedIQ) => this._receivedIQ.next(q));
 
             this._client.on('disconnected', () => {

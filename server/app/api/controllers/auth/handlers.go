@@ -6,8 +6,11 @@ import (
 	"server/pkg/domain"
 	"server/pkg/kratos"
 	"server/pkg/settings"
+	"slices"
 
 	"github.com/gin-gonic/gin"
+
+	ory "github.com/ory/kratos-client-go"
 )
 
 func getLoginFlow(ctx *gin.Context) {
@@ -46,15 +49,16 @@ func getRegistrationFlow(ctx *gin.Context) {
 
 	defer resp.Body.Close() //nolint:all
 
-	// Current kratos configuration show "traits.image" on registration
-	// this is not needed yeat. So this is dirty trick to remove this
-	// field from list of nodes.
-	for i, n := range flow.Ui.Nodes {
-		if n.Attributes.UiNodeInputAttributes.Name == "traits.image" {
-			flow.Ui.Nodes = append(flow.Ui.Nodes[:i], flow.Ui.Nodes[i+1:]...)
-			break
+	// Current kratos configuration show "traits.image"  and "traits.nickname"
+	// on registration this is not needed yeat. So this is dirty trick to
+	// remove this field from list of nodes. It should be done via json schema.
+	nodes := []ory.UiNode{}
+	for _, n := range flow.Ui.Nodes {
+		if !slices.Contains([]string{"traits.image", "traits.nickname"}, n.Attributes.UiNodeInputAttributes.Name) {
+			nodes = append(nodes, n)
 		}
 	}
+	flow.Ui.Nodes = nodes
 
 	data, err := flow.ToMap()
 	if err != nil {
