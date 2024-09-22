@@ -17,6 +17,7 @@ import { RoomItemComponent } from "./components/layout/sidebar/component/room-it
 import { SenderComponent } from "./components/room/components/sender/sender.component";
 import { ParticipantsComponent } from "./components/room/components/participants/participants.component";
 import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
+import { SubscriptionItemComponent } from "./components/layout/sidebar/component/subscription-item/subscription-item.component";
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-di
         RoomItemComponent,
         SenderComponent,
         ParticipantsComponent,
+        SubscriptionItemComponent,
     ],
     imports: [
         CommonModule,

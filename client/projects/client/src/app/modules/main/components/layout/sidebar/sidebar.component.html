@@ -1,9 +1,44 @@
 <div class="h-full flex flex-col justify-between">
-    <nav class="flex flex-col">
-        @if(rooms$ | async; as rooms) {
-            @for (item of rooms; track $index) {
-                <app-room-item [room]="item" />
-            }
+    <nav class="flex flex-col gap-4">
+
+        <div class="flex gap-2">
+            <button 
+                (click)="changeTab('conversation')"
+                class="block rounded-md text-center px-2 py-1 bg-orange-400 text-white text-sm">
+                Conversation
+            </button>
+            <button 
+                (click)="changeTab('contacts')"
+                class="block rounded-md text-center px-2 py-1 bg-orange-400 text-white text-sm">
+                Contacts
+            </button>
+        </div>
+
+        @if(tab === "conversation") {
+            <div class="flex flex-col gap-4">
+                @if(rooms$ | async; as rooms) {
+                    @for (item of rooms; track $index) {
+                        <app-room-item [room]="item" />
+                    }
+                }
+
+                <hr>
+
+                @if(conversations$ | async; as conversations) {
+                    @for (item of conversations; track $index) {
+                        <div>{{ item.jid }}</div>
+                    }
+                }
+            </div>
+        }
+        @if(tab === "contacts") {
+            <div class="flex flex-col gap-4">
+                @if(subscriptions$ | async; as subscriptions) {
+                    @for (item of subscriptions; track $index) {
+                        <app-subscription-item [subscription]="item" />
+                    }
+                }
+            </div>
         }
     </nav>
 

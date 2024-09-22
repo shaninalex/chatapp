@@ -1,10 +1,14 @@
 import { DestroyRef, Injectable, OnDestroy } from "@angular/core";
 import { AppState } from "../../store/store";
 import { Store } from "@ngrx/store";
-import { Observable, Subscription } from "rxjs";
+import { filter, map, Observable, of, Subscription, switchMap } from "rxjs";
 import { ReceivedIQ, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
-import { DistributionService } from "@lib";
+import { PresenceType } from "stanza/Constants"
+import { DistributionService, SubscriptionTypes } from "@lib";
 import { MessageType } from "stanza/Constants";
+import { selectConversationByJid } from "../../store/chat/reducers/conversation";
+import { ChatConversationAdd, ChatMessageAdd, ChatSubscriptionAdd } from "../../store/chat/actions";
+import { ConsistencyRequestParametersConsistencyEnum } from "@ory/kratos-client";
 
 /**
  *
@@ -19,7 +23,7 @@ import { MessageType } from "stanza/Constants";
 @Injectable()
 export class XmppEventsDistributionService implements DistributionService, OnDestroy {
     subscription: Subscription = new Subscription
-    constructor(private store: Store<AppState>, private ref: DestroyRef) {}
+    constructor(private store: Store<AppState>, private ref: DestroyRef) { }
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe()
@@ -39,45 +43,33 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
         presence$: Observable<ReceivedPresence>,
         iq$: Observable<ReceivedIQ>,
     ): void {
-        this.subscription.add(messages$.subscribe(data => this.handleMessage(data)))
-        this.subscription.add(presence$.subscribe(data => this.handlePresence(data)))
-        this.subscription.add(iq$.subscribe(data => this.handleIQ(data)))
+        this.subscription.add(
+            messages$.pipe(
+                switchMap((message: ReceivedMessage) => {
+                    if (message.type !== MessageType.GroupChat) {
+                        return this.store.select(selectConversationByJid(message.from)).pipe(
+                            map((conversation) => {
+                                if (conversation && conversation.length === 0) {
+                                    this.store.dispatch(ChatConversationAdd({ payload: { jid: message.from} }))
+                                }
+                                return message;
+                            })
+                        );
+                    }
+                    return of(message);
+                }),
+                filter(message => message.body !== undefined)
+            ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
+        );
+        
+        this.subscription.add(
+            presence$.pipe(
+                map(presence => {
+                    if (presence.type && SubscriptionTypes.includes(presence.type)) {
+                        this.store.dispatch(ChatSubscriptionAdd({ payload: presence }))
+                    }
+                })
+            ).subscribe(),
+        );
     }
-
-    /**
-     *
-     *
-     * @param {ReceivedMessage} message
-     * @memberof XmppEventsDistributionService
-     */
-    handleMessage(message: ReceivedMessage): void {
-        console.log(message)
-        // check if message type is Chat or GroupChat
-        if (message.type === MessageType.GroupChat) {
-
-        } else {
-
-        }
-    }
-
-    /**
-     *
-     *
-     * @param {ReceivedPresence} presence
-     * @memberof XmppEventsDistributionService
-     */
-    handlePresence(presence: ReceivedPresence): void {
-        // console.log("presence:", presence)
-    }
-
-    /**
-     *
-     *
-     * @param {ReceivedIQ} iq
-     * @memberof XmppEventsDistributionService
-     */
-    handleIQ(iq: ReceivedIQ): void {
-        // console.log("iq:", iq)
-    }
-
 }

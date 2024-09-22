@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
-import { Conversation, Room } from "./def";
-import { ReceivedMessage, ReceivedPresence } from "stanza/protocol";
+import { Conversation } from "./def";
+import { DiscoItem, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
 
 // build name of actions like this:
 // module: Chat
@@ -10,7 +10,7 @@ import { ReceivedMessage, ReceivedPresence } from "stanza/protocol";
 
 export const ChatRoomAdd = createAction(
     "[chat] add room",
-    props<{ payload: Room }>()
+    props<{ payload: DiscoItem }>()
 )
 
 export const ChatMessageAdd = createAction(
@@ -30,5 +30,10 @@ export const ChatParticipantRemove = createAction(
 
 export const ChatConversationAdd = createAction(
     "[chat] add conversation",
-    props<{ conversation: Conversation }>()
+    props<{ payload: Conversation }>()
+)
+
+export const ChatSubscriptionAdd = createAction(
+    "[subscription] add subscription item",
+    props<{ payload: ReceivedPresence }>()
 )

@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UiService } from "@ui";
-import { from, map, mergeMap, Observable } from "rxjs";
+import { from, map, mergeMap, Observable, Subscription } from "rxjs";
 import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
 import { XmppService } from "../../lib/services/xmpp.service";
 import { DiscoItem, DiscoItems } from "stanza/protocol";
@@ -24,30 +24,17 @@ export class MainComponent {
         private eventsDistribution: XmppEventsDistributionService,
     ) {
         this.loading$ = this.ui.appLoading.asObservable()
-        this.queryRooms()
+        this.loadRoomsAndDispatch();
         this.eventsDistribution.run(
             this.xmpp.receivedMessage$,
             this.xmpp.receivedPrecense$,
             this.xmpp.receivedIQ$
-        )
+        );
     }
 
-    queryRooms(): void {
-        this.xmpp.queryRoomsOnline().pipe(
-            map((data) => (data.disco as DiscoItems).items || []),
-            mergeMap((rooms: DiscoItem[]) => from(rooms)),
-            mergeMap((room: DiscoItem) =>
-                this.xmpp.getRoomInfo(room.jid as string).pipe(
-                    map((info) => ({ room, info }))
-                )
-            ),
-            map(({ room, info }) => {
-                this.store.dispatch(ChatRoomAdd({
-                    payload: { id: room.jid as string, info }
-                }));
-                return room;
-            }),
-            map((room) => [room])
-        ).subscribe();
+    private loadRoomsAndDispatch() {
+        this.xmpp.queryRoomsOnline().subscribe(data => {
+            (data.disco as DiscoItems).items?.map(d => this.store.dispatch(ChatRoomAdd({ payload: d })));
+        });
     }
 }

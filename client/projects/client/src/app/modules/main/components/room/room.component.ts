@@ -31,19 +31,9 @@ export class RoomComponent implements OnInit {
             next: ({ jid }) => {
                 this.jid = jid;
                 this.xmpp.sendPresenceRoom(jid, this.user.username).subscribe();
-                this.messages$ = this.xmpp.receivedMessage$.pipe(
-                    filter((message: ReceivedMessage) => message.from.startsWith(jid)),
-                    filter((message: ReceivedMessage) => message.type === MessageType.GroupChat),
-                    map(msg => {
-                        if (msg.body) {
-                            // save to store only messages that has a "body" property
-                            this.store.dispatch(ChatMessageAdd({ payload: msg }))
-                        }
-                        // all not printable goes to <app-chat-state>
-                        return msg
-                    })
-                );
 
+                // TODO: move to xmpp distribution
+                /*
                 this.xmpp.receivedPrecense$.pipe(
                     filter((precense: ReceivedPresence) => precense.from.startsWith(jid)),
                     filter((precense: ReceivedPresence) => precense.from.split(this.jid + "/").length > 1),
@@ -61,6 +51,7 @@ export class RoomComponent implements OnInit {
                         }
                     }
                 })
+                */
             }
         })
     }

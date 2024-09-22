@@ -4,7 +4,10 @@ import { Observable, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../../../store/store";
 import { selectRoomsAll } from "../../../../../store/chat/reducers/rooms";
-import { Room } from "../../../../../store/chat/def";
+import { DiscoItem, ReceivedPresence } from "stanza/protocol";
+import { Conversation } from "../../../../../store/chat/def";
+import { selectConversationAll } from "../../../../../store/chat/reducers/conversation";
+import { selectSubscriptionsAll } from "../../../../../store/chat/reducers/subscriptions";
 
 @Component({
     selector: 'app-sidebar',
@@ -12,12 +15,20 @@ import { Room } from "../../../../../store/chat/def";
 })
 export class SidebarComponent implements OnInit {
     version: string;
-    rooms$: Observable<Room[]> = of([])
+    rooms$: Observable<DiscoItem[]> = of([])
+    conversations$: Observable<Conversation[]> = of([])
+    subscriptions$: Observable<ReceivedPresence[]> = of([])
+    tab: "conversation" | "contacts" = "conversation"
 
     constructor(private store: Store<AppState>) { }
-
     ngOnInit(): void {
         this.version = version;
         this.rooms$ = this.store.select(selectRoomsAll);
+        this.conversations$ = this.store.select(selectConversationAll);
+        this.subscriptions$ = this.store.select(selectSubscriptionsAll);
+    }
+
+    changeTab(tabName: "conversation" | "contacts") {
+        this.tab = tabName
     }
 }

@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { Room } from "../../../../../../../store/chat/def";
+import { DiscoItem } from "stanza/protocol";
 
 
 @Component({
@@ -7,5 +8,5 @@ import { Room } from "../../../../../../../store/chat/def";
     templateUrl: './room-item.component.html'
 })
 export class RoomItemComponent {
-    @Input() room: Room;
+    @Input() room: DiscoItem;
 }
