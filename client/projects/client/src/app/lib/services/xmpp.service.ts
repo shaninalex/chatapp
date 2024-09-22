@@ -67,7 +67,6 @@ export class XmppService implements IXmppService {
             this._client.on("presence", (p: ReceivedPresence) => this._receivedPrecense.next(p));
             this._client.on("presence:error", (p: ReceivedPresence) => this._receivedPrecense.next(p))
             this._client.on("iq", (q: ReceivedIQ) => this._receivedIQ.next(q));
-
             this._client.on('disconnected', () => {
                 this._client = null;
                 this._connected$.next(false);

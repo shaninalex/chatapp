@@ -30,11 +30,7 @@ export class RoomComponent implements OnInit {
         this.route.params.subscribe({
             next: ({ jid }) => {
                 this.jid = jid;
-
-                // TODO: handle nickname conflict if exists.
-                // show modal before continue to change nickname
                 this.xmpp.sendPresenceRoom(jid, this.user.username).subscribe();
-
                 this.messages$ = this.xmpp.receivedMessage$.pipe(
                     filter((message: ReceivedMessage) => message.from.startsWith(jid)),
                     filter((message: ReceivedMessage) => message.type === MessageType.GroupChat),
