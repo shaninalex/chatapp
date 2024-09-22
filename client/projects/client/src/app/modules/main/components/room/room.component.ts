@@ -6,7 +6,7 @@ import { filter, map, Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../../store/store";
 import { ChatMessageAdd, ChatParticipantAdd, ChatParticipantRemove } from "../../../../store/chat/actions";
-import { PresenceType } from "stanza/Constants";
+import { MessageType, PresenceType } from "stanza/Constants";
 import { UserService } from "../../../../lib/services/user.service";
 
 @Component({
@@ -37,6 +37,7 @@ export class RoomComponent implements OnInit {
 
                 this.messages$ = this.xmpp.receivedMessage$.pipe(
                     filter((message: ReceivedMessage) => message.from.startsWith(jid)),
+                    filter((message: ReceivedMessage) => message.type === MessageType.GroupChat),
                     map(msg => {
                         if (msg.body) {
                             // save to store only messages that has a "body" property
