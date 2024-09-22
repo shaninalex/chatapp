@@ -103,6 +103,13 @@ func (s *api) CreateUser(ctx context.Context, user *ory.Identity) error {
 		return err
 	}
 
+	// add user to lobby
+	err = s.addUserToLobby(user)
+	if err != nil {
+		log.Println("add user to lobby:", err)
+		return err
+	}
+
 	log.Println("Create user successfull")
 	return nil
 }

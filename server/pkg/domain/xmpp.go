@@ -1,6 +1,7 @@
 package domain
 
-// Ref: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#oauth_issue_token
+// Create oath token
+// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#oauth_issue_token
 type XmppAuthTokenResponse struct {
 	Token     string `json:"token"`
 	Scopes    string `json:"scopes"`
@@ -27,7 +28,7 @@ type MucCreateRoom struct {
 }
 
 // Subscribe user to room
-// https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#subscribe_room
+// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#subscribe_room
 type SubscribeRoom struct {
 	User  string   `json:"user"`
 	Nick  string   `json:"nick"`
@@ -35,33 +36,33 @@ type SubscribeRoom struct {
 	Nodes []string `json:"nodes"`
 }
 
-/*
-Example:
-```go
+// Change room affiliation
+// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#set_room_affiliation
+type Affiliation string
 
-	{
-		"name": "room1",
-		"service": "conference.example.com",
-		"jid": "user2@example.com",
-		"affiliation": "member"
-	}
+var (
+	AffiliationOwner   Affiliation = "owner"
+	AffiliationAdmin   Affiliation = "admin"
+	AffiliationMember  Affiliation = "member"
+	AffiliationOutcast Affiliation = "outcast"
+	AffiliationNone    Affiliation = "none"
+)
 
-```
-Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#set_room_affiliation
-*/
 type ChangeRoomAffiliation struct {
-	Name        string `json:"name"`
-	Service     string `json:"service"`
-	Jid         string `json:"jid"`
-	Affiliation string `json:"affiliation"`
+	Name        string      `json:"name"`
+	Service     string      `json:"service"`
+	JID         string      `json:"jid"`
+	Affiliation Affiliation `json:"affiliation"`
 }
 
+// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#register
 type RegisterUser struct {
 	User     string `json:"user"`
 	Host     string `json:"host"`
 	Password string `json:"password"`
 }
 
+// Docs: https://docs.ejabberd.im/developer/ejabberd-api/admin-api/#oauth_issue_token
 type CreateAuthToken struct {
 	Jid    string `json:"jid"`
 	Ttl    int    `json:"ttl"`

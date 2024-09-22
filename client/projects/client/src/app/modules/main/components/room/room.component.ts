@@ -62,11 +62,6 @@ export class RoomComponent implements OnInit {
                             default:
                                 this.store.dispatch(ChatParticipantAdd({ payload: p }))
                         }
-                        // if (p.type === PresenceType.Unavailable) {
-                        //     this.store.dispatch(ChatParticipantRemove({ id: p.from }))
-                        // } else {
-                        //     this.store.dispatch(ChatParticipantAdd({ payload: p }))
-                        // }
                     }
                 })
             }
