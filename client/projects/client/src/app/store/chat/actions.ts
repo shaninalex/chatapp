@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Room } from "./def";
+import { Conversation, Room } from "./def";
 import { ReceivedMessage, ReceivedPresence } from "stanza/protocol";
 
 // build name of actions like this:
@@ -26,4 +26,9 @@ export const ChatParticipantAdd = createAction(
 export const ChatParticipantRemove = createAction(
     "[chat] remove participant",
     props<{ id: string }>()
+)
+
+export const ChatConversationAdd = createAction(
+    "[chat] add conversation",
+    props<{ conversation: Conversation }>()
 )

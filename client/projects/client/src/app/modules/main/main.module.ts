@@ -16,6 +16,7 @@ import { ChatStateComponent } from "./components/room/components/chat-states/cha
 import { RoomItemComponent } from "./components/layout/sidebar/component/room-item/room-item.component";
 import { SenderComponent } from "./components/room/components/sender/sender.component";
 import { ParticipantsComponent } from "./components/room/components/participants/participants.component";
+import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ParticipantsComponent } from "./components/room/components/participants
         UiModule,
     ],
     providers: [
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        XmppEventsDistributionService,
     ]
 })
 export class MainModule { }
