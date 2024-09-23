@@ -1,20 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { UiService } from "@ui";
-import { from, map, mergeMap, Observable, Subscription } from "rxjs";
-import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
-import { XmppService } from "../../lib/services/xmpp.service";
-import { DiscoItem, DiscoItems } from "stanza/protocol";
-import { ChatRoomAdd } from "../../store/chat/actions";
+import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { UiService } from "@ui";
+import { Observable } from "rxjs";
 import { AppState } from "../../store/store";
-
+import { XmppService } from "../../lib/services/xmpp.service";
+import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
+import { DiscoItems } from "stanza/protocol";
+import { ChatRoomAdd } from "../../store/chat/actions";
 
 @Component({
-    selector: 'app-main',
-    templateUrl: './main.component.html',
-    styleUrl: './main.component.css',
+    selector: "app-chat",
+    templateUrl: "./main-chat.component.html"
 })
-export class MainComponent {
+export class MainChatComponent {
     loading$: Observable<boolean>
 
     constructor(
@@ -37,4 +35,5 @@ export class MainComponent {
             (data.disco as DiscoItems).items?.map(d => this.store.dispatch(ChatRoomAdd({ payload: d })));
         });
     }
+
 }

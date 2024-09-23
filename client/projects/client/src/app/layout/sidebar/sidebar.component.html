@@ -1,0 +1,32 @@
+<div class="h-full flex flex-col justify-between border-r p-4 text-center">
+    <div class="flex flex-col">
+        <a class="flex items-center gap-4 mb-6" [routerLink]="['/']">
+            <img src="/assets/images/logo.png" alt="" class="w-10">
+        </a>
+        <ul class="flex flex-col gap-3">
+            <li>
+                <a [routerLink]="['/']" title="Conversations">
+                    <i class="fa fa-comments-o text-slate-600 hover:text-slate-800 text-2xl" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/contacts']" title="Contacts">
+                    <i class="fa fa-address-book-o text-slate-600 hover:text-slate-800 text-2xl" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul>
+            <li>
+                <a [routerLink]="['/settings']" title="Settings">
+                    <i class="fa fa-cog text-slate-600 hover:text-slate-800 text-2xl" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+        <div class="text-xs text-slate-700 pt-4">
+            {{version}}
+        </div>
+    </div>
+</div>
