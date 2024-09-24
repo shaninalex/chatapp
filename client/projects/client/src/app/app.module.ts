@@ -12,15 +12,10 @@ import { effects, reducers } from './store/store';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { XmppService } from './lib/services/xmpp.service';
 import { UserService } from './lib/services/user.service';
-import { HeaderComponent } from './layout/header/header.component';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
-
 
 @NgModule({
     declarations: [
         AppComponent,
-        HeaderComponent,
-        SidebarComponent
     ],
     imports: [
         BrowserModule,

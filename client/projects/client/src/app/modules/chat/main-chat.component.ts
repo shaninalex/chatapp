@@ -21,7 +21,8 @@ export class MainChatComponent {
         private xmpp: XmppService,
         private eventsDistribution: XmppEventsDistributionService,
     ) {
-        this.loading$ = this.ui.appLoading.asObservable()
+        this.ui.title.next("Chat");
+        this.loading$ = this.ui.appLoading.asObservable();
         this.loadRoomsAndDispatch();
         this.eventsDistribution.run(
             this.xmpp.receivedMessage$,

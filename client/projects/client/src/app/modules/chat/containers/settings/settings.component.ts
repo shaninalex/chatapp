@@ -5,6 +5,7 @@ import { selectLogoutLink, selectSettings } from "../../../../store/identity/sel
 import { GetLogoutLinkStart, GetSettingsStart } from "../../../../store/identity/actions";
 import { FormBuilder } from "@angular/forms";
 import { UiNode, UiText } from "@ory/kratos-client";
+import { UiService } from "@ui";
 
 type SettingsTabs = "profile" | "password" | "oidc" | "totp"
 
@@ -25,7 +26,12 @@ export class SettingsComponent implements OnInit {
     nodes_oidc: Array<UiNode>;
     nodes_default: Array<UiNode>;
 
-    constructor(private store: Store<AppState>, public fb: FormBuilder) {
+    constructor(
+        private store: Store<AppState>,
+        public fb: FormBuilder,
+        private ui: UiService,
+    ) {
+        this.ui.title.next("Settings");
         this.store.dispatch(GetLogoutLinkStart())
         this.store.dispatch(GetSettingsStart())
         this.store.select(selectLogoutLink).subscribe({

@@ -11,6 +11,11 @@ import { TabFormComponent } from "./containers/settings/components/tab-form/tab-
 import { ConversationComponent } from "./containers/chat/conversation.component";
 import { ConversationsListComponent } from "./containers/chat/components/conversations-list/conversations-list.component";
 import { ContactsComponent } from "./containers/contacts/contacts.component";
+import { HeaderComponent } from "../../layout/header/header.component";
+import { SidebarComponent } from '../../layout/sidebar/sidebar.component';
+import { ConvItemComponent } from "./containers/chat/components/conversations-list/components/conv-item.component";
+import { ConversationAreaComponent } from "./containers/chat/components/conversation-area/conversation-area.component";
+import { RoomMenuComponent } from "./containers/chat/components/conversation-area/components/room-menu.component";
 
 @NgModule({
     declarations: [
@@ -18,10 +23,15 @@ import { ContactsComponent } from "./containers/contacts/contacts.component";
         SettingsComponent,
         ConversationComponent,
         ContactsComponent,
+        HeaderComponent,
+        SidebarComponent,
 
         // ui
         TabFormComponent,
         ConversationsListComponent,
+        ConvItemComponent,
+        ConversationAreaComponent,
+        RoomMenuComponent,
     ],
     imports: [
         CommonModule,
@@ -34,4 +44,4 @@ import { ContactsComponent } from "./containers/contacts/contacts.component";
         XmppEventsDistributionService,
     ]
 })
-export class ChatModule {}
+export class ChatModule { }
