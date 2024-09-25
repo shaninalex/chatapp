@@ -8,7 +8,8 @@ export const mock_conversations: Conv[] = [
         preview: "Donec nulla urna, maximus ut tellus in, accumsan mollis sem.",
         unread: 9,
         selected: false,
-        room: true,
+        room: false,
+        image: "/assets/images/user-6.jpg"
     },
     {
         id: "7c72957e-8725-4a08-b028-9ff43958e044",
@@ -18,7 +19,7 @@ export const mock_conversations: Conv[] = [
         unread: 2,
         selected: true,
         room: false,
-        image: "/assets/images/default-profile-picture.jpg"
+        image: "/assets/images/user-5.jpg"
     },
     {
         id: "3b959302-3468-4c66-bd63-18af2b1064e6",
@@ -28,15 +29,17 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-1.jpg"
     },
     {
         id: "e604c802-1ec2-46cd-a598-8b53d6ed7754",
-        name: "David Mitchell",
+        name: "Morning Meeting",
         time: new Date("2019-04-24T15:47:58.946+03:00"),
         preview: "Nam rutrum enim sit amet varius interdum",
         unread: 1,
         selected: false,
         room: true,
+        image: "/assets/images/talking.png"
     },
     {
         id: "aa9be020-339e-48b2-89eb-13081f58c9b5",
@@ -46,6 +49,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-3.jpg"
     },
     {
         id: "9ac439fb-218b-4d08-83c7-38883b5af1d1",
@@ -55,6 +59,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-4.jpg"
     },
     {
         id: "0e8d171a-6538-4f79-9685-526fa23818a3",
@@ -73,6 +78,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-7.jpg"
     },
     {
         id: "6664e2cb-cd4f-4a9c-b977-1a501bd51367",
@@ -82,6 +88,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-8.jpg"
     },
     {
         id: "05b0e78c-73e5-4c9c-a54b-ca8ad4f4af74",
@@ -91,6 +98,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-9.jpg"
     },
     {
         id: "466bf8bb-4017-4c6f-a0d6-a4a7c13bef4c",
@@ -100,6 +108,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-10.jpg"
     },
     {
         id: "c55e0698-0c50-4515-be51-08d8a69f7a60",
@@ -109,6 +118,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-11.jpg"
     },
     {
         id: "bda6dac0-eb30-472c-8e56-89c0d30dc273",
@@ -118,6 +128,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-12.jpg"
     },
     {
         id: "4d98c92a-e278-4736-9db2-900b43d9c917",
@@ -136,6 +147,7 @@ export const mock_conversations: Conv[] = [
         unread: 0,
         selected: false,
         room: false,
+        image: "/assets/images/user-10.jpg"
     },
     {
         id: "06d726a8-f673-4236-992f-01d5a8ff84ea",

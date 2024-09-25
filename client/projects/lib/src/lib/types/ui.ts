@@ -8,3 +8,9 @@ export interface Conv {
     image?: string
     room: boolean
 }
+
+export interface CollocutorItem {
+    id: string
+    image: string
+    name: string
+}

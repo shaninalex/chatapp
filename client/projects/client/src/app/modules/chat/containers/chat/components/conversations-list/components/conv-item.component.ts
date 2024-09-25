@@ -8,7 +8,7 @@ import { Conv } from "@lib";
 <div class="flex gap-2 p-2 rounded-lg hover:bg-slate-100 cursor-pointer"
     [ngClass]="{'bg-slate-100': conv.selected }">
     @if (conv.image) {
-        <img class="w-6 h-6 rounded-full shrink-0" src="/assets/images/default-profile-picture.jpg" />
+        <img class="w-6 h-6 rounded-full shrink-0" src="{{ conv.image }}" />
     } @else {
         <div class="w-6 h-6 bg-slate-300 rounded-full flex items-center justify-center">
             <i class="fa fa-user text-slate-500"></i>
@@ -24,16 +24,19 @@ import { Conv } from "@lib";
             </div>
             <div class="text-sm text-slate-500">{{ conv.time | date: 'H:mm'}}</div>
         </div>
-        <div class="flex justify-between items-center text-sm">
-            <div class="text-slate-500">{{ conv.preview | slice: 0:30 }}...</div>
-            @if (conv.unread > 0) {
-                <div class="rounded-xl bg-violet-300 px-2">{{ conv.unread}}</div>
-            }
-        </div>
+        @if (conv.preview !== "") {
+            <div class="flex justify-between items-center text-sm">
+                <div class="text-slate-500">{{ conv.preview | slice: 0:30 }}...</div>
+                @if (conv.unread > 0) {
+                    <div class="rounded-xl bg-violet-300 px-2">{{ conv.unread}}</div>
+                    }
+            </div>
+        }
     </div>
-</div>    
+</div>
 `
 })
 export class ConvItemComponent {
     @Input() conv: Conv
 }
+

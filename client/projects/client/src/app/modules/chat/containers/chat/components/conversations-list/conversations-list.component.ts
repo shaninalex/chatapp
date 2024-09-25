@@ -9,9 +9,8 @@ import { Observable, of } from "rxjs";
 <div class="w-80 shrink-0">
     <div class="bg-slate-100 mb-4 p-2 rounded-lg flex items-center justify-between">
         <button class="p-0 m-0 leading-none relative left-1" style="top: 1px" title="Compose">
-            <i class="fa fa-pencil-square-o text-xl leading-none text-slate-600" aria-hidden="true"></i>
+            <i class="fa-regular fa-plus text-xl leading-none text-slate-600" aria-hidden="true"></i>
         </button>
-        
         <input class="border rounded-lg bg-transparent px-2 w-3/4" placeholder="Search" />
     </div>
 
@@ -24,5 +23,7 @@ import { Observable, of } from "rxjs";
     `
 })
 export class ConversationsListComponent {
+    // rxjs scan operator ( video: RxJS Scan Operator - How to Manage the State ) 
+    // Sort by conv.time DESC
     conversations$: Observable<Conv[]> = of(mock_conversations)
 }
