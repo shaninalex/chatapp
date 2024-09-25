@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { UiService } from "@ui";
+import {Component} from "@angular/core";
+import {UiService} from "@ui";
 
 @Component({
     selector: 'app-conversation',

@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import {CollocutorItem} from "@lib";
+import {UiCollocutorItem} from "@lib";
 
 
 @Component({
@@ -18,7 +18,7 @@ import {CollocutorItem} from "@lib";
 `
 })
 export class CollocutorItemComponent {
-    @Input() item: CollocutorItem
+    @Input() item: UiCollocutorItem
 
     handleClick() {
 

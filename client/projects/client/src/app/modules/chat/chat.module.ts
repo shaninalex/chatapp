@@ -7,19 +7,20 @@ import {XmppEventsDistributionService} from "../../lib/services/xmpp-events-dist
 import {MainChatComponent} from "./main-chat.component";
 import {ChatRoutingModule} from "./chat-routing.module";
 import {SettingsComponent} from "./containers/settings/settings.component";
-import {TabFormComponent} from "./containers/settings/components/tab-form/tab-form.component";
+import {TabFormComponent} from "./components/tab-form.component";
 import {ConversationComponent} from "./containers/chat/conversation.component";
-import {ConversationsListComponent} from "./containers/chat/components/conversations-list/conversations-list.component";
+import {ConversationsListComponent} from "./components/conversations-list/conversations-list.component";
 import {ContactsComponent} from "./containers/contacts/contacts.component";
 import {HeaderComponent} from "../../layout/header/header.component";
 import {SidebarComponent} from '../../layout/sidebar/sidebar.component';
-import {ConvItemComponent} from "./containers/chat/components/conversations-list/components/conv-item.component";
-import {ConversationAreaComponent} from "./containers/chat/components/conversation-area/conversation-area.component";
-import {ChatMenuComponent} from "./containers/chat/components/conversation-area/components/chat-menu.component";
-import {ChatStateComponent} from "./containers/chat/components/conversation-area/components/chat-states.component";
+import {ConvItemComponent} from "./components/conv-item.component";
+import {ConversationAreaComponent} from "./components/conversation-area/conversation-area.component";
+import {ChatMenuComponent} from "./components/chat-menu.component";
+import {ChatStateComponent} from "./components/chat-states.component";
 import {
     CollocutorItemComponent
-} from "./containers/chat/components/conversation-area/components/collocutor-item.component";
+} from "./components/collocutor-item.component";
+import {MessageComponent} from "./components/message.component";
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import {
         ChatMenuComponent,
         ChatStateComponent,
         CollocutorItemComponent,
+        MessageComponent,
     ],
     imports: [
         CommonModule,

@@ -12,9 +12,9 @@ import { ConsistencyRequestParametersConsistencyEnum } from "@ory/kratos-client"
 
 /**
  *
- * Service to save event data from xmpp to NGRX It will help to 
- * subscribe only for store selectors instead of direct consuming 
- * for XmppService. The idea is to have single point in application 
+ * Service to save event data from xmpp to NGRX It will help to
+ * subscribe only for store selectors instead of direct consuming
+ * for XmppService. The idea is to have single point in application
  * where we subscribe to all xmpp events
  *
  * @export
@@ -36,7 +36,7 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
      * @param {Observable<ReceivedMessage>} messages$
      * @param {Observable<ReceivedPresence>} presence$
      * @param {Observable<ReceivedIQ>} iq$
-     * @memberof EventsDistributionService
+     * @memberof XmppEventsDistributionService
      */
     run(
         messages$: Observable<ReceivedMessage>,
@@ -61,7 +61,7 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
                 filter(message => message.body !== undefined)
             ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
         );
-        
+
         this.subscription.add(
             presence$.pipe(
                 map(presence => {

@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {CollocutorItem, Conv} from "@lib";
+import {UiCollocutorItem, UiConv} from "@lib";
 import {Observable} from "rxjs";
 
 import {v4 as uuid} from "uuid"
@@ -105,7 +105,7 @@ import {v4 as uuid} from "uuid"
     `
 })
 export class ChatMenuComponent {
-    @Input() conversation$: Observable<Conv>
+    @Input() conversation$: Observable<UiConv>
     showUsersList: boolean = true;
 
     toggleUsers() {
@@ -124,7 +124,7 @@ export class ChatMenuComponent {
         this.showPrivateChatsList = !this.showPrivateChatsList
     }
 
-    collocutors: CollocutorItem[] = [
+    collocutors: UiCollocutorItem[] = [
         {
             id: uuid(),
             image: "/assets/images/user-1.jpg",

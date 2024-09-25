@@ -1,4 +1,6 @@
-export interface Conv {
+import {MessageType} from "stanza/Constants";
+
+export interface UiConv {
     id: string
     name: string
     time: Date
@@ -9,8 +11,17 @@ export interface Conv {
     room: boolean
 }
 
-export interface CollocutorItem {
+export interface UiCollocutorItem {
     id: string
     image: string
     name: string
+}
+
+export interface UiChatMessage {
+    id: string
+    from: string
+    to: string
+    body: string
+    time?: Date
+    type?: MessageType
 }

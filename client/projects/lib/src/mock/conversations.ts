@@ -1,6 +1,6 @@
-import { Conv } from "@lib";
+import { UiConv } from "@lib";
 
-export const mock_conversations: Conv[] = [
+export const mock_conversations: UiConv[] = [
     {
         id: "02f95862-e6bb-4952-b97b-fb06f67701cc",
         name: "Katherine Perry",

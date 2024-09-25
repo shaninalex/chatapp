@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Conv, mock_conversations } from "@lib";
+import { UiConv, mock_conversations } from "@lib";
 import { Observable, of } from "rxjs";
 
 
@@ -23,7 +23,7 @@ import { Observable, of } from "rxjs";
     `
 })
 export class ConversationsListComponent {
-    // rxjs scan operator ( video: RxJS Scan Operator - How to Manage the State ) 
+    // rxjs scan operator ( video: RxJS Scan Operator - How to Manage the State )
     // Sort by conv.time DESC
-    conversations$: Observable<Conv[]> = of(mock_conversations)
+    conversations$: Observable<UiConv[]> = of(mock_conversations)
 }

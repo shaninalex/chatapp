@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
-import { Conv } from "@lib";
-import { Observable } from "rxjs";
+import {Component, Input} from "@angular/core";
+import {conversation_1, UiChatMessage, UiConv} from "@lib";
+import {Observable} from "rxjs";
 
 /**
  * @description
@@ -14,5 +14,6 @@ import { Observable } from "rxjs";
     templateUrl: "./conversation-area.component.html"
 })
 export class ConversationAreaComponent {
-    @Input() conversation$: Observable<Conv>
+    @Input() conversation$: Observable<UiConv>
+    conversation_1: UiChatMessage[] = conversation_1;
 }
