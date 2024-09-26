@@ -196,3 +196,19 @@ func (s *api) isNicknameExists(nickname string) bool {
 		return false
 	}
 }
+
+func (s *api) addUserToLobby(user *ory.Identity) error {
+	payload := domain.ChangeRoomAffiliation{
+		Name:        "lobby",
+		Service:     fmt.Sprintf("conference.%s", settings.GetString("ejabberd.domain")),
+		JID:         fmt.Sprintf("%s@%s", user.Id, settings.GetString("ejabberd.domain")),
+		Affiliation: domain.AffiliationMember,
+	}
+	url := fmt.Sprintf("%s/api/set_room_affiliation", settings.GetString("ejabberd.http_root"))
+	_, err := s.makeAdminRequest(payload, url)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -70,7 +70,10 @@ func (s *api) Listener() {
 
 func (s *api) UpdateToken(user *ory.Identity) {
 	log.Println("Update user token")
-	s.authToken(user)
+	_, err := s.authToken(user)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func (s *api) CreateUser(ctx context.Context, user *ory.Identity) error {
@@ -100,6 +103,13 @@ func (s *api) CreateUser(ctx context.Context, user *ory.Identity) error {
 	err = s.createNode(user)
 	if err != nil {
 		log.Println("create node:", err)
+		return err
+	}
+
+	// add user to lobby
+	err = s.addUserToLobby(user)
+	if err != nil {
+		log.Println("add user to lobby:", err)
 		return err
 	}
 

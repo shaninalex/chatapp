@@ -13,10 +13,9 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { XmppService } from './lib/services/xmpp.service';
 import { UserService } from './lib/services/user.service';
 
-
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,
