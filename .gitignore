@@ -1,4 +1,6 @@
 .env
+.idea
+.vscode
 
 config/oathkeeper/access-rules.yml
 config/oathkeeper/oathkeeper.yml

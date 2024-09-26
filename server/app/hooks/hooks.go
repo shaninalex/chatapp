@@ -66,13 +66,20 @@ func (app *app) handleRegister(ctx *gin.Context) {
 	}
 
 	traits := &domain.Traits{}
-	traits.FromInterface(identity.Traits)
+	err = traits.FromInterface(identity.Traits)
+	if err != nil {
+		log.Println(err)
+	}
 	traits.Nickname = kratos.GenerateNickname(traits)
 	identity, _, err = kratos.Api.UpdateIdentityTraits(ctx, identity.Id, traits.ToMap())
 	if err != nil {
 		log.Println(err)
 	}
 
-	ejabberd.Api.CreateUser(ctx, identity)
+	err = ejabberd.Api.CreateUser(ctx, identity)
+	if err != nil {
+		log.Println(err)
+	}
+
 	ctx.JSON(http.StatusOK, domain.NewResponse(nil, []string{"Successfully registered"}, nil))
 }

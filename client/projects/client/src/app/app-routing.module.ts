@@ -9,7 +9,7 @@ import { AuthGuard } from './lib/guards/auth.guard';
 const routes: Routes = [
     {
         path: "",
-        loadChildren: () => import("./modules/main/main.module").then(m => m.MainModule),
+        loadChildren: () => import("./modules/chat/chat.module").then(m => m.ChatModule),
         canMatch: [AuthGuard]
     },
     {
