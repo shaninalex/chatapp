@@ -36,5 +36,4 @@ export class MainChatComponent {
             (data.disco as DiscoItems).items?.map(d => this.store.dispatch(ChatRoomAdd({ payload: d })));
         });
     }
-
 }

@@ -21,7 +21,7 @@ import {v4 as uuid} from "uuid"
 @Component({
     selector: "app-chat-menu",
     template: `
-        <div class="border-l h-full p-4 w-72 flex flex-col gap-4">
+        <div class="border-l h-full p-4 w-72 flex flex-col gap-4 overflow-y-auto">
             <div class="flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <div class="font-bold">Users</div>
@@ -36,7 +36,6 @@ import {v4 as uuid} from "uuid"
                 @if (showUsersList) {
                     <div class="flex flex-col gap-3">
                         @for (item of collocutors; track item) {
-                            <app-collocutor-item [item]="item"/>
                             <app-collocutor-item [item]="item"/>
                         }
                         <button class="text-slate-400 text-xs text-left">(+ 30 users)</button>

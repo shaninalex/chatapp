@@ -39,7 +39,6 @@ export class MessageComponent {
      * TODO: make utils function to extract nickname from all kinds of JID's
      */
     get image(): string {
-        const i = Math.floor(Math.random() * (12 - 1 + 1) + 1);
-        return `/assets/images/user-${i}.jpg`
+        return `/assets/images/user-1.jpg`
     }
 }

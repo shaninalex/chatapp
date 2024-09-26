@@ -21,14 +21,14 @@
             </div>
         </div>
         <div class="p-4">
-            <div class="flex flex-col mb-4">
-                @for (message of conversation_1; track message) {
-                    <app-message [m]="message"/>
-                }
+            <div class="flex flex-col-reverse mb-4 overflow-y-auto" style="height: calc(100vh - 20.4rem);">
+                <div class="flex flex-col">
+                    @for (message of conversation_1; track message) {
+                        <app-message [m]="message"/>
+                    }
+                </div>
             </div>
-            <div>
-                <!--message form -->
-            </div>
+            <app-send-form />
         </div>
     </div>
 

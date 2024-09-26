@@ -15,12 +15,13 @@ import {HeaderComponent} from "../../layout/header/header.component";
 import {SidebarComponent} from '../../layout/sidebar/sidebar.component';
 import {ConvItemComponent} from "./components/conv-item.component";
 import {ConversationAreaComponent} from "./components/conversation-area/conversation-area.component";
-import {ChatMenuComponent} from "./components/chat-menu.component";
+import {ChatMenuComponent} from "./components/conversation-area/chat-menu.component";
 import {ChatStateComponent} from "./components/chat-states.component";
 import {
     CollocutorItemComponent
 } from "./components/collocutor-item.component";
-import {MessageComponent} from "./components/message.component";
+import {MessageComponent} from "./components/conversation-area/message.component";
+import { SendFromComponent } from "./components/conversation-area/send-form.component";
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import {MessageComponent} from "./components/message.component";
         ChatStateComponent,
         CollocutorItemComponent,
         MessageComponent,
+        SendFromComponent,
     ],
     imports: [
         CommonModule,
