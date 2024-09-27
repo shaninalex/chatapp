@@ -1,6 +1,9 @@
 import { Component } from "@angular/core";
 import { UiConv, mock_conversations } from "@lib";
-import { Observable, of } from "rxjs";
+import { Store } from "@ngrx/store";
+import { map, merge, Observable, of, scan } from "rxjs";
+import { AppState } from "../../../../store/store";
+import { selectRoomsAll } from "../../../../store/chat/reducers/rooms";
 
 
 @Component({
@@ -23,7 +26,32 @@ import { Observable, of } from "rxjs";
     `
 })
 export class ConversationsListComponent {
-    // rxjs scan operator ( video: RxJS Scan Operator - How to Manage the State )
-    // Sort by conv.time DESC
-    conversations$: Observable<UiConv[]> = of(mock_conversations)
+    conversations$: Observable<UiConv[]>;
+
+    constructor(private store: Store<AppState>) {
+        this.conversations$ = merge(
+            // IMPORTANT: Example data. Will be removed on CU-8695z23hy
+            of(mock_conversations),
+
+            // This is only for rooms, not for 1-to-1 conversations - this
+            // things will be getting from another place
+            this.store.select(selectRoomsAll).pipe(
+                map(data => {
+                    const convs: UiConv[] = data.map(d => ({
+                        id: d.jid as string,
+                        name: d.name as string,
+                        time: new Date(),
+                        preview: "",
+                        unread: 0,
+                        selected: false,
+                        room: true,
+                    }))
+                    return convs
+                })
+            ),
+        ).pipe(
+            scan((acc: UiConv[], curr: UiConv[]) => [...acc, ...curr], []),
+            map(convs => convs.sort((a: UiConv, b: UiConv) => b.time.getTime() - a.time.getTime()))
+        )
+    }
 }
