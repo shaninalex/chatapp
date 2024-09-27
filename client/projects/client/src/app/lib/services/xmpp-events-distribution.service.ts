@@ -3,12 +3,10 @@ import { AppState } from "../../store/store";
 import { Store } from "@ngrx/store";
 import { filter, map, Observable, of, Subscription, switchMap } from "rxjs";
 import { ReceivedIQ, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
-import { PresenceType } from "stanza/Constants"
 import { DistributionService, SubscriptionTypes } from "@lib";
 import { MessageType } from "stanza/Constants";
 import { selectConversationByJid } from "../../store/chat/reducers/conversation";
 import { ChatConversationAdd, ChatMessageAdd, ChatSubscriptionAdd } from "../../store/chat/actions";
-import { ConsistencyRequestParametersConsistencyEnum } from "@ory/kratos-client";
 
 /**
  *

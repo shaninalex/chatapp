@@ -7,7 +7,9 @@ import { XmppState } from "../reducer";
 import { DiscoItem, DiscoItems } from "stanza/protocol";
 
 export interface RoomsState extends EntityState<DiscoItem> { }
-export const RoomsAdapter: EntityAdapter<DiscoItem> = createEntityAdapter<DiscoItem>();
+export const RoomsAdapter: EntityAdapter<DiscoItem> = createEntityAdapter<DiscoItem>({
+    selectId: (model: DiscoItem) => model.jid as string
+});
 export const initialRooms: RoomsState = RoomsAdapter.getInitialState();
 
 export const roomsReducer = createReducer(

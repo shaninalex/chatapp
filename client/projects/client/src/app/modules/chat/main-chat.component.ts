@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { UiService } from "@ui";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { AppState } from "../../store/store";
 import { XmppService } from "../../lib/services/xmpp.service";
 import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
 import { DiscoItems } from "stanza/protocol";
 import { ChatRoomAdd } from "../../store/chat/actions";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
     selector: "app-chat",
@@ -32,7 +33,9 @@ export class MainChatComponent {
     }
 
     private loadRoomsAndDispatch() {
-        this.xmpp.queryRoomsOnline().subscribe(data => {
+        this.xmpp.queryRoomsOnline().pipe(
+            takeUntilDestroyed(),
+        ).subscribe(data => {
             (data.disco as DiscoItems).items?.map(d => this.store.dispatch(ChatRoomAdd({ payload: d })));
         });
     }
