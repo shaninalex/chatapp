@@ -17,8 +17,10 @@ import { UiService } from "@ui";
         <button class="p-0 m-0 leading-none relative left-1" style="top: 1px" title="Compose">
             <i class="fa-regular fa-plus text-xl leading-none text-slate-600" aria-hidden="true"></i>
         </button>
-        <input class="border rounded-lg bg-transparent px-2 w-3/4" placeholder="Search" />
+        <input [(ngModel)]="searchValue" class="border rounded-lg bg-transparent px-2 w-3/4" placeholder="Search" />
     </div>
+
+    <div>{{ searchValue }}</div>
 
     <div class="flex flex-col gap-2 overflow-y-auto" style="height: calc(100vh - 11rem)">
         @for (item of (conversations$ | async); track $index) {
@@ -31,6 +33,7 @@ import { UiService } from "@ui";
 export class ConversationsListComponent {
     conversations$: Observable<UiConv[]>;
     selectedConversation$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+    private searchSubject: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
     constructor(private store: Store<AppState>, private router: Router, private ui: UiService) {
         const convs$ = merge(
@@ -69,14 +72,24 @@ export class ConversationsListComponent {
             map(convs => convs.sort((a: UiConv, b: UiConv) => b.time.getTime() - a.time.getTime()))
         )
 
-        this.conversations$ = combineLatest([convs$, this.ui.selectedConversation$]).pipe(
+        this.conversations$ = combineLatest([convs$, this.ui.selectedConversation$, this.searchSubject]).pipe(
             map(([conversations, selectedId]) => {
-                return conversations.map(conv => ({
-                    ...conv,
-                    selected: conv.id === selectedId,
-                }))
+                return conversations
+                    .filter(conv => conv.name.toLowerCase().includes(this.searchValue.toLowerCase()))
+                    .map(conv => ({
+                        ...conv,
+                        selected: conv.id === selectedId,
+                    }))
             })
         )
+    }
+
+    get searchValue(): string {
+        return this.searchSubject.getValue()
+    }
+
+    set searchValue(value: string) {
+        this.searchSubject.next(value)
     }
 
     handleOnClick(id: string) {

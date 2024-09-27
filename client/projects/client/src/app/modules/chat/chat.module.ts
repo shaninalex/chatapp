@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UiModule } from "@ui";
 import { XmppEventsDistributionService } from "../../lib/services/xmpp-events-distribution.service";
 import { MainChatComponent } from "./main-chat.component";
@@ -47,6 +47,7 @@ import { NoChatSelectedComponent } from "./components/not-chat-selected.componen
     ],
     imports: [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         ChatRoutingModule,
         UiModule,
