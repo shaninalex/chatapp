@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { map, merge, Observable, of, scan } from "rxjs";
 import { AppState } from "../../../../store/store";
 import { selectRoomsAll } from "../../../../store/chat/reducers/rooms";
+import { selectSubscriptionsAll } from "../../../../store/chat/reducers/subscriptions";
 
 
 @Component({
@@ -30,14 +31,11 @@ export class ConversationsListComponent {
 
     constructor(private store: Store<AppState>) {
         this.conversations$ = merge(
-            // IMPORTANT: Example data. Will be removed on CU-8695z23hy
-            of(mock_conversations),
 
-            // This is only for rooms, not for 1-to-1 conversations - this
-            // things will be getting from another place
+            // This is only for rooms
             this.store.select(selectRoomsAll).pipe(
                 map(data => {
-                    const convs: UiConv[] = data.map(d => ({
+                    return data.map(d => ({
                         id: d.jid as string,
                         name: d.name as string,
                         time: new Date(),
@@ -46,9 +44,23 @@ export class ConversationsListComponent {
                         selected: false,
                         room: true,
                     }))
-                    return convs
                 })
             ),
+
+            // User subscriptions ( basicaly one-to-one conversations )
+            this.store.select(selectSubscriptionsAll).pipe(
+                map(data => {
+                    return data.map(d => ({
+                        id: d.from,
+                        name: d.from,
+                        time: new Date(),
+                        preview: d.status ? d.status : "",
+                        unread: 0,
+                        selected: false,
+                        room: false,
+                    }))
+                })
+            )
         ).pipe(
             scan((acc: UiConv[], curr: UiConv[]) => [...acc, ...curr], []),
             map(convs => convs.sort((a: UiConv, b: UiConv) => b.time.getTime() - a.time.getTime()))
