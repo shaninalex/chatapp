@@ -38,7 +38,6 @@ export class ErrorComponent implements OnInit {
             next: params => {
                 this.authService.GetError(params["id"]).subscribe({
                     next: resp => {
-                        console.log(resp)
                         this.error = resp.data;
                     },
                     error: (error: HttpErrorResponse) => {

@@ -13,6 +13,8 @@ export class UiService {
     // appLoading for global application loading, gathering information before showing ui
     public appLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
+    public selectedConversation$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
     constructor() {
         this.title.subscribe({
             next: (title: string) => {

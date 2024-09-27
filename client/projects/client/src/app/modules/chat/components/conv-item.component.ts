@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { UiConv } from "@lib";
 
 
@@ -6,7 +6,9 @@ import { UiConv } from "@lib";
     selector: "app-conv-item",
     template: `
         <div class="flex gap-2 p-2 rounded-lg hover:bg-slate-100 cursor-pointer"
-             [ngClass]="{'bg-slate-100': conv.selected }">
+             [ngClass]="{'bg-slate-100': conv.selected }"
+            (click)="selectConversation(conv.id)"
+        >
             @if (conv.image) {
                 <img class="w-6 h-6 rounded-full shrink-0" src="{{ conv.image }}"/>
             } @else {
@@ -17,7 +19,7 @@ import { UiConv } from "@lib";
             <div class="flex-grow">
                 <div class="flex justify-between items-center mb-1">
                     <div>
-                        {{ conv.name }}
+                        {{ name }}
                         @if (conv.room) {
                             <i class="fa-solid fa-user-group text-slate-500"></i>
                         }
@@ -38,5 +40,14 @@ import { UiConv } from "@lib";
 })
 export class ConvItemComponent {
     @Input() conv: UiConv
+    @Output() onClick: EventEmitter<string> = new EventEmitter();
+
+    selectConversation(id: string) {
+        this.onClick.emit(id);
+    }
+
+    get name(): string {
+        return this.conv.name;
+    }
 }
 

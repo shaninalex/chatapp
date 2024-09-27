@@ -1,10 +1,12 @@
 import { Component } from "@angular/core";
-import { UiConv, mock_conversations } from "@lib";
+import { UiConv } from "@lib";
 import { Store } from "@ngrx/store";
-import { map, merge, Observable, of, scan } from "rxjs";
+import { BehaviorSubject, combineLatest, map, merge, Observable, scan } from "rxjs";
 import { AppState } from "../../../../store/store";
 import { selectRoomsAll } from "../../../../store/chat/reducers/rooms";
 import { selectSubscriptionsAll } from "../../../../store/chat/reducers/subscriptions";
+import { Router } from "@angular/router";
+import { UiService } from "@ui";
 
 
 @Component({
@@ -20,7 +22,7 @@ import { selectSubscriptionsAll } from "../../../../store/chat/reducers/subscrip
 
     <div class="flex flex-col gap-2 overflow-y-auto" style="height: calc(100vh - 11rem)">
         @for (item of (conversations$ | async); track $index) {
-            <app-conv-item [conv]="item" />
+            <app-conv-item [conv]="item" (onClick)="handleOnClick($event)" />
         }
     </div>
 </div>
@@ -28,9 +30,10 @@ import { selectSubscriptionsAll } from "../../../../store/chat/reducers/subscrip
 })
 export class ConversationsListComponent {
     conversations$: Observable<UiConv[]>;
+    selectedConversation$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
-    constructor(private store: Store<AppState>) {
-        this.conversations$ = merge(
+    constructor(private store: Store<AppState>, private router: Router, private ui: UiService) {
+        const convs$ = merge(
 
             // This is only for rooms
             this.store.select(selectRoomsAll).pipe(
@@ -65,5 +68,19 @@ export class ConversationsListComponent {
             scan((acc: UiConv[], curr: UiConv[]) => [...acc, ...curr], []),
             map(convs => convs.sort((a: UiConv, b: UiConv) => b.time.getTime() - a.time.getTime()))
         )
+
+        this.conversations$ = combineLatest([convs$, this.ui.selectedConversation$]).pipe(
+            map(([conversations, selectedId]) => {
+                return conversations.map(conv => ({
+                    ...conv,
+                    selected: conv.id === selectedId,
+                }))
+            })
+        )
+    }
+
+    handleOnClick(id: string) {
+        this.ui.selectedConversation$.next(id);
+        this.router.navigate(["chat", id]);
     }
 }

@@ -1,10 +1,9 @@
 import { createReducer, createSelector, on } from "@ngrx/store";
 import { EntityAdapter, EntityState, createEntityAdapter } from "@ngrx/entity";
 import * as actions from '../actions';
-import { Room } from "../def";
 import { selectXmppFeature } from "../selectors";
 import { XmppState } from "../reducer";
-import { DiscoItem, DiscoItems } from "stanza/protocol";
+import { DiscoItem } from "stanza/protocol";
 
 export interface RoomsState extends EntityState<DiscoItem> { }
 export const RoomsAdapter: EntityAdapter<DiscoItem> = createEntityAdapter<DiscoItem>({
