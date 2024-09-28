@@ -17,12 +17,12 @@ import { ChatRoomItemComponent } from "./components/chat-room-item.component";
 import { ConversationAreaComponent } from "./components/conversation-area/conversation-area.component";
 import { ChatMenuComponent } from "./components/conversation-area/chat-menu/chat-menu.component";
 import { ChatStateComponent } from "./components/chat-states.component";
-import {
-    CollocutorItemComponent
-} from "./components/collocutor-item.component";
+import { ParticipantItemComponent } from "./components/conversation-area/chat-menu/participant-item.component";
 import { MessageComponent } from "./components/conversation-area/message.component";
 import { SendFromComponent } from "./components/conversation-area/send-form.component";
 import { NoChatSelectedComponent } from "./components/not-chat-selected.component";
+import { LibPipesModule } from "@lib";
+import { PrivateRoomItem } from "./components/conversation-area/chat-menu/private-room-item.component";
 
 @NgModule({
     declarations: [
@@ -40,10 +40,11 @@ import { NoChatSelectedComponent } from "./components/not-chat-selected.componen
         ConversationAreaComponent,
         ChatMenuComponent,
         ChatStateComponent,
-        CollocutorItemComponent,
+        ParticipantItemComponent,
         MessageComponent,
         SendFromComponent,
         NoChatSelectedComponent,
+        PrivateRoomItem,
     ],
     imports: [
         CommonModule,
@@ -51,6 +52,8 @@ import { NoChatSelectedComponent } from "./components/not-chat-selected.componen
         ReactiveFormsModule,
         ChatRoutingModule,
         UiModule,
+
+        LibPipesModule,
     ],
     providers: [
         provideHttpClient(withInterceptorsFromDi()),

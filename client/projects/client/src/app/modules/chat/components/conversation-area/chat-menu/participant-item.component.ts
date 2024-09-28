@@ -3,7 +3,7 @@ import { RoomParticipant } from "@lib";
 
 
 @Component({
-    selector: "app-collocutor-item",
+    selector: "chat-participant-item",
     template: `
 <div class="flex items-center justify-between gap-2">
     <div class="flex gap-2 p-2" (click)="handleClick()">
@@ -34,7 +34,7 @@ import { RoomParticipant } from "@lib";
         }
     `]
 })
-export class CollocutorItemComponent {
+export class ParticipantItemComponent {
     @Input() item: RoomParticipant
 
     handleClick() {

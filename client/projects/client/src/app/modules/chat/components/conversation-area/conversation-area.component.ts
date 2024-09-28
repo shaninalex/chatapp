@@ -5,6 +5,7 @@ import { AppState } from "../../../../store/store";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { selectMessagesByRoom, selectRoomByJID } from "../../../../store/chat/selectors";
+import { ChatRoomsSelect } from "../../../../store/chat/actions";
 
 /**
  * @description
@@ -28,6 +29,10 @@ export class ConversationAreaComponent {
         this.messages$ = this.route.params.pipe(
             switchMap(params => {
                 if (!params["id"]) return of([])
+                this.store.dispatch(ChatRoomsSelect({ payload: { 
+                    id: params["id"],
+                    changes: { selected: true }
+                }}))
                 return this.store.select(selectMessagesByRoom(params["id"]))
             }),
         );
