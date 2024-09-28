@@ -6,7 +6,6 @@ import { AppState } from "../../../../store/store";
 
 import { Router } from "@angular/router";
 import { selectRoomsAll } from "../../../../store/chat/selectors/rooms";
-import { ChatRoomsSelect } from "../../../../store/chat/actions";
 
 
 @Component({
@@ -22,7 +21,7 @@ import { ChatRoomsSelect } from "../../../../store/chat/actions";
 
     <div class="flex flex-col gap-2 overflow-y-auto" style="height: calc(100vh - 11rem)">
         @for (item of (rooms$ | async); track $index) {
-            <chat-room-item [conv]="item" (onClick)="handleOnClick($event)" />
+            <chat-room-item [conv]="item" />
         }
     </div>
 </div>
@@ -54,17 +53,5 @@ export class ConversationsListComponent {
 
     set searchValue(value: string) {
         this.searchSubject.next(value)
-    }
-
-    handleOnClick(id: string) {
-        this.router.navigate(["chat", id]);
-        this.store.dispatch(ChatRoomsSelect({
-            payload: {
-                id: id,
-                changes: {
-                    selected: true
-                }
-            }
-        }))
     }
 }

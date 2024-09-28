@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Room } from "@lib";
 import { RoomType } from "@lib";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../store/store";
+import { Router } from "@angular/router";
+import { ChatRoomsSelect } from "../../../store/chat/actions";
 
 
 @Component({
@@ -8,7 +12,7 @@ import { RoomType } from "@lib";
     template: `
         <div class="flex gap-2 p-2 rounded-lg hover:bg-slate-100 cursor-pointer shrink-0"
              [ngClass]="{'bg-slate-100': conv.selected }"
-            (click)="selectConversation(conv.jid)"
+            (click)="selectConversation()"
         >
             @if (isPubSub) {
                 <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center">
@@ -47,10 +51,19 @@ import { RoomType } from "@lib";
 })
 export class ChatRoomItemComponent {
     @Input() conv: Room;
-    @Output() onClick: EventEmitter<string> = new EventEmitter();
 
-    selectConversation(id: string) {
-        this.onClick.emit(id);
+    constructor(private store: Store<AppState>, private router: Router) { }
+
+    selectConversation() {
+        this.router.navigate([this.conv.type, this.conv.jid]);
+        this.store.dispatch(ChatRoomsSelect({
+            payload: {
+                id: this.conv.jid,
+                changes: {
+                    selected: true
+                }
+            }
+        }))
     }
 
     get name(): string {
@@ -65,4 +78,5 @@ export class ChatRoomItemComponent {
         return this.conv.type === RoomType.pubsub
     }
 }
+
 

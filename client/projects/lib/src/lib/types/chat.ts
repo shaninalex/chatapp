@@ -1,9 +1,9 @@
 import { MessageType, MUCAffiliation, MUCRole, PresenceShow, RosterSubscription } from "stanza/Constants"
 
 export enum RoomType {
-    group,
-    normal,
-    pubsub,
+    group = "group",
+    chat = "chat",
+    pubsub = "pubsub",
 }
 
 export interface RoomParticipant {

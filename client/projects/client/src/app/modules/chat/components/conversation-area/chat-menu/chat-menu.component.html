@@ -2,10 +2,9 @@
     <div class="border-l h-full p-4 w-72 flex flex-col gap-4 overflow-y-auto">
         @if ((privateRooms$ | async); as privateRooms) {
             @if (privateRooms.length) {
-                <hr>
                 <div>
                     <div class="mb-3 flex items-center justify-between">
-                        <div class="font-bold">Private Conversations</div>
+                        <div class="font-bold">Private</div>
                         <button (click)="togglePrivateChats()" class="text-slate-500">
                             @if (showPrivateChatsList) {
                                 <i class="text-xs fa-solid fa-down-left-and-up-right-to-center"></i>
@@ -22,6 +21,8 @@
                         </div>
                     }
                 </div>
+
+                <hr>
             }
         }
 
@@ -47,6 +48,7 @@
                         </div>
                     }
                 </div>
+
                 <hr>
             }
         }
