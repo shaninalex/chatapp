@@ -70,5 +70,9 @@ export function precenseRoom(client: Stanza.Agent, roomJid: string, nickname: st
 }
 
 export function sendRoomMessage(client: Stanza.Agent, to: string, body: string, from: string): string {
-    return client.sendMessage({to: to, body: body, type: MessageType.GroupChat, from: from })
+    return client.sendMessage({ to: to, body: body, type: MessageType.GroupChat, from: from })
+}
+
+export function getVCard(client: Stanza.Agent, to: string): Promise<Stanza.Stanzas.VCardTemp> {
+    return client.getVCard(to)
 }

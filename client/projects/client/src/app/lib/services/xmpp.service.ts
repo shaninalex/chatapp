@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { environment } from '../../../environments/environment.development';
 import { IXmppService, operations } from '@lib';
 import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
-import { DiscoInfo, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
+import { DiscoInfo, ReceivedIQ, ReceivedMessage, ReceivedPresence, VCardTemp } from 'stanza/protocol';
 
 
 @Injectable({
@@ -116,6 +116,15 @@ export class XmppService implements IXmppService {
             filter(connected => connected),
             switchMap(() => from(operations.queryRoomInfo(this._client!, roomJid)).pipe(
                 map(result => result.disco as DiscoInfo)
+            ))
+        )
+    }
+
+    public getVCard(JID: string): Observable<VCardTemp> {
+        return this._connected$.pipe(
+            filter(connected => connected),
+            switchMap(() => from(operations.getVCard(this._client!, JID)).pipe(
+                map(result => result as VCardTemp)
             ))
         )
     }

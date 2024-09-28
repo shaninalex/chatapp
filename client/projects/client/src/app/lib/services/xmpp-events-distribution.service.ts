@@ -1,9 +1,11 @@
-import { DestroyRef, Injectable, OnDestroy } from "@angular/core";
-import { AppState } from "../../store/store";
+import { Injectable, OnDestroy } from "@angular/core";
+import { AppState } from "@store/store";
 import { Store } from "@ngrx/store";
-import { filter, map, Observable, of, Subscription, switchMap } from "rxjs";
+import { connect, filter, map, Observable, of, Subscription, switchMap, take, takeLast, tap } from "rxjs";
 import { ReceivedIQ, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
 import { DistributionService } from "@lib";
+import { XmppService } from "./xmpp.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  *
@@ -17,11 +19,53 @@ import { DistributionService } from "@lib";
  */
 @Injectable()
 export class XmppEventsDistributionService implements DistributionService, OnDestroy {
-    subscription: Subscription = new Subscription
-    constructor(private store: Store<AppState>, private ref: DestroyRef) { }
+    sub: Subscription = new Subscription
+    constructor(private store: Store<AppState>) { }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe()
+        this.sub.unsubscribe()
+    }
+
+    start(xmpp: XmppService) {
+        this.sub.add(
+            xmpp.connected$.pipe(
+                filter(connect => connect),
+                take(1),
+                tap(() => {
+                    // run initial queries
+                    this.initialQueries(xmpp);
+
+                    // provide event sources to distrtibution service
+                    this.distribute(
+                        xmpp.receivedMessage$,
+                        xmpp.receivedPrecense$,
+                        xmpp.receivedIQ$
+                    );
+
+                }),
+            ).subscribe()
+        )
+    }
+
+    initialQueries(xmpp: XmppService): void {
+        // get static list of rooms
+        this.sub.add(xmpp.queryRoomsOnline().subscribe());
+
+        // pubsub
+        this.sub.add(xmpp.getPubsub().subscribe());
+
+        // contact list
+        this.sub.add(
+            xmpp.getRoster().pipe(
+                switchMap((roster, index) => {
+                    // TODO: refactor
+                    roster.items.map(item => {
+                        xmpp.getVCard(item.jid).subscribe(result => console.log(result));
+                    })
+                    return of(roster);
+                }),
+            ).subscribe()
+        );
     }
 
     /**
@@ -33,11 +77,20 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
      * @param {Observable<ReceivedIQ>} iq$
      * @memberof XmppEventsDistributionService
      */
-    run(
+    distribute(
         messages$: Observable<ReceivedMessage>,
         presence$: Observable<ReceivedPresence>,
         iq$: Observable<ReceivedIQ>,
     ): void {
+        this.sub.add(
+            iq$.pipe(
+                map(iq => {
+                    console.log(iq);
+                    return iq;
+                })
+            ).subscribe()
+        );
+
         // this.subscription.add(
         //     messages$.pipe(
         //         switchMap((message: ReceivedMessage) => {

@@ -19,7 +19,7 @@ export interface XmppUserToken {
 }
 
 export interface DistributionService {
-    run(
+    distribute(
         messages$: Observable<ReceivedMessage>,
         presence$: Observable<ReceivedPresence>,
         iq$: Observable<ReceivedIQ>,
