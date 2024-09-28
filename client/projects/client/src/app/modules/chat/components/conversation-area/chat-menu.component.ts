@@ -1,8 +1,8 @@
-import {Component, Input} from "@angular/core";
-import {UiCollocutorItem, UiConv} from "@lib";
-import {Observable} from "rxjs";
+import { Component, Input } from "@angular/core";
+import { Room, UiCollocutorItem } from "@lib";
+import { Observable } from "rxjs";
 
-import {v4 as uuid} from "uuid"
+import { v4 as uuid } from "uuid"
 
 /**
  * @description
@@ -104,7 +104,7 @@ import {v4 as uuid} from "uuid"
     `
 })
 export class ChatMenuComponent {
-    @Input() conversation$: Observable<UiConv>
+    @Input() room$: Observable<Room | undefined>
     showUsersList: boolean = true;
 
     toggleUsers() {

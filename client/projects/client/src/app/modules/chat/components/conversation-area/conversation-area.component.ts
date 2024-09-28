@@ -1,11 +1,10 @@
-import { Component, Input } from "@angular/core";
-import { conversation_1, UiChatMessage, UiConv } from "@lib";
-import { UiService } from "@ui";
-import { BehaviorSubject, Observable, take, tap } from "rxjs";
+import { Component } from "@angular/core";
+import { Message, Room } from "@lib";
+import { filter, Observable, of, switchMap } from "rxjs";
 import { AppState } from "../../../../store/store";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { selectMessagesByRoom, selectRoomsByJID } from "../../../../store/chat/selectors";
 
 /**
  * @description
@@ -19,21 +18,23 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     templateUrl: "./conversation-area.component.html"
 })
 export class ConversationAreaComponent {
-    @Input() conversation$: Observable<UiConv>
-    conversation_1: UiChatMessage[] = conversation_1;
+    room$: Observable<Room | undefined>;
+    messages$: Observable<Message[]>;
 
     constructor(
-        private ui: UiService,
         private store: Store<AppState>,
         private route: ActivatedRoute
     ) {
-        this.route.params.pipe(
-            take(1),
-            tap(params => {
-                if (!params["id"]) return
+        this.messages$ = this.route.params.pipe(
+            switchMap(params => {
+                if (!params["id"]) return of([])
+                return this.store.select(selectMessagesByRoom(params["id"]))
             }),
-            // switch map and select room
-            takeUntilDestroyed()
-        ).subscribe()
+        );
+
+        this.room$ = this.route.params.pipe(
+            switchMap(params => this.store.select(selectRoomsByJID(params['id']))),
+            filter((room: Room | undefined) => !!room),
+        );
     }
 }
