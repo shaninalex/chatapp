@@ -2,10 +2,10 @@ import { Component } from "@angular/core";
 import { Room } from "@lib";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject, combineLatest, map, Observable } from "rxjs";
-import { AppState } from "../../../../store/store";
+import { AppState } from "@store/store";
 
 import { Router } from "@angular/router";
-import { selectRoomsAll } from "../../../../store/chat/selectors/rooms";
+import { selectRoomsAll } from "@store/chat/selectors/rooms";
 
 
 @Component({

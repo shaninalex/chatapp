@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Room } from "@lib";
 import { RoomType } from "@lib";
 import { Store } from "@ngrx/store";
-import { AppState } from "../../../store/store";
+import { AppState } from "@store/store";
 import { Router } from "@angular/router";
-import { ChatRoomsSelect } from "../../../store/chat/actions";
+import { ChatRoomsSelect } from "@store/chat/actions";
 
 
 @Component({

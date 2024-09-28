@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { AppState } from "../../../../store/store";
-import { selectLogoutLink, selectSettings } from "../../../../store/identity/selectors";
-import { GetLogoutLinkStart, GetSettingsStart } from "../../../../store/identity/actions";
+import { AppState } from "@store/store";
+import { selectLogoutLink, selectSettings } from "@store/identity/selectors";
+import { GetLogoutLinkStart, GetSettingsStart } from "@store/identity/actions";
 import { FormBuilder } from "@angular/forms";
 import { UiNode, UiText } from "@ory/kratos-client";
 import { UiService } from "@ui";

@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
 import { isSubRoom, Message, Room, RoomType } from "@lib";
 import { filter, Observable, of, switchMap } from "rxjs";
-import { AppState } from "../../../../store/store";
+import { AppState } from "@store/store";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectMessagesByRoom, selectRoomByJID } from "../../../../store/chat/selectors";
-import { ChatRoomsSelect } from "../../../../store/chat/actions";
+import { selectMessagesByRoom, selectRoomByJID } from "@store/chat/selectors";
+import { ChatRoomsSelect } from "@store/chat/actions";
 import { MessageType } from "stanza/Constants";
 
 /**

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Room, RoomParticipant } from "@lib";
 import { Store } from "@ngrx/store";
-import { map, Observable, switchMap } from "rxjs";
-import { AppState } from "../../../../../store/store";
-import { selectParticipantsByRoom } from "../../../../../store/chat/selectors/participants";
-import { selectPrivateRooms } from "../../../../../store/chat/selectors";
+import { Observable, switchMap } from "rxjs";
+import { AppState } from "@store/store";
+import { selectParticipantsByRoom } from "@store/chat/selectors/participants";
+import { selectPrivateRooms } from "@store/chat/selectors";
 
 /**
  * @description
@@ -44,7 +44,7 @@ export class ChatMenuComponent implements OnInit {
             switchMap((room: Room) => {
                 return this.store.select(selectPrivateRooms(room.jid))
             })
-        ) 
+        )
     }
 
     toggleUsers() {
