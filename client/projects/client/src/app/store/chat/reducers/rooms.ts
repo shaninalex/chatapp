@@ -1,27 +1,23 @@
-import { createReducer, createSelector, on } from "@ngrx/store";
+import { createReducer, on } from "@ngrx/store";
 import { EntityAdapter, EntityState, createEntityAdapter } from "@ngrx/entity";
-import * as actions from '../actions';
-import { selectXmppFeature } from "../selectors";
-import { XmppState } from "../reducer";
-import { DiscoItem } from "stanza/protocol";
+import * as actions from '../actions/rooms';
+import { Room } from "@lib";
+import { fillState, MOCK_CHAT_STORE } from "../mock-store";
 
-export interface RoomsState extends EntityState<DiscoItem> { }
-export const RoomsAdapter: EntityAdapter<DiscoItem> = createEntityAdapter<DiscoItem>({
-    selectId: (model: DiscoItem) => model.jid as string
+export interface RoomsState extends EntityState<Room> { }
+
+export const RoomsAdapter: EntityAdapter<Room> = createEntityAdapter<Room>({
+    selectId: (model: Room) => model.jid
 });
-export const initialRooms: RoomsState = RoomsAdapter.getInitialState();
 
-export const roomsReducer = createReducer(
-    initialRooms,
-    on(actions.ChatRoomAdd, (state, { payload }) => RoomsAdapter.addOne(payload, state)),
+const roomsInitialState = fillState<Room>(RoomsAdapter, MOCK_CHAT_STORE.rooms)
+
+export const RoomsReducer = createReducer(
+    roomsInitialState,
+    on(actions.ChatRoomsAdd, (state, { payload }) => RoomsAdapter.addOne(payload, state)),
+    on(actions.ChatRoomsUpdate, (state, { payload }) => RoomsAdapter.updateOne(payload, state)),
+    on(actions.ChatRoomsSelect, (state, { payload }) => RoomsAdapter.updateOne(
+        payload,
+        RoomsAdapter.map(room => ({ ...room, selected: false }), state)
+    )),
 )
-
-export const selectRoomsFeature = createSelector(
-    selectXmppFeature,
-    (state: XmppState) => state.rooms
-)
-
-export const selectRoomsAll = createSelector(
-    selectRoomsFeature,
-    RoomsAdapter.getSelectors().selectAll
-);

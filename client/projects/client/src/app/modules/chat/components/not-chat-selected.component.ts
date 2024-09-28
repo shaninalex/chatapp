@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { UiService } from "@ui";
 
 @Component({
     selector: "no-chat-selected",
@@ -9,10 +8,5 @@ import { UiService } from "@ui";
 </div>
 `
 })
-export class NoChatSelectedComponent {
-
-    constructor(private ui: UiService) {
-        this.ui.selectedConversation$.next(null);
-    }
-}
+export class NoChatSelectedComponent { }
 

@@ -21,7 +21,7 @@ const routes: Routes = [
                         component: NoChatSelectedComponent,
                     },
                     {
-                        path: "chat/:id",
+                        path: ":type/:id",
                         component: ConversationAreaComponent,
                     }
                 ]

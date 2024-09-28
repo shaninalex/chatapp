@@ -1,15 +1,17 @@
-import { Component, Input } from "@angular/core";
-import { conversation_1, UiChatMessage, UiConv } from "@lib";
-import { UiService } from "@ui";
-import { BehaviorSubject, Observable, take, tap } from "rxjs";
-import { AppState } from "../../../../store/store";
+import { Component } from "@angular/core";
+import { isSubRoom, Message, Room, RoomType } from "@lib";
+import { filter, Observable, of, switchMap } from "rxjs";
+import { AppState } from "@store/store";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { selectMessagesByRoom, selectRoomByJID } from "@store/chat/selectors";
+import { ChatRoomsSelect } from "@store/chat/actions";
+import { MessageType } from "stanza/Constants";
 
 /**
  * @description
  * ConversationArea component responsible for chat itself.
+ *
  * It can be:
  * - room ( group ) multiuser chat ( XMPP MUC ),
  * - room private chat ( when you chatting with the person from the room, but it may be not in your contact list.
@@ -19,21 +21,41 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     templateUrl: "./conversation-area.component.html"
 })
 export class ConversationAreaComponent {
-    @Input() conversation$: Observable<UiConv>
-    conversation_1: UiChatMessage[] = conversation_1;
+    room$: Observable<Room>;
+    messages$: Observable<Message[]>;
 
     constructor(
-        private ui: UiService,
         private store: Store<AppState>,
         private route: ActivatedRoute
     ) {
-        this.route.params.pipe(
-            take(1),
-            tap(params => {
-                if (!params["id"]) return
-                this.ui.selectedConversation$.next(params["id"]);
+        this.messages$ = this.route.params.pipe(
+            switchMap(params => {
+                if (!params["id"] || !params["type"]) return of([])
+                const JID: string = params["id"]
+                const roomType: RoomType = params["type"] as RoomType
+
+                this.store.dispatch(ChatRoomsSelect({
+                    payload: {
+                        id: JID,
+                        changes: { selected: true }
+                    }
+                }))
+
+                if (isSubRoom(JID) || roomType !== RoomType.group) {
+                    return this.store.select(selectMessagesByRoom(JID, MessageType.Chat))
+                }
+
+                return this.store.select(selectMessagesByRoom(JID, MessageType.GroupChat))
             }),
-            takeUntilDestroyed()
-        ).subscribe()
+        );
+
+        this.room$ = this.route.params.pipe(
+            switchMap(params => this.store.select(selectRoomByJID(params['id']))),
+            filter((room: Room | undefined) => !!room),
+        );
+    }
+
+    isPubSub(roomType: RoomType): boolean {
+        return roomType !== RoomType.pubsub;
     }
 }

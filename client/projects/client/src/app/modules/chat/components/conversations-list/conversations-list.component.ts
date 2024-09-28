@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
-import { UiConv } from "@lib";
+import { Room } from "@lib";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, combineLatest, map, merge, Observable, scan } from "rxjs";
-import { AppState } from "../../../../store/store";
-import { selectRoomsAll } from "../../../../store/chat/reducers/rooms";
-import { selectSubscriptionsAll } from "../../../../store/chat/reducers/subscriptions";
+import { BehaviorSubject, combineLatest, map, Observable } from "rxjs";
+import { AppState } from "@store/store";
+
 import { Router } from "@angular/router";
-import { UiService } from "@ui";
+import { selectRoomsAll } from "@store/chat/selectors/rooms";
 
 
 @Component({
@@ -20,67 +19,31 @@ import { UiService } from "@ui";
         <input [(ngModel)]="searchValue" class="border rounded-lg bg-transparent px-2 w-3/4" placeholder="Search" />
     </div>
 
-    <div>{{ searchValue }}</div>
-
     <div class="flex flex-col gap-2 overflow-y-auto" style="height: calc(100vh - 11rem)">
-        @for (item of (conversations$ | async); track $index) {
-            <app-conv-item [conv]="item" (onClick)="handleOnClick($event)" />
+        @for (item of (rooms$ | async); track $index) {
+            <chat-room-item [conv]="item" />
         }
     </div>
 </div>
     `
 })
 export class ConversationsListComponent {
-    conversations$: Observable<UiConv[]>;
-    selectedConversation$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+    rooms$: Observable<Room[]>;
     private searchSubject: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
-    constructor(private store: Store<AppState>, private router: Router, private ui: UiService) {
-        const convs$ = merge(
-
-            // This is only for rooms
-            this.store.select(selectRoomsAll).pipe(
-                map(data => {
-                    return data.map(d => ({
-                        id: d.jid as string,
-                        name: d.name as string,
-                        time: new Date(),
-                        preview: "",
-                        unread: 0,
-                        selected: false,
-                        room: true,
-                    }))
-                })
+    constructor(private store: Store<AppState>, private router: Router) {
+        // select rooms without parent
+        const _root_rooms$ = this.store.select(selectRoomsAll).pipe(
+            map(rooms => rooms
+                .filter(room => room.parent === null)
             ),
+        );
 
-            // User subscriptions ( basicaly one-to-one conversations )
-            this.store.select(selectSubscriptionsAll).pipe(
-                map(data => {
-                    return data.map(d => ({
-                        id: d.from,
-                        name: d.from,
-                        time: new Date(),
-                        preview: d.status ? d.status : "",
-                        unread: 0,
-                        selected: false,
-                        room: false,
-                    }))
-                })
+        // filter if needed by search subject
+        this.rooms$ = combineLatest([_root_rooms$, this.searchSubject]).pipe(
+            map(([rooms]) => rooms
+                .filter(room => room.name.toLowerCase().includes(this.searchValue.toLowerCase()))
             )
-        ).pipe(
-            scan((acc: UiConv[], curr: UiConv[]) => [...acc, ...curr], []),
-            map(convs => convs.sort((a: UiConv, b: UiConv) => b.time.getTime() - a.time.getTime()))
-        )
-
-        this.conversations$ = combineLatest([convs$, this.ui.selectedConversation$, this.searchSubject]).pipe(
-            map(([conversations, selectedId]) => {
-                return conversations
-                    .filter(conv => conv.name.toLowerCase().includes(this.searchValue.toLowerCase()))
-                    .map(conv => ({
-                        ...conv,
-                        selected: conv.id === selectedId,
-                    }))
-            })
         )
     }
 
@@ -90,10 +53,5 @@ export class ConversationsListComponent {
 
     set searchValue(value: string) {
         this.searchSubject.next(value)
-    }
-
-    handleOnClick(id: string) {
-        this.ui.selectedConversation$.next(id);
-        this.router.navigate(["chat", id]);
     }
 }

@@ -1,30 +1,16 @@
-import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
+import { createReducer, on } from "@ngrx/store";
 import { EntityAdapter, EntityState, createEntityAdapter } from "@ngrx/entity";
-import * as actions from '../actions';
-import { ReceivedMessage } from "stanza/protocol";
-import { XmppState } from "../reducer";
-import { selectXmppFeature } from "../selectors";
+import * as actions from '../actions/message';
+import { Message } from "@lib";
+import { fillState, MOCK_CHAT_STORE } from "../mock-store";
 
-export interface MessagesState extends EntityState<ReceivedMessage> { }
-export const MessagesAdapter: EntityAdapter<ReceivedMessage> = createEntityAdapter<ReceivedMessage>();
-export const initialMessages: MessagesState = MessagesAdapter.getInitialState();
+export interface MessagesState extends EntityState<Message> { }
 
-export const messagesReducer = createReducer(
-    initialMessages,
-    on(actions.ChatMessageAdd, (state, { payload }) => MessagesAdapter.addOne(payload, state)),
+export const MessagesAdapter: EntityAdapter<Message> = createEntityAdapter<Message>();
+
+export const InitialMessages: MessagesState = fillState<Message>(MessagesAdapter, MOCK_CHAT_STORE.messages)
+
+export const MessagesReducer = createReducer(
+    InitialMessages,
+    on(actions.ChatMessageAdd, (state, { message }) => MessagesAdapter.addOne(message, state)),
 )
-
-export const selectMessagesFeature = createSelector(
-    selectXmppFeature,
-    (state: XmppState) => state.messages
-)
-
-export const selectAllMessages = createSelector(
-    selectMessagesFeature,
-    MessagesAdapter.getSelectors().selectAll
-);
-
-export const selectMessagesByRoom = (jid: string) => createSelector(
-    selectAllMessages,
-    (messages: ReceivedMessage[]) => messages.filter(message => message.from.startsWith(jid))
-);
