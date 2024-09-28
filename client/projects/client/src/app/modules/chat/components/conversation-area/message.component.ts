@@ -1,12 +1,12 @@
-import {Component, Input} from "@angular/core";
-import {UiChatMessage} from "@lib";
+import { Component, Input } from "@angular/core";
+import { UiChatMessage } from "@lib";
 
 @Component({
     selector: 'app-message',
     template: `
         <div class="flex flex-start gap-4 p-4 hover:bg-slate-50 rounded-lg" id="{{ m.id }}">
             <button>
-                <img class="w-10 h-10 rounded-full" src="{{ image }}" alt="{{ m.from }}">
+                <ui-avatar [image]="image" [size]="10" />
             </button>
             <div class="flex-grow">
                 <div class="flex flex-start justify-between">
