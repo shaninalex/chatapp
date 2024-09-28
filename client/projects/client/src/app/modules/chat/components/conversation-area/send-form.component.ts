@@ -1,10 +1,12 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
     selector: "app-send-form",
     template: `
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="border px-5 py-4 flex items-center gap-4 m-4 rounded-xl">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()"
+        class="border px-5 py-4 flex items-center gap-4 m-4 rounded-xl"
+    >
         <div class="flex items-center gap-4 text-slate-300">
             <button type="button" disabled><i class="fa-solid fa-microphone"></i></button>
             <button type="button" disabled><i class="fa-regular fa-image"></i></button>

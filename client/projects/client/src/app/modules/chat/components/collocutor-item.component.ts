@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import {UiCollocutorItem} from "@lib";
+import { RoomParticipant } from "@lib";
 
 
 @Component({
@@ -14,7 +14,11 @@ import {UiCollocutorItem} from "@lib";
                 <i class="fa fa-user text-slate-500"></i>
             </div>
         }
-        {{ item.name }}
+        @if (item.name) {
+            {{ item.name }}
+        } @else {
+            {{ nameFromJid }}
+        }
     </div>
     <button class="collocutor-menu bg-slate-100 rounded-lg px-2">
         <i class="fa-solid fa-ellipsis"></i>
@@ -31,9 +35,13 @@ import {UiCollocutorItem} from "@lib";
     `]
 })
 export class CollocutorItemComponent {
-    @Input() item: UiCollocutorItem
+    @Input() item: RoomParticipant
 
     handleClick() {
 
+    }
+
+    get nameFromJid(): string {
+        return this.item.jid.split("/")[1]
     }
 }

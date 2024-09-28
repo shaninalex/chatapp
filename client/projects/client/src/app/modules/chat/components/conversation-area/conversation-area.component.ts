@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
-import { Message, Room } from "@lib";
+import { Message, Room, RoomType } from "@lib";
 import { filter, Observable, of, switchMap } from "rxjs";
 import { AppState } from "../../../../store/store";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectMessagesByRoom, selectRoomsByJID } from "../../../../store/chat/selectors";
+import { selectMessagesByRoom, selectRoomByJID } from "../../../../store/chat/selectors";
 
 /**
  * @description
@@ -18,7 +18,7 @@ import { selectMessagesByRoom, selectRoomsByJID } from "../../../../store/chat/s
     templateUrl: "./conversation-area.component.html"
 })
 export class ConversationAreaComponent {
-    room$: Observable<Room | undefined>;
+    room$: Observable<Room>;
     messages$: Observable<Message[]>;
 
     constructor(
@@ -33,8 +33,12 @@ export class ConversationAreaComponent {
         );
 
         this.room$ = this.route.params.pipe(
-            switchMap(params => this.store.select(selectRoomsByJID(params['id']))),
+            switchMap(params => this.store.select(selectRoomByJID(params['id']))),
             filter((room: Room | undefined) => !!room),
         );
+    }
+
+    isPubSub(roomType: RoomType): boolean {
+        return roomType !== RoomType.pubsub;
     }
 }

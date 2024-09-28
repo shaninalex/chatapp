@@ -1,7 +1,7 @@
 import { createSelector } from "@ngrx/store";
 import { selectXmppFeature } from "./feature";
 import { XmppState } from "../reducer";
-import { RoomsAdapter } from "../reducers/rooms";
+import { RoomsAdapter, RoomsState } from "../reducers/rooms";
 import { Room } from "@lib";
 
 export const selectRoomsFeature = createSelector(
@@ -14,10 +14,13 @@ export const selectRoomsAll = createSelector(
     RoomsAdapter.getSelectors().selectAll
 );
 
-export const selectRoomsByJID = (id: string) => createSelector(
-    selectRoomsAll,
-    (rooms: Room[]): Room | undefined => rooms.find(room => room.jid === id)
+export const selectRoomByJID = (id: string) => createSelector(
+    selectRoomsFeature,
+    (state: RoomsState) => state.entities[id]
 );
 
-// TODO: select all root level conversations
-// TODO: select all group chat privat conversations
+export const selectPrivateRooms = (jid: string) => createSelector(
+    selectRoomsAll,
+    (rooms: Room[]) => rooms.filter(room => room.jid !== jid).filter(room => room.jid.startsWith(jid))
+);
+
