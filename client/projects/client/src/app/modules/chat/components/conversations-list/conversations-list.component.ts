@@ -3,8 +3,7 @@ import { UiConv } from "@lib";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject, combineLatest, map, merge, Observable, scan } from "rxjs";
 import { AppState } from "../../../../store/store";
-import { selectRoomsAll } from "../../../../store/chat/reducers/rooms";
-import { selectSubscriptionsAll } from "../../../../store/chat/reducers/subscriptions";
+
 import { Router } from "@angular/router";
 import { UiService } from "@ui";
 
@@ -36,52 +35,7 @@ export class ConversationsListComponent {
     private searchSubject: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
     constructor(private store: Store<AppState>, private router: Router, private ui: UiService) {
-        const convs$ = merge(
-
-            // This is only for rooms
-            this.store.select(selectRoomsAll).pipe(
-                map(data => {
-                    return data.map(d => ({
-                        id: d.jid as string,
-                        name: d.name as string,
-                        time: new Date(),
-                        preview: "",
-                        unread: 0,
-                        selected: false,
-                        room: true,
-                    }))
-                })
-            ),
-
-            // User subscriptions ( basicaly one-to-one conversations )
-            this.store.select(selectSubscriptionsAll).pipe(
-                map(data => {
-                    return data.map(d => ({
-                        id: d.from,
-                        name: d.from,
-                        time: new Date(),
-                        preview: d.status ? d.status : "",
-                        unread: 0,
-                        selected: false,
-                        room: false,
-                    }))
-                })
-            )
-        ).pipe(
-            scan((acc: UiConv[], curr: UiConv[]) => [...acc, ...curr], []),
-            map(convs => convs.sort((a: UiConv, b: UiConv) => b.time.getTime() - a.time.getTime()))
-        )
-
-        this.conversations$ = combineLatest([convs$, this.ui.selectedConversation$, this.searchSubject]).pipe(
-            map(([conversations, selectedId]) => {
-                return conversations
-                    .filter(conv => conv.name.toLowerCase().includes(this.searchValue.toLowerCase()))
-                    .map(conv => ({
-                        ...conv,
-                        selected: conv.id === selectedId,
-                    }))
-            })
-        )
+          
     }
 
     get searchValue(): string {

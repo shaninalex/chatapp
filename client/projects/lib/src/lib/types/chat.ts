@@ -14,7 +14,7 @@ export interface RoomParticipant {
     online?: string
     affiliation?: MUCAffiliation
     role?: MUCRole
-    status: PresenceShow
+    status?: PresenceShow
 }
 
 export interface Room {
@@ -24,7 +24,8 @@ export interface Room {
     image: string
     type: RoomType
     owner: string
-    parent: string
+    moderators: string[]
+    parent: string | null
 }
 
 export interface ChatUser {
@@ -37,6 +38,7 @@ export interface ChatUser {
 }
 
 export interface Message {
+    id: string
     from: string
     to: string
     timestamp: string

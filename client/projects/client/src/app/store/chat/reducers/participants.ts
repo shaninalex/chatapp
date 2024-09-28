@@ -2,6 +2,7 @@ import { RoomParticipant } from "@lib";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
 import * as actions from "../actions/participants"
+import { fillState, MOCK_CHAT_STORE } from "../mock-store";
 
 export interface ParticipantsState extends EntityState<RoomParticipant> {}
 
@@ -9,7 +10,7 @@ export const ParticipantsAdapter: EntityAdapter<RoomParticipant> = createEntityA
     selectId: (model: RoomParticipant) => model.jid
 })
 
-export const ParticipantsInitialState: ParticipantsState = ParticipantsAdapter.getInitialState()
+export const ParticipantsInitialState: ParticipantsState = fillState<RoomParticipant>(ParticipantsAdapter, MOCK_CHAT_STORE.participants)
 
 export const ParticipantsReducer = createReducer(
     ParticipantsInitialState,
