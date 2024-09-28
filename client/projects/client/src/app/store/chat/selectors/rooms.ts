@@ -1,8 +1,7 @@
 import { createSelector } from "@ngrx/store";
-import { selectXmppFeature } from "../selectors";
+import { selectXmppFeature } from "./feature";
 import { XmppState } from "../reducer";
 import { RoomsAdapter } from "../reducers/rooms";
-
 
 export const selectRoomsFeature = createSelector(
     selectXmppFeature,

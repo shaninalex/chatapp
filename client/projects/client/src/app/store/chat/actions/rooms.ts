@@ -8,6 +8,11 @@ export const ChatRoomsAdd = createAction(
 )
 
 export const ChatRoomsUpdate = createAction(
-    "[chat room] add",
+    "[chat room] update",
+    props<{ payload: Update<Room> }>()
+)
+
+export const ChatRoomsSelect = createAction(
+    "[chat room] select",
     props<{ payload: Update<Room> }>()
 )

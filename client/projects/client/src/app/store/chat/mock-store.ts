@@ -1,10 +1,7 @@
 import { ChatUser, Message, Room, RoomParticipant, RoomType } from "@lib"
 import { v4 as uuid } from "uuid"
-import { RoomsState } from "./reducers/rooms"
 import { EntityAdapter, EntityState } from "@ngrx/entity"
 import { MessageType, PresenceShow, RosterSubscription } from "stanza/Constants"
-import { MessagesState } from "./reducers/messages"
-import { ChatUsersState } from "./reducers/users"
 
 const domain: string = "rocinante.ship"
 const jimHolden: string = `JamesHolden@${domain}` // session user
@@ -14,7 +11,7 @@ const alexKamal: string = `AlexKamal@${domain}`
 const roomBridge: string = `bridge@conversation.${domain}`
 const roomGalley: string = `galley@conversation.${domain}`
 const roomWorkshop: string = `workshop@conversation.${domain}`
-const roomNotifications: string =  `notifications@conversation.${domain}`
+const roomNotifications: string = `notifications@conversation.${domain}`
 
 export const MOCK_CHAT_STORE: {
     rooms: Room[],
@@ -47,7 +44,7 @@ export const MOCK_CHAT_STORE: {
             jid: `${roomGalley}/nagata`,
             name: "Naomi Nagata",
             unread: 0,
-            image: "/assets/images/user-1.png",
+            image: "/assets/images/user-1.jpg",
             type: RoomType.group,
             owner: jimHolden,
             parent: roomGalley,
@@ -67,7 +64,7 @@ export const MOCK_CHAT_STORE: {
             jid: naomiNagata,
             name: "Naomi Nagata",
             unread: 0,
-            image: "/assets/images/user-2.png",
+            image: "/assets/images/user-2.jpg",
             type: RoomType.normal,
             owner: jimHolden,
             parent: null,
@@ -77,7 +74,7 @@ export const MOCK_CHAT_STORE: {
             jid: amosBurton,
             name: "Amos Burton",
             unread: 0,
-            image: "/assets/images/user-3.png",
+            image: "/assets/images/user-3.jpg",
             type: RoomType.normal,
             owner: jimHolden,
             parent: null,
@@ -87,7 +84,7 @@ export const MOCK_CHAT_STORE: {
             jid: alexKamal,
             name: "Alex Kamal",
             unread: 0,
-            image: "/assets/images/user-4.png",
+            image: "/assets/images/user-4.jpg",
             type: RoomType.normal,
             owner: jimHolden,
             parent: null,
@@ -183,7 +180,7 @@ export const MOCK_CHAT_STORE: {
             jid: naomiNagata,
             name: "Naomi Nagata",
             nickname: "naominagata",
-            image: "/assets/images/user-1.png",
+            image: "/assets/images/user-1.jpg",
             subscription: RosterSubscription.Both,
             status: PresenceShow.Chat
         },
@@ -191,7 +188,7 @@ export const MOCK_CHAT_STORE: {
             jid: amosBurton,
             name: "Amos Barton",
             nickname: "amosbarton",
-            image: "/assets/images/user-2.png",
+            image: "/assets/images/user-2.jpg",
             subscription: RosterSubscription.Both,
             status: PresenceShow.Chat
         },
@@ -199,7 +196,7 @@ export const MOCK_CHAT_STORE: {
             jid: alexKamal,
             name: "Alex Kamal",
             nickname: "alexkamal",
-            image: "/assets/images/user-3.png",
+            image: "/assets/images/user-3.jpg",
             subscription: RosterSubscription.Both,
             status: PresenceShow.Chat
         }

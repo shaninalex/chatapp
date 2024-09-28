@@ -31,8 +31,8 @@ export class ConversationAreaComponent {
             take(1),
             tap(params => {
                 if (!params["id"]) return
-                this.ui.selectedConversation$.next(params["id"]);
             }),
+            // switch map and select room
             takeUntilDestroyed()
         ).subscribe()
     }

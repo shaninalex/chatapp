@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
-import { UiConv } from "@lib";
+import { Room } from "@lib";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, combineLatest, map, merge, Observable, scan } from "rxjs";
+import { BehaviorSubject, combineLatest, map, Observable } from "rxjs";
 import { AppState } from "../../../../store/store";
 
 import { Router } from "@angular/router";
-import { UiService } from "@ui";
+import { selectRoomsAll } from "../../../../store/chat/selectors/rooms";
+import { ChatRoomsSelect } from "../../../../store/chat/actions";
 
 
 @Component({
@@ -19,23 +20,32 @@ import { UiService } from "@ui";
         <input [(ngModel)]="searchValue" class="border rounded-lg bg-transparent px-2 w-3/4" placeholder="Search" />
     </div>
 
-    <div>{{ searchValue }}</div>
-
     <div class="flex flex-col gap-2 overflow-y-auto" style="height: calc(100vh - 11rem)">
-        @for (item of (conversations$ | async); track $index) {
-            <app-conv-item [conv]="item" (onClick)="handleOnClick($event)" />
+        @for (item of (rooms$ | async); track $index) {
+            <chat-room-item [conv]="item" (onClick)="handleOnClick($event)" />
         }
     </div>
 </div>
     `
 })
 export class ConversationsListComponent {
-    conversations$: Observable<UiConv[]>;
-    selectedConversation$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+    rooms$: Observable<Room[]>;
     private searchSubject: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
-    constructor(private store: Store<AppState>, private router: Router, private ui: UiService) {
-          
+    constructor(private store: Store<AppState>, private router: Router) {
+        // select rooms without parent
+        const _root_rooms$ = this.store.select(selectRoomsAll).pipe(
+            map(rooms => rooms
+                .filter(room => room.parent === null)
+            ),
+        );
+
+        // filter if needed by search subject
+        this.rooms$ = combineLatest([_root_rooms$, this.searchSubject]).pipe(
+            map(([rooms]) => rooms
+                .filter(room => room.name.toLowerCase().includes(this.searchValue.toLowerCase()))
+            )
+        )
     }
 
     get searchValue(): string {
@@ -47,7 +57,14 @@ export class ConversationsListComponent {
     }
 
     handleOnClick(id: string) {
-        this.ui.selectedConversation$.next(id);
         this.router.navigate(["chat", id]);
+        this.store.dispatch(ChatRoomsSelect({
+            payload: {
+                id: id,
+                changes: {
+                    selected: true
+                }
+            }
+        }))
     }
 }

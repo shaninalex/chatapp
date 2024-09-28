@@ -13,7 +13,7 @@ import { ConversationsListComponent } from "./components/conversations-list/conv
 import { ContactsComponent } from "./containers/contacts/contacts.component";
 import { HeaderComponent } from "../../layout/header/header.component";
 import { SidebarComponent } from '../../layout/sidebar/sidebar.component';
-import { ConvItemComponent } from "./components/conv-item.component";
+import { ChatRoomItemComponent } from "./components/chat-room-item.component";
 import { ConversationAreaComponent } from "./components/conversation-area/conversation-area.component";
 import { ChatMenuComponent } from "./components/conversation-area/chat-menu.component";
 import { ChatStateComponent } from "./components/chat-states.component";
@@ -36,7 +36,7 @@ import { NoChatSelectedComponent } from "./components/not-chat-selected.componen
         // ui
         TabFormComponent,
         ConversationsListComponent,
-        ConvItemComponent,
+        ChatRoomItemComponent,
         ConversationAreaComponent,
         ChatMenuComponent,
         ChatStateComponent,

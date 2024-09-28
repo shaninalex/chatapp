@@ -26,6 +26,9 @@ export interface Room {
     owner: string
     moderators: string[]
     parent: string | null
+    time?: Date
+    preview?: string
+    selected?: boolean
 }
 
 export interface ChatUser {

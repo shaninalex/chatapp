@@ -2,7 +2,7 @@ import { Message } from "@lib";
 import { createSelector } from "@ngrx/store";
 import { XmppState } from "../reducer";
 import { MessagesAdapter } from "../reducers/messages";
-import { selectXmppFeature } from "../selectors";
+import { selectXmppFeature } from "./feature";
 
 export const selectMessagesFeature = createSelector(
     selectXmppFeature,

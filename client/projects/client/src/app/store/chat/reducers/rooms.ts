@@ -16,4 +16,8 @@ export const RoomsReducer = createReducer(
     roomsInitialState,
     on(actions.ChatRoomsAdd, (state, { payload }) => RoomsAdapter.addOne(payload, state)),
     on(actions.ChatRoomsUpdate, (state, { payload }) => RoomsAdapter.updateOne(payload, state)),
+    on(actions.ChatRoomsSelect, (state, { payload }) => RoomsAdapter.updateOne(
+        payload,
+        RoomsAdapter.map(room => ({ ...room, selected: false }), state)
+    )),
 )
