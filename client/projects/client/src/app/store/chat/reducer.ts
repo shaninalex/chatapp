@@ -1,22 +1,19 @@
 import { combineReducers } from '@ngrx/store';
-import { roomsReducer, RoomsState } from './reducers/rooms';
-import { messagesReducer, MessagesState } from './reducers/messages';
-import { participantsReducer, ParticipantsState } from './reducers/participants';
-import { conversationReducer, ConversationState } from './reducers/conversation';
-import { contactsReducer, SubscriptionState } from './reducers/subscriptions';
+import { RoomsReducer, RoomsState } from './reducers/rooms';
+import { MessagesReducer, MessagesState } from './reducers/messages';
+import { ChatUsersReducer, ChatUsersState } from './reducers/users';
+import { ParticipantsReducer, ParticipantsState } from './reducers/participants';
 
 export interface XmppState {
     rooms: RoomsState
     messages: MessagesState
+    users: ChatUsersState
     participants: ParticipantsState
-    conversations: ConversationState
-    subscriptions: SubscriptionState
 }
 
 export const xmppReducer = combineReducers({
-    rooms: roomsReducer,
-    messages: messagesReducer,
-    participants: participantsReducer,
-    conversations: conversationReducer,
-    subscriptions: contactsReducer,
+    rooms: RoomsReducer,
+    messages: MessagesReducer,
+    users: ChatUsersReducer,
+    participants: ParticipantsReducer
 });

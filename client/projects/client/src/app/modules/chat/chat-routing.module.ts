@@ -4,6 +4,8 @@ import { MainChatComponent } from './main-chat.component';
 import { SettingsComponent } from './containers/settings/settings.component';
 import { ConversationComponent } from './containers/chat/conversation.component';
 import { ContactsComponent } from './containers/contacts/contacts.component';
+import { ConversationAreaComponent } from './components/conversation-area/conversation-area.component';
+import { NoChatSelectedComponent } from './components/not-chat-selected.component';
 
 const routes: Routes = [
     {
@@ -12,7 +14,17 @@ const routes: Routes = [
         children: [
             {
                 path: "",
-                component: ConversationComponent
+                component: ConversationComponent,
+                children: [
+                    {
+                        path: "",
+                        component: NoChatSelectedComponent,
+                    },
+                    {
+                        path: ":type/:id",
+                        component: ConversationAreaComponent,
+                    }
+                ]
             },
             {
                 path: "settings",

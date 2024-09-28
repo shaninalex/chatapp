@@ -32,6 +32,12 @@
             "@ui": [
                 "./projects/ui/src/public-api",
                 "./dist/ui"
+            ],
+            "@store": [
+                "./projects/client/src/app/store"
+            ],
+            "@store/*": [
+                "./projects/client/src/app/store/*"
             ]
             // "lib": [
             //     "./dist/lib"
@@ -40,7 +46,7 @@
             //     "./dist/ui"
             // ]
         },
-        "resolveJsonModule": true,
+        "resolveJsonModule": true
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

@@ -3,10 +3,7 @@ import { AppState } from "../../store/store";
 import { Store } from "@ngrx/store";
 import { filter, map, Observable, of, Subscription, switchMap } from "rxjs";
 import { ReceivedIQ, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
-import { DistributionService, SubscriptionTypes } from "@lib";
-import { MessageType } from "stanza/Constants";
-import { selectConversationByJid } from "../../store/chat/reducers/conversation";
-import { ChatConversationAdd, ChatMessageAdd, ChatSubscriptionAdd } from "../../store/chat/actions";
+import { DistributionService } from "@lib";
 
 /**
  *
@@ -41,33 +38,33 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
         presence$: Observable<ReceivedPresence>,
         iq$: Observable<ReceivedIQ>,
     ): void {
-        this.subscription.add(
-            messages$.pipe(
-                switchMap((message: ReceivedMessage) => {
-                    if (message.type !== MessageType.GroupChat) {
-                        return this.store.select(selectConversationByJid(message.from)).pipe(
-                            map((conversation) => {
-                                if (conversation && conversation.length === 0) {
-                                    this.store.dispatch(ChatConversationAdd({ payload: { jid: message.from} }))
-                                }
-                                return message;
-                            })
-                        );
-                    }
-                    return of(message);
-                }),
-                filter(message => message.body !== undefined)
-            ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
-        );
+        // this.subscription.add(
+        //     messages$.pipe(
+        //         switchMap((message: ReceivedMessage) => {
+        //             if (message.type !== MessageType.GroupChat) {
+        //                 return this.store.select(selectConversationByJid(message.from)).pipe(
+        //                     map((conversation) => {
+        //                         if (conversation && conversation.length === 0) {
+        //                             this.store.dispatch(ChatConversationAdd({ payload: { jid: message.from} }))
+        //                         }
+        //                         return message;
+        //                     })
+        //                 );
+        //             }
+        //             return of(message);
+        //         }),
+        //         filter(message => message.body !== undefined)
+        //     ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
+        // );
 
-        this.subscription.add(
-            presence$.pipe(
-                map(presence => {
-                    if (presence.type && SubscriptionTypes.includes(presence.type)) {
-                        this.store.dispatch(ChatSubscriptionAdd({ payload: presence }))
-                    }
-                })
-            ).subscribe(),
-        );
+        // this.subscription.add(
+        //     presence$.pipe(
+        //         map(presence => {
+        //             if (presence.type && SubscriptionTypes.includes(presence.type)) {
+        //                 this.store.dispatch(ChatSubscriptionAdd({ payload: presence }))
+        //             }
+        //         })
+        //     ).subscribe(),
+        // );
     }
 }
