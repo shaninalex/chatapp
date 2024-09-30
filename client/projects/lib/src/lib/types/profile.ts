@@ -1,5 +1,5 @@
 import { Identity, Session } from "@ory/kratos-client"
-import { XmppUserToken } from "./xmpp"
+import { XmppUserToken } from "@lib"
 
 export interface Profile {
     identity: Identity

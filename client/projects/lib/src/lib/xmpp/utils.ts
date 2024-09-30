@@ -63,12 +63,16 @@ export function queryRoomItems(client: Stanza.Agent, roomJid: string): Promise<I
     return client.sendIQ(iq)
 }
 
-export function precenseRoom(client: Stanza.Agent, roomJid: string, nickname: string): string {
+export function presenceRoom(client: Stanza.Agent, roomJid: string, nickname: string): string {
     return client.sendPresence({
         to: `${roomJid}/${nickname}`
     })
 }
 
 export function sendRoomMessage(client: Stanza.Agent, to: string, body: string, from: string): string {
-    return client.sendMessage({to: to, body: body, type: MessageType.GroupChat, from: from })
+    return client.sendMessage({ to: to, body: body, type: MessageType.GroupChat, from: from })
+}
+
+export function getVCard(client: Stanza.Agent, to: string): Promise<Stanza.Stanzas.VCardTemp> {
+    return client.getVCard(to)
 }

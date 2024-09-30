@@ -16,3 +16,8 @@ export const ChatRoomsSelect = createAction(
     "[chat room] select",
     props<{ payload: Update<Room> }>()
 )
+
+export const ChatRoomSentPresence = createAction(
+    "[chat rooms] sent presence to room",
+    props<{ jid: string }>()
+)

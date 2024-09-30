@@ -3,8 +3,9 @@ import * as Stanza from 'stanza';  // https://github.com/legastero/stanza
 import { Injectable } from "@angular/core";
 import { environment } from '../../../environments/environment.development';
 import { IXmppService, operations } from '@lib';
-import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap } from 'rxjs';
-import { DiscoInfo, ReceivedIQ, ReceivedMessage, ReceivedPresence } from 'stanza/protocol';
+import { BehaviorSubject, filter, from, map, Observable, of, ReplaySubject, switchMap, scan } from 'rxjs';
+import { DiscoInfo, DiscoItems, IQ, ReceivedIQ, ReceivedMessage, ReceivedPresence, VCardTemp } from 'stanza/protocol';
+import { IQType } from 'stanza/Constants';
 
 
 @Injectable({
@@ -21,11 +22,11 @@ export class XmppService implements IXmppService {
     private pubsub: string = `pubsub.${environment.XMPP_DOMAIN}`;
 
     private _receivedMessage: ReplaySubject<ReceivedMessage> = new ReplaySubject(1);
-    private _receivedPrecense: ReplaySubject<ReceivedPresence> = new ReplaySubject(1);
+    private _receivedPresence: ReplaySubject<ReceivedPresence> = new ReplaySubject(1);
     private _receivedIQ: ReplaySubject<ReceivedIQ> = new ReplaySubject(1);
 
     public receivedMessage$: Observable<ReceivedMessage> = this._receivedMessage.asObservable();
-    public receivedPrecense$: Observable<ReceivedPresence> = this._receivedPrecense.asObservable();
+    public receivedPresence$: Observable<ReceivedPresence> = this._receivedPresence.asObservable();
     public receivedIQ$: Observable<ReceivedIQ> = this._receivedIQ.asObservable();
 
     public get userJid(): string { return this._userJid }
@@ -63,9 +64,9 @@ export class XmppService implements IXmppService {
                 observer.complete();
             });
 
-            this._client.on("message", (msg: ReceivedMessage) => this._receivedMessage.next(msg))
-            this._client.on("presence", (p: ReceivedPresence) => this._receivedPrecense.next(p));
-            this._client.on("presence:error", (p: ReceivedPresence) => this._receivedPrecense.next(p))
+            this._client.on("message", (msg: ReceivedMessage) => this._receivedMessage.next(msg));
+            this._client.on("presence", (p: ReceivedPresence) => this._receivedPresence.next(p));
+            this._client.on("presence:error", (p: ReceivedPresence) => this._receivedPresence.next(p));
             this._client.on("iq", (q: ReceivedIQ) => this._receivedIQ.next(q));
             this._client.on('disconnected', () => {
                 this._client = null;
@@ -107,7 +108,7 @@ export class XmppService implements IXmppService {
     public sendPresenceRoom(roomJid: string, nickname: string = this._userID): Observable<string> {
         return this._connected$.pipe(
             filter(connected => connected),
-            switchMap(() => from(operations.precenseRoom(this._client!, roomJid, nickname)))
+            switchMap(() => of(operations.presenceRoom(this._client!, roomJid, nickname))),
         )
     }
 
@@ -116,6 +117,24 @@ export class XmppService implements IXmppService {
             filter(connected => connected),
             switchMap(() => from(operations.queryRoomInfo(this._client!, roomJid)).pipe(
                 map(result => result.disco as DiscoInfo)
+            ))
+        )
+    }
+
+    public getVCard(JID: string): Observable<VCardTemp> {
+        return this._connected$.pipe(
+            filter(connected => connected),
+            switchMap(() => from(operations.getVCard(this._client!, JID)).pipe(
+                map(result => result as VCardTemp)
+            ))
+        )
+    }
+
+    public getRoomItems(roomJid: string): Observable<DiscoItems> {
+        return this._connected$.pipe(
+            filter(connected => connected),
+            switchMap(() => from(operations.queryRoomItems(this._client!, roomJid)).pipe(
+                map(result => result.disco as DiscoItems)
             ))
         )
     }

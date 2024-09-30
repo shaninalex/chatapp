@@ -19,18 +19,12 @@ import { ChatRoomsSelect } from "@store/chat/actions";
                     <i class="fa-regular fa-envelope text-slate-500"></i>
                 </div>
             } @else {
-                @if (conv.image) {
-                    <img class="w-8 h-8 rounded-full shrink-0" src="{{ conv.image }}"/>
-                } @else {
-                    <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center">
-                        <i class="fa-regular fa-user text-slate-500"></i>
-                    </div>
-                }
+                <ui-avatar [image]="conv.image" [size]="8" />
             }
             <div class="flex-grow">
                 <div class="flex justify-between items-center mb-1 pt-1">
                     <div>
-                        {{ name }}
+                        {{ conv.name }}
                         @if (isRoom) {
                             <i class="fa-solid fa-user-group text-slate-500"></i>
                         }
@@ -64,10 +58,6 @@ export class ChatRoomItemComponent {
                 }
             }
         }))
-    }
-
-    get name(): string {
-        return this.conv.name;
     }
 
     get isRoom(): boolean {

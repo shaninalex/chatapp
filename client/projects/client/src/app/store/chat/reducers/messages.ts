@@ -8,7 +8,8 @@ export interface MessagesState extends EntityState<Message> { }
 
 export const MessagesAdapter: EntityAdapter<Message> = createEntityAdapter<Message>();
 
-export const InitialMessages: MessagesState = fillState<Message>(MessagesAdapter, MOCK_CHAT_STORE.messages)
+// export const InitialMessages: MessagesState = fillState<Message>(MessagesAdapter, MOCK_CHAT_STORE.messages)
+export const InitialMessages: MessagesState = MessagesAdapter.getInitialState();
 
 export const MessagesReducer = createReducer(
     InitialMessages,

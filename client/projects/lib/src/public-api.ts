@@ -7,3 +7,5 @@ export * from './lib/utils'
 
 export * from './lib/lib.module';
 export * from './lib/pipes.module'
+
+export * from './lib/xmpp'

@@ -7,11 +7,7 @@ import { NotFoundComponent } from './lib/pages/not-found/not-found.component';
 import { AuthGuard } from './lib/guards/auth.guard';
 
 const routes: Routes = [
-    {
-        path: "",
-        loadChildren: () => import("./modules/chat/chat.module").then(m => m.ChatModule),
-        canMatch: [AuthGuard]
-    },
+
     {
         path: "auth",
         loadChildren: () => import("./modules/auth/auth.module").then(m => m.AuthModule),
@@ -20,6 +16,11 @@ const routes: Routes = [
     { path: "401", component: UnauthorizedComponent },
     { path: "403", component: ErrorPermissionComponent },
     { path: "404", component: NotFoundComponent },
+    {
+        path: "",
+        loadChildren: () => import("./modules/chat/chat.module").then(m => m.ChatModule),
+        canMatch: [AuthGuard]
+    },
 ];
 
 @NgModule({

@@ -3,14 +3,14 @@
 }
 
 @if ((room$ | async); as room ) {
-<div class="flex gap-7 h-full">
+<div class="flex gap-7 h-full overflow-y-hidden">
     <div class="flex-grow border rounded-lg border-slate-200">
         <div class="flex gap-2 flex-start p-4 border-b justify-between">
             <button class="flex gap-2 items-center">
                 @if (room.image !== "") {
                     <img class="w-12 h-12 rounded-full shrink-0" src="{{ room.image }}" alt="{{ room.name }}" />
                 } @else {
-                    <img class="w-12 h-12 rounded-full shrink-0" src="/assets/image/talking.png" alt="{{ room.name }}" />
+                    <img class="w-12 h-12 rounded-full shrink-0" src="/assets/images/talking.png" alt="{{ room.name }}" />
                 }
                 <div class="text-left">
                     <div>{{ room.name }}</div>
