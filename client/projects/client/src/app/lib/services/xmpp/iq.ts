@@ -8,10 +8,10 @@ import { ChatParticipantsAddMany, ChatRoomsAdd } from "@store/chat/actions";
 import { Disco, DiscoItem, DiscoItems, IQ, IQPayload } from "stanza/protocol";
 import { XmppService } from "../xmpp.service";
 import { selectRoomByJID } from "@store";
-import { filter, map, of } from "rxjs";
+import { map, Observable, of } from "rxjs";
 
 interface IQHandler {
-    run(): void
+    run(): Observable<any>
 }
 
 // HANDLERS
@@ -31,14 +31,14 @@ class IQRosterHandler implements IQHandler {
         this.iq = iq;
     }
 
-    run(): void {
-        // console.log("handle roster iq");
+    run(): Observable<any> {
+        return of(null)
     }
 }
 
 /**
  * Handle pubsub iq result. Store list of pubsub nodes
- * Also should handle user default pubsub ( created on registerd )
+ * Also should handle user default pubsub ( created on registered )
  * If user SHOULD be subscribed to pubsub list.
  *
  * @class IQPubSubHandler
@@ -53,8 +53,8 @@ class IQPubSubHandler implements IQHandler {
         this.iq = iq;
     }
 
-    run(): void {
-        // console.log("handle pubsub iq");
+    run(): Observable<any> {
+        return of(null)
     }
 }
 
@@ -68,34 +68,36 @@ class IQPubSubHandler implements IQHandler {
 class IQDiscoHandler implements IQHandler {
     private store: Store;
     private iq: IQ;
-    private xmpp: XmppService
 
-    constructor(store: Store, xmpp: XmppService, iq: IQ) {
+    constructor(store: Store, iq: IQ) {
         this.store = store;
         this.iq = iq;
-        this.xmpp = xmpp
     }
 
-    run(): void {
-        if (!this.iq.disco) return
+    run(): Observable<any> {
+        if (!this.iq.disco) return of(null);
         const disco: Disco = this.iq.disco;
-        if (disco.type === "items") {
-            if (!disco.items) return
-            if (!this.iq.from) return
-            this.store.select(selectRoomByJID(this.iq.from)).pipe(
+
+        if (disco.type === 'items') {
+            if (!disco.items || !this.iq.from) return of(null);
+
+            return this.store.select(selectRoomByJID(this.iq.from)).pipe(
                 map((room: Room | undefined) => {
-                    if (!disco.items) return of(null)
+                    if (!disco.items) return of(null);
                     if (room) {
-                        this.saveParticipants(disco.items)
+                        this.saveParticipants(disco.items);
                     } else {
                         this.saveRooms(disco.items);
                     }
-                    return of(null)
+                    return null;
                 })
-            ).subscribe().unsubscribe();
-        } else if (disco.type === "info") {
-            console.log("Disco type info:", disco)
+            );
+        } else if (disco.type === 'info') {
+            console.log('Disco type info:', disco);
+            return of(null);
         }
+        
+        return of(null); // Default case
     }
 
     private saveParticipants(items: DiscoItem[]) {
@@ -141,8 +143,8 @@ class IQVCardHandler implements IQHandler {
         this.iq = iq;
     }
 
-    run(): void {
-        // console.log("handle vcard iq");
+    run(): Observable<any> {
+        return of(null)
     }
 }
 
@@ -157,7 +159,7 @@ export class IQManager {
             this.processor = new IQPubSubHandler(store, xmpp, iq)
             return
         } else if (iq.disco) {
-            this.processor = new IQDiscoHandler(store, xmpp, iq)
+            this.processor = new IQDiscoHandler(store, iq)
             return
         } else if (iq.vcard) {
             this.processor = new IQVCardHandler(store, xmpp, iq)
@@ -165,7 +167,8 @@ export class IQManager {
         }
     }
 
-    handle() {
-        this.processor?.run()
+    handle(): Observable<any> {
+        if (!this.processor) return of(null)
+        return this.processor?.run()
     }
 }

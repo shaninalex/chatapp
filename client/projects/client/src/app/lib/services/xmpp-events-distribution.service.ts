@@ -35,6 +35,7 @@ export class XmppEventsDistributionService implements OnDestroy {
                 filter(connect => connect),
                 take(1),
                 tap(() => {
+
                     // run initial queries
                     this.initialQueries(xmpp);
 
@@ -68,11 +69,14 @@ export class XmppEventsDistributionService implements OnDestroy {
      *
      */
     distribute(xmpp: XmppService): void {
+        if (!xmpp) return
         this.sub.add(
-            xmpp.receivedIQ$.subscribe(iq => {
-                const ctx = new IQManager(this.store, xmpp, iq);
-                ctx.handle();
-            })
+            xmpp.receivedIQ$.pipe(
+                switchMap((iq: ReceivedIQ, _) => {
+                    const ctx = new IQManager(this.store, xmpp, iq);
+                    return ctx.handle();    
+                })
+            ).subscribe()
         );
 
         this.sub.add(
@@ -83,25 +87,6 @@ export class XmppEventsDistributionService implements OnDestroy {
         );
 
     }
-
-    // this.subscription.add(
-    //     messages$.pipe(
-    //         switchMap((message: ReceivedMessage) => {
-    //             if (message.type !== MessageType.GroupChat) {
-    //                 return this.store.select(selectConversationByJid(message.from)).pipe(
-    //                     map((conversation) => {
-    //                         if (conversation && conversation.length === 0) {
-    //                             this.store.dispatch(ChatConversationAdd({ payload: { jid: message.from} }))
-    //                         }
-    //                         return message;
-    //                     })
-    //                 );
-    //             }
-    //             return of(message);
-    //         }),
-    //         filter(message => message.body !== undefined)
-    //     ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
-    // );
 
     // this.subscription.add(
     //     presence$.pipe(
