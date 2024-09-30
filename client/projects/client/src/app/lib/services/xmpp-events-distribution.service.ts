@@ -1,11 +1,14 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { AppState } from "@store/store";
 import { Store } from "@ngrx/store";
-import { connect, filter, map, Observable, of, Subscription, switchMap, take, takeLast, tap } from "rxjs";
+import { filter, map, Observable, of, Subscription, switchMap, take, takeLast, tap } from "rxjs";
 import { ReceivedIQ, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
-import { DistributionService } from "@lib";
 import { XmppService } from "./xmpp.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { IQManager } from "./xmpp/iq";
+import { ChatMessageAdd } from "@store/chat/actions";
+import { Message } from "@lib";
+import { MessageManager } from "./xmpp/message";
+
 
 /**
  *
@@ -18,7 +21,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
  * @class EventsDistributionService
  */
 @Injectable()
-export class XmppEventsDistributionService implements DistributionService, OnDestroy {
+export class XmppEventsDistributionService implements OnDestroy {
     sub: Subscription = new Subscription
     constructor(private store: Store<AppState>) { }
 
@@ -35,13 +38,8 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
                     // run initial queries
                     this.initialQueries(xmpp);
 
-                    // provide event sources to distrtibution service
-                    this.distribute(
-                        xmpp.receivedMessage$,
-                        xmpp.receivedPrecense$,
-                        xmpp.receivedIQ$
-                    );
-
+                    // provide event sources to distribution service
+                    this.distribute(xmpp);
                 }),
             ).subscribe()
         )
@@ -49,22 +47,18 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
 
     initialQueries(xmpp: XmppService): void {
         // get static list of rooms
-        this.sub.add(xmpp.queryRoomsOnline().subscribe());
+        this.sub.add(
+            xmpp.queryRoomsOnline().subscribe()
+        );
 
         // pubsub
-        this.sub.add(xmpp.getPubsub().subscribe());
+        this.sub.add(
+            xmpp.getPubsub().subscribe()
+        );
 
         // contact list
         this.sub.add(
-            xmpp.getRoster().pipe(
-                switchMap((roster, index) => {
-                    // TODO: refactor
-                    roster.items.map(item => {
-                        xmpp.getVCard(item.jid).subscribe(result => console.log(result));
-                    })
-                    return of(roster);
-                }),
-            ).subscribe()
+            xmpp.getRoster().subscribe()
         );
     }
 
@@ -72,52 +66,50 @@ export class XmppEventsDistributionService implements DistributionService, OnDes
      *
      * Distribute and store events data from xmpp
      *
-     * @param {Observable<ReceivedMessage>} messages$
-     * @param {Observable<ReceivedPresence>} presence$
-     * @param {Observable<ReceivedIQ>} iq$
-     * @memberof XmppEventsDistributionService
      */
-    distribute(
-        messages$: Observable<ReceivedMessage>,
-        presence$: Observable<ReceivedPresence>,
-        iq$: Observable<ReceivedIQ>,
-    ): void {
+    distribute(xmpp: XmppService): void {
         this.sub.add(
-            iq$.pipe(
-                map(iq => {
-                    console.log(iq);
-                    return iq;
-                })
-            ).subscribe()
+            xmpp.receivedIQ$.subscribe(iq => {
+                const ctx = new IQManager(this.store, xmpp, iq);
+                ctx.handle();
+            })
         );
 
-        // this.subscription.add(
-        //     messages$.pipe(
-        //         switchMap((message: ReceivedMessage) => {
-        //             if (message.type !== MessageType.GroupChat) {
-        //                 return this.store.select(selectConversationByJid(message.from)).pipe(
-        //                     map((conversation) => {
-        //                         if (conversation && conversation.length === 0) {
-        //                             this.store.dispatch(ChatConversationAdd({ payload: { jid: message.from} }))
-        //                         }
-        //                         return message;
-        //                     })
-        //                 );
-        //             }
-        //             return of(message);
-        //         }),
-        //         filter(message => message.body !== undefined)
-        //     ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
-        // );
+        this.sub.add(
+            xmpp.receivedMessage$.subscribe(msg => {
+                const ctx = new MessageManager(this.store, xmpp, msg);
+                ctx.handle();
+            })
+        );
 
-        // this.subscription.add(
-        //     presence$.pipe(
-        //         map(presence => {
-        //             if (presence.type && SubscriptionTypes.includes(presence.type)) {
-        //                 this.store.dispatch(ChatSubscriptionAdd({ payload: presence }))
-        //             }
-        //         })
-        //     ).subscribe(),
-        // );
     }
+
+    // this.subscription.add(
+    //     messages$.pipe(
+    //         switchMap((message: ReceivedMessage) => {
+    //             if (message.type !== MessageType.GroupChat) {
+    //                 return this.store.select(selectConversationByJid(message.from)).pipe(
+    //                     map((conversation) => {
+    //                         if (conversation && conversation.length === 0) {
+    //                             this.store.dispatch(ChatConversationAdd({ payload: { jid: message.from} }))
+    //                         }
+    //                         return message;
+    //                     })
+    //                 );
+    //             }
+    //             return of(message);
+    //         }),
+    //         filter(message => message.body !== undefined)
+    //     ).subscribe((message) => this.store.dispatch(ChatMessageAdd({ payload: message }))),
+    // );
+
+    // this.subscription.add(
+    //     presence$.pipe(
+    //         map(presence => {
+    //             if (presence.type && SubscriptionTypes.includes(presence.type)) {
+    //                 this.store.dispatch(ChatSubscriptionAdd({ payload: presence }))
+    //             }
+    //         })
+    //     ).subscribe(),
+    // );
 }

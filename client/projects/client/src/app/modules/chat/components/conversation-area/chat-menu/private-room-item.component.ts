@@ -7,8 +7,8 @@ import { Room } from "@lib";
     selector: "chat-private-room-item",
     template: `
 <div class="flex items-center justify-between gap-2">
-    <div class="flex gap-2 p-2 cursor-pointer" (click)="handleClick()">
-        <ui-avatar [image]="item.image" [size]="6" />
+    <div class="flex items-center gap-2 p-2 cursor-pointer" (click)="handleClick()">
+        <ui-avatar [image]="item.image" [size]="8" />
 
         {{ item.jid | subroomname }}
     </div>

@@ -17,11 +17,3 @@ export interface XmppUserToken {
     token: string
     expire: number
 }
-
-export interface DistributionService {
-    distribute(
-        messages$: Observable<ReceivedMessage>,
-        presence$: Observable<ReceivedPresence>,
-        iq$: Observable<ReceivedIQ>,
-    ): void
-}

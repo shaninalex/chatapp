@@ -44,7 +44,7 @@ export interface Message {
     id: string
     from: string
     to: string
-    timestamp: string
+    timestamp: Date
     body: string
     read: boolean
     type: MessageType

@@ -1,6 +1,7 @@
 import { identityReducer, IdentityState } from "./identity/reducer";
 import * as identityEffects from './identity/effects'
 import { xmppReducer, XmppState } from "./chat/reducer";
+import * as chatRoomEffects from "./chat/effects";
 
 
 export interface AppState {
@@ -15,4 +16,5 @@ export const reducers = {
 
 export const effects = [
     identityEffects,
+    chatRoomEffects,
 ]

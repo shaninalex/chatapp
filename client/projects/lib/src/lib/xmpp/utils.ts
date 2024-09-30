@@ -63,7 +63,7 @@ export function queryRoomItems(client: Stanza.Agent, roomJid: string): Promise<I
     return client.sendIQ(iq)
 }
 
-export function precenseRoom(client: Stanza.Agent, roomJid: string, nickname: string): string {
+export function presenceRoom(client: Stanza.Agent, roomJid: string, nickname: string): string {
     return client.sendPresence({
         to: `${roomJid}/${nickname}`
     })
