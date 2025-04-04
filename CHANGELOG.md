@@ -1,3 +1,11 @@
+## 0.2.0 (2025-04-04)
+
+### Feat
+
+- **chat**: clients and hub
+- **core**: chat shards structure for user
+- start from scratch
+
 ## 0.1.0 (2025-04-04)
 
 ### Feat
