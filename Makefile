@@ -1,3 +1,10 @@
+# Go
+
+test:
+	go test ./... -v
+
+# DOCKER
+
 start:
 	docker compose -f docker-compose.dev.yml up -d --build
 

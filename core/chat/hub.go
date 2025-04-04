@@ -17,9 +17,18 @@ func (s Hub) Run() {
 	for {
 		select {
 		case c := <-s.register:
-			s.clients.Put(c.UserId().String(), c)
+			s.clientAdd(c)
 		case c := <-s.unregister:
-			s.clients.Delete(c.UserId().String())
+			s.clientRemove(c)
 		}
 	}
+}
+
+func (s Hub) clientAdd(c IClient) {
+	s.clients.Put(c.UserId().String(), c)
+}
+
+func (s Hub) clientRemove(c IClient) {
+	c.Close()
+	s.clients.Delete(c.UserId().String())
 }
