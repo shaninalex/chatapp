@@ -7,3 +7,4 @@ config/oathkeeper/oathkeeper.yml
 config/kratos/kratos.yml
 config/ejabberd/config/ejabberd.yml
 
+var/
