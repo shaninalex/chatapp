@@ -12,7 +12,7 @@ func (s Hub) Register(c IClient) { s.unregister <- c }
 // Unregister used for removing client from clients map
 func (s Hub) Unregister(c IClient) { s.register <- c }
 
-// Run is starting all goroutines
+// Run is listening for goroutines
 func (s Hub) Run() {
 	for {
 		select {

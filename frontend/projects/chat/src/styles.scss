@@ -1,0 +1,23 @@
+@use '@angular/material' as mat;
+@use "tailwindcss";
+
+@include mat.core();
+
+html {
+    color-scheme: light;
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    @include mat.theme((
+        color: mat.$azure-palette,
+        typography: (
+            bold-weight: 900,
+            medium-weight: 500,
+            regular-weight: 400,
+        ),
+        density: -1
+    ));
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
