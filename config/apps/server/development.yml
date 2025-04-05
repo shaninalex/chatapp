@@ -1,0 +1,7 @@
+app:
+  port: 8000
+
+kratos:
+  dsn: "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable&search_path=kratos"
+  url_admin: "http://localhost:4434"
+  url_browser: "http://localhost:4433"

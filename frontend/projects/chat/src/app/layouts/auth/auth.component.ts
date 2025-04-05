@@ -2,7 +2,13 @@ import {Component} from '@angular/core';
 
 @Component({
     selector: 'ch-auth-layout',
-    templateUrl: './auth.component.html'
+    template: `
+        <div class="h-screen flex items-center justify-center">
+            <div>
+                <ng-content></ng-content>
+            </div>
+        </div>
+    `
 })
 export class AuthComponent {
 
