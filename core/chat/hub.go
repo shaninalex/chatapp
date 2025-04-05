@@ -12,14 +12,23 @@ func (s Hub) Register(c IClient) { s.unregister <- c }
 // Unregister used for removing client from clients map
 func (s Hub) Unregister(c IClient) { s.register <- c }
 
-// Run is starting all goroutines
+// Run is listening for goroutines
 func (s Hub) Run() {
 	for {
 		select {
 		case c := <-s.register:
-			s.clients.Put(c.UserId().String(), c)
+			s.clientAdd(c)
 		case c := <-s.unregister:
-			s.clients.Delete(c.UserId().String())
+			s.clientRemove(c)
 		}
 	}
+}
+
+func (s Hub) clientAdd(c IClient) {
+	s.clients.Put(c.UserId().String(), c)
+}
+
+func (s Hub) clientRemove(c IClient) {
+	c.Close()
+	s.clients.Delete(c.UserId().String())
 }

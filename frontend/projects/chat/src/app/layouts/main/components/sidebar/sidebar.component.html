@@ -1,0 +1,26 @@
+<div class="grow-0 shrink-0 h-full p-4 flex flex-col"
+     [@openClose]="sidebarOpen ? 'open' : 'closed'">
+    <a href="/" class="flex items-center gap-2 mb-6">
+        <img class="h-12 w-auto d-block" src="/images/logo.png" alt="Chat Logo">
+        <span [@fadeInOut]="sidebarOpen ? 'open' : 'closed'"
+              class="font-bold text-2xl">Chat</span>
+    </a>
+
+    <mat-nav-list>
+        @for (item of menu; track $index) {
+            <a mat-list-item routerLink="/">
+                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                <span [@fadeInOut]="sidebarOpen ? 'open' : 'closed'">{{ item.label }}</span>
+            </a>
+        }
+    </mat-nav-list>
+
+    <div class="flex-auto"></div>
+
+    <mat-nav-list>
+        <a mat-list-item routerLink="/">
+            <mat-icon matListItemIcon>settings</mat-icon>
+            <span [@fadeInOut]="sidebarOpen ? 'open' : 'closed'" >Settings</span>
+        </a>
+    </mat-nav-list>
+</div>
