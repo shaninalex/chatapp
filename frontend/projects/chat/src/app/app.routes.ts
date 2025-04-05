@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {PageHomeComponent, PageLoginComponent} from '../pages';
+import {PageHomeComponent, PageLoginComponent} from '@chat/pages';
 
 export const routes: Routes = [
     {

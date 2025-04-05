@@ -16,7 +16,24 @@
         "moduleResolution": "bundler",
         "importHelpers": true,
         "target": "ES2022",
-        "module": "ES2022"
+        "module": "ES2022",
+        "paths": {
+            "@chat/app/*": [
+                "./projects/chat/src/app/*"
+            ],
+            "@chat/shared/*": [
+                "./projects/chat/src/shared/*"
+            ],
+            "@chat/pages": [
+                "./projects/chat/src/pages"
+            ],
+            "@chat/features/*": [
+                "./projects/chat/src/features/*"
+            ],
+            "@chat/environments/*": [
+                "./projects/chat/src/environments/*"
+            ]
+        }
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
